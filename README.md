@@ -93,7 +93,7 @@ flutter test test/unawaited_debug_test.dart
 
 ## GitHub 自動化
 
-- 已提供 CI：`.github/workflows/flutter.yml`（兩個 job：**Format, analyze, test** 先跑；通過後才跑 **Web & Android smoke builds**，可較早失敗、少佔用 Android SDK 下載；Flutter 釘選 **3.41.6** 與可重現建置—升級 SDK 時請一併更新 workflow 中的 `flutter-version`）
+- 已提供 CI：`.github/workflows/flutter.yml`（兩個 job：**Format, analyze, test** 先跑；通過後才跑 **Web & Android smoke builds**，可較早失敗、少佔用 Android SDK 下載；Flutter 釘選 **3.41.6**（workflow 頂層 **`env.FLUTTER_VERSION`**，一處修改即可）以維持可重現建置）
 - 觸發時機：對 `main` 的 push 與 pull request；亦可在 Actions 分頁 **Run workflow** 手動執行
 - 內容：`dart format`（檢查）、`dart analyze --fatal-infos`、`flutter test --coverage`（並上傳 `lcov` artifact）、`flutter build web --release` 與 **`flutter build apk --debug`**（安裝 **Android API 36** + **NDK 28.2.13676358**，與目前 Flutter stable 預設一致）、`flutter pub get --enforce-lockfile`
 - 對 `main` 的 PR 另跑依賴審查：`.github/workflows/dependency-review.yml`（需啟用 [Dependency graph](https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-the-dependency-graph)）

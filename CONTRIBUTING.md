@@ -8,7 +8,7 @@ Report security issues privately; see `SECURITY.md` (also linked from **New issu
 
 CI on `main` is two-stage: Dart **quality** (format / analyze / tests + coverage artifact) must pass before **Web & Android** smoke builds run, saving time when analysis or tests fail.
 
-When upgrading Flutter for the whole team, bump `flutter-version` in **both** `Setup Flutter` steps inside `.github/workflows/flutter.yml` so CI matches local toolchains.
+When upgrading Flutter for the whole team, bump **`env.FLUTTER_VERSION`** at the top of `.github/workflows/flutter.yml` (both jobs read it) so CI matches local toolchains.
 
 ## Workflow
 
