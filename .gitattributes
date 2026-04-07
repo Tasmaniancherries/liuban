@@ -1,0 +1,17 @@
+# Normalize line endings for text files (aligns with .editorconfig).
+* text=auto eol=lf
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
+
+# Flutter / platform
+*.aar binary
+*.jar binary
+*.keystore binary
+*.jks binary
