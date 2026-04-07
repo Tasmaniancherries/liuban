@@ -9,7 +9,8 @@ build/
 **/generated_plugin_registrant.dart
 *.iml
 .idea/
-.vscode/
+.vscode/*
+!.vscode/extensions.json
 
 # iOS / Android（generate 後）
 **/Pods/

@@ -2,7 +2,7 @@
 
 The repository is **proprietary** (`LICENSE`). Contributing implies you only submit changes you have the right to share under agreements with the maintainers.
 
-The repo includes `.editorconfig` and `.gitattributes` (text defaults to LF). Prefer `dart format` so CI stays green.
+The repo includes `.editorconfig` and `.gitattributes` (text defaults to LF). Prefer `dart format` so CI stays green. VS Code users: install recommended extensions from `.vscode/extensions.json` when prompted.
 
 Report security issues privately; see `SECURITY.md` (also linked from **New issue** via `.github/ISSUE_TEMPLATE/config.yml`). Pull requests against `main` also run GitHub **Dependency review** when Dependency graph is enabled for the repository.
 
