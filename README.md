@@ -73,6 +73,7 @@ flutter test test/unawaited_debug_test.dart
 - 已提供 CI：`.github/workflows/flutter.yml`
 - 觸發時機：對 `main` 的 push 與 pull request
 - 內容：`dart analyze` + `flutter test`
+- 依賴更新：`.github/dependabot.yml` 每週檢查 **GitHub Actions** 與 **pub**（`pubspec.yaml`）並開 PR
 
 ## 協作流程
 
