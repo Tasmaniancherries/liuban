@@ -100,6 +100,8 @@ flutter test test/unawaited_debug_test.dart
 - 依賴更新：`.github/dependabot.yml` 每週檢查 **GitHub Actions** 與 **pub**（`pubspec.yaml`），並以 **groups** 盡量合併為較少筆 PR
 - 安全性回報：見 `SECURITY.md`
 
+若 **Build Android APK** 失敗且訊息與 **NDK／CMake／platform** 相關，請對照 `.github/workflows/flutter.yml` 內 `setup-android` 的 `packages`（需與你使用的 Flutter stable 預設 `compileSdk`／`ndkVersion` 一致），或把該 job 的完整 log 附在 Issue／PR。
+
 ## 協作流程
 
 - Issue：使用 `.github/ISSUE_TEMPLATE/` 內建模板
