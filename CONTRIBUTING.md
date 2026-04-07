@@ -29,6 +29,12 @@ Optional coverage (matches CI’s `flutter test --coverage`; output is gitignore
 flutter test --coverage
 ```
 
+Optional web compile smoke (also run in CI):
+
+```bash
+flutter build web --release
+```
+
 If you changed dependencies in `pubspec.yaml`, commit `pubspec.lock` in the same PR.
 
 ## PR Quality

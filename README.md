@@ -35,6 +35,14 @@ flutter run -d ios
 flutter run -d android
 ```
 
+## Web 建置（可選）
+
+```bash
+flutter build web --release
+```
+
+輸出在 `build/web`。CI 會在 `main` 的 workflow 裡執行相同指令作為**編譯煙霧測試**（與上架無關，僅確認可編譯）。
+
 ## 開發與測試
 
 ```bash
