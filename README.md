@@ -95,7 +95,7 @@ flutter test test/unawaited_debug_test.dart
 
 - 已提供 CI：`.github/workflows/flutter.yml`
 - 觸發時機：對 `main` 的 push 與 pull request；亦可在 Actions 分頁 **Run workflow** 手動執行
-- 內容：`dart format`（檢查）、`dart analyze --fatal-infos`、`flutter test --coverage`（並上傳 `lcov` artifact）、`flutter build web --release` 與 **`flutter build apk --debug`**（編譯煙霧測試）、`flutter pub get --enforce-lockfile`
+- 內容：`dart format`（檢查）、`dart analyze --fatal-infos`、`flutter test --coverage`（並上傳 `lcov` artifact）、`flutter build web --release` 與 **`flutter build apk --debug`**（安裝 **Android API 36** + **NDK 28.2.13676358**，與目前 Flutter stable 預設一致）、`flutter pub get --enforce-lockfile`
 - 對 `main` 的 PR 另跑依賴審查：`.github/workflows/dependency-review.yml`（需啟用 [Dependency graph](https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-the-dependency-graph)）
 - 依賴更新：`.github/dependabot.yml` 每週檢查 **GitHub Actions** 與 **pub**（`pubspec.yaml`），並以 **groups** 盡量合併為較少筆 PR
 - 安全性回報：見 `SECURITY.md`
