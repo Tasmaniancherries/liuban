@@ -40,7 +40,7 @@ flutter run -d android
 ```bash
 flutter pub get
 dart format .   # CI 會檢查格式；也可用 dart format --output=none --set-exit-if-changed . 只檢查不寫入
-dart analyze    # 含 unawaited_futures：丟棄的 Future 須 await、unawaited() 或 unawaitedDebug*
+dart analyze --fatal-infos   # 與 CI 相同；含 unawaited_futures、cancel_subscriptions、close_sinks、avoid_void_async
 flutter test
 ```
 
@@ -74,8 +74,8 @@ flutter test test/unawaited_debug_test.dart
 ## GitHub 自動化
 
 - 已提供 CI：`.github/workflows/flutter.yml`
-- 觸發時機：對 `main` 的 push 與 pull request
-- 內容：`dart analyze` + `flutter test`
+- 觸發時機：對 `main` 的 push 與 pull request；亦可在 Actions 分頁 **Run workflow** 手動執行
+- 內容：`dart format`（檢查）、`dart analyze --fatal-infos`、`flutter test`、`flutter pub get --enforce-lockfile`
 - 依賴更新：`.github/dependabot.yml` 每週檢查 **GitHub Actions** 與 **pub**（`pubspec.yaml`）並開 PR
 
 ## 協作流程

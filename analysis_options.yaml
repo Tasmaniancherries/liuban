@@ -6,3 +6,7 @@ linter:
     prefer_const_literals_to_create_immutables: true
     # Catch fire-and-forget [Future]s that should use await, unawaited(), or unawaitedDebug*.
     unawaited_futures: true
+    cancel_subscriptions: true
+    close_sinks: true
+    # void fn() async { ... } hides errors from callers; prefer Future<void>.
+    avoid_void_async: true
