@@ -49,6 +49,8 @@ flutter build apk --debug
 
 If you changed dependencies in `pubspec.yaml`, commit `pubspec.lock` in the same PR.
 
+Use `dart pub outdated` to see available upgrades. **`dart pub upgrade`** updates the lockfile within current constraints—commit those lockfile bumps when `dart analyze` and `flutter test` stay green. **Major** dependency moves (e.g. `go_router`) deserve their own PR with `dart pub upgrade --major-versions` (or hand-edited constraints) plus migration notes and tests.
+
 Android: `android/gradle.properties` uses JVM heap settings that fit typical laptops and GitHub-hosted runners; if local builds are slow, you can raise `-Xmx` for your machine only (avoid committing very large values).
 
 ## PR Quality
