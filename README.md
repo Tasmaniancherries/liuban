@@ -91,6 +91,13 @@ flutter test test/unawaited_debug_test.dart
 
 目前 UI 為可運行的**前端殼子**；後端請依上列契約對接。
 
+## 主要套件（路由／分享）
+
+- [**go_router**](https://pub.dev/packages/go_router) **^17.x**：宣告式路由與 deep link（見 `lib/app/router.dart`）。
+- [**share_plus**](https://pub.dev/packages/share_plus) **^12.x**：系統分享請用 **`SharePlus.instance.share(ShareParams)`**（已取代舊版 `Share.share`）。
+
+其餘依賴以 `pubspec.yaml` / `pubspec.lock` 為準。開發依賴 **`test`** 需與 Flutter SDK 內建的 **`flutter_test`** 解析相容，勿手動升到與 SDK 釘選的 `test_api` 衝突的版本。
+
 ## GitHub 自動化
 
 - 已提供 CI：`.github/workflows/flutter.yml`（兩個 job：**Format, analyze, test** 先跑；通過後才跑 **Web & Android smoke builds**，可較早失敗、少佔用 Android SDK 下載；Flutter 釘選 **3.41.6**（workflow 頂層 **`env.FLUTTER_VERSION`**，一處修改即可）以維持可重現建置）
