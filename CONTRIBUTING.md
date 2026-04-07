@@ -35,6 +35,12 @@ Optional web compile smoke (also run in CI):
 flutter build web --release
 ```
 
+Optional Android debug APK smoke (also run in CI; requires a working Android SDK locally):
+
+```bash
+flutter build apk --debug
+```
+
 If you changed dependencies in `pubspec.yaml`, commit `pubspec.lock` in the same PR.
 
 ## PR Quality

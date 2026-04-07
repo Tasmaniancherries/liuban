@@ -18,7 +18,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -51,3 +51,20 @@ jobs:
 
       - name: Build web (smoke)
         run: flutter build web --release
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: >-
+            tools platform-tools
+            platforms;android-34 build-tools;34.0.0
+            platforms;android-35 build-tools;35.0.0
+
+      - name: Build Android APK (smoke)
+        run: flutter build apk --debug
