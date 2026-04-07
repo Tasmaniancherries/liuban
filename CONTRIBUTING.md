@@ -1,5 +1,7 @@
 # Contributing to Liuban
 
+The repo includes `.editorconfig` (UTF-8, LF, Dart 2-space indent). Prefer `dart format` so CI stays green.
+
 ## Workflow
 
 - Create a short-lived branch from `main` for each change.

@@ -83,6 +83,7 @@ flutter test test/unawaited_debug_test.dart
 - Issue：使用 `.github/ISSUE_TEMPLATE/` 內建模板
 - PR：使用 `.github/pull_request_template.md`
 - 參與開發：見 `CONTRIBUTING.md`
+- 編輯器慣例：見專案根目錄 `.editorconfig`
 - Code owners：見 `.github/CODEOWNERS`
 - 建議每個 PR 專注單一主題，並附上測試計畫
 
