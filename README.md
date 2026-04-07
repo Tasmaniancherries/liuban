@@ -35,6 +35,20 @@ flutter run -d ios
 flutter run -d android
 ```
 
+## 開發與測試
+
+```bash
+flutter pub get
+dart analyze
+flutter test
+```
+
+若要只跑單一測試檔：
+
+```bash
+flutter test test/unawaited_debug_test.dart
+```
+
 ## 專案結構（概要）
 
 | 路徑 | 說明 |
@@ -53,6 +67,18 @@ flutter run -d android
 | `docs/backend_domain_apis_contract.md` | 廣場、好友／私訊、推廣、客服 API |
 
 目前 UI 為可運行的**前端殼子**；後端請依上列契約對接。
+
+## GitHub 自動化
+
+- 已提供 CI：`.github/workflows/flutter.yml`
+- 觸發時機：對 `main` 的 push 與 pull request
+- 內容：`dart analyze` + `flutter test`
+
+## 協作流程
+
+- Issue：使用 `.github/ISSUE_TEMPLATE/` 內建模板
+- PR：使用 `.github/pull_request_template.md`
+- 建議每個 PR 專注單一主題，並附上測試計畫
 
 ## 上架提醒
 
