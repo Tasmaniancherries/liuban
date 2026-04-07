@@ -40,9 +40,11 @@ flutter run -d android
 ```bash
 flutter pub get
 dart format .   # CI 會檢查格式；也可用 dart format --output=none --set-exit-if-changed . 只檢查不寫入
-dart analyze
+dart analyze    # 含 unawaited_futures：丟棄的 Future 須 await、unawaited() 或 unawaitedDebug*
 flutter test
 ```
+
+變更 `pubspec.yaml` 後請執行 `flutter pub get` 並一併提交 `pubspec.lock`（CI 以 `flutter pub get --enforce-lockfile` 驗證）。
 
 若要只跑單一測試檔：
 

@@ -1,3 +1,5 @@
+import "dart:async" show unawaited;
+
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:liuban/core/app_container_scope.dart";
@@ -137,15 +139,17 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
       _items.add(ChatMessage(text: t, fromUser: true, time: DateTime.now()));
       _input.clear();
     });
-    Future.microtask(() {
-      if (_scroll.hasClients) {
-        _scroll.animateTo(
-          _scroll.position.maxScrollExtent + 80,
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOut,
-        );
-      }
-    });
+    unawaited(
+      Future.microtask(() async {
+        if (_scroll.hasClients) {
+          await _scroll.animateTo(
+            _scroll.position.maxScrollExtent + 80,
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeOut,
+          );
+        }
+      }),
+    );
   }
 
   @override

@@ -1,3 +1,5 @@
+import "dart:async" show unawaited;
+
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:liuban/core/debug/unawaited_debug.dart";
@@ -33,7 +35,7 @@ Future<void> showShareLinkSheet(BuildContext context,
           }
           return;
         }
-        HapticFeedback.lightImpact();
+        unawaited(HapticFeedback.lightImpact());
         if (ctx.mounted) Navigator.of(ctx).pop();
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -47,7 +49,7 @@ Future<void> showShareLinkSheet(BuildContext context,
 
       Future<void> systemShare() async {
         final origin = _shareAnchorFromContext(ctx);
-        HapticFeedback.lightImpact();
+        unawaited(HapticFeedback.lightImpact());
         if (ctx.mounted) Navigator.of(ctx).pop();
         try {
           await Share.share(
