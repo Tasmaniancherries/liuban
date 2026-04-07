@@ -21,6 +21,12 @@ dart analyze --fatal-infos
 flutter test
 ```
 
+Optional coverage (matches CI’s `flutter test --coverage`; output is gitignored under `coverage/`):
+
+```bash
+flutter test --coverage
+```
+
 If you changed dependencies in `pubspec.yaml`, commit `pubspec.lock` in the same PR.
 
 ## PR Quality
