@@ -2,7 +2,7 @@
 
 The repo includes `.editorconfig` and `.gitattributes` (text defaults to LF). Prefer `dart format` so CI stays green.
 
-Report security issues privately; see `SECURITY.md`. Pull requests against `main` also run GitHub **Dependency review** when Dependency graph is enabled for the repository.
+Report security issues privately; see `SECURITY.md` (also linked from **New issue** via `.github/ISSUE_TEMPLATE/config.yml`). Pull requests against `main` also run GitHub **Dependency review** when Dependency graph is enabled for the repository.
 
 ## Workflow
 

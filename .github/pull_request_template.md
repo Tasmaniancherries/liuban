@@ -10,9 +10,11 @@
 - [ ] Docs
 
 ## Test Plan
-- [ ] `dart analyze`
-- [ ] `flutter test`
-- [ ] 手動驗證主要流程
+- [ ] `dart format --output=none --set-exit-if-changed .`（或已執行 `dart format .`）
+- [ ] `dart analyze --fatal-infos`
+- [ ] `flutter test`（與 CI 相同可加上 `--coverage`）
+- [ ] 若更動 `pubspec.yaml`：已更新並提交 `pubspec.lock`
+- [ ] 手動驗證主要流程（如適用）
 
 ## Screenshots / Recordings
 如有 UI 變更，請附上前後對比。

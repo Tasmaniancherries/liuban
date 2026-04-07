@@ -1,0 +1,7 @@
+# https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository
+blank_issues_enabled: true
+
+contact_links:
+  - name: 安全性問題（請勿公開細節）
+    url: https://github.com/Tasmaniancherries/liuban/security/policy
+    about: 請依 SECURITY.md／安全政策私下通報，勿開公開 Issue。
