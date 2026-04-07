@@ -2,6 +2,8 @@
 
 The repository is **proprietary** (`LICENSE`). Contributing implies you only submit changes you have the right to share under agreements with the maintainers.
 
+Use a Flutter/Dart toolchain that satisfies `pubspec.yaml` `environment.sdk` (currently Dart **>=3.9.0**). CI pins a specific Flutter release via `env.FLUTTER_VERSION` in `.github/workflows/flutter.yml`.
+
 The repo includes `.editorconfig` and `.gitattributes` (text defaults to LF). Prefer `dart format` so CI stays green. VS Code users: install recommended extensions from `.vscode/extensions.json` when prompted.
 
 Report security issues privately; see `SECURITY.md` (also linked from **New issue** via `.github/ISSUE_TEMPLATE/config.yml`). Pull requests against `main` also run GitHub **Dependency review** when Dependency graph is enabled for the repository.

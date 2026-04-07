@@ -4,7 +4,7 @@
 
 ## 環境準備
 
-1. 安裝 [Flutter SDK](https://docs.flutter.dev/get-started/install)（穩定版）。
+1. 安裝 [Flutter SDK](https://docs.flutter.dev/get-started/install)（穩定版；建議與 CI 一致，見下方 GitHub 自動化中的 **`FLUTTER_VERSION`**）。`pubspec.yaml` 要求 **Dart `>=3.9.0 <4.0.0`**（隨 Flutter 內建 Dart 一併滿足即可）。
 2. 在本專案根目錄執行（會自動補齊 `android/`、`ios/` 等平台目錄）：
 
    ```bash

@@ -28,8 +28,8 @@ class SupportApi {
         _path("/support/messages"),
         data: <String, dynamic>{
           "text": text,
-          if (guestToken != null) "guest_token": guestToken,
-          if (contactHint != null) "contact_hint": contactHint,
+          "guest_token": ?guestToken,
+          "contact_hint": ?contactHint,
         },
       );
     } on DioException catch (e) {
