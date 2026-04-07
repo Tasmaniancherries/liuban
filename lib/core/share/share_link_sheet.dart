@@ -52,10 +52,12 @@ Future<void> showShareLinkSheet(BuildContext context,
         unawaited(HapticFeedback.lightImpact());
         if (ctx.mounted) Navigator.of(ctx).pop();
         try {
-          await Share.share(
-            url,
-            subject: "留伴",
-            sharePositionOrigin: origin,
+          await SharePlus.instance.share(
+            ShareParams(
+              uri: Uri.parse(url),
+              subject: "留伴",
+              sharePositionOrigin: origin,
+            ),
           );
         } catch (_) {
           if (context.mounted) {
