@@ -102,4 +102,4 @@ flutter test test/unawaited_debug_test.dart
 
 ## 授權
 
-專有軟體或未指定 — 依你方需要自行加上 `LICENSE`。
+本專案為**專有軟體**：見專案根目錄 `LICENSE`（All Rights Reserved）。若你未取得著作權人書面許可，不得任意使用、重製或散布程式碼。
