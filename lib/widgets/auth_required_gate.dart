@@ -75,27 +75,23 @@ class AuthRequiredGate extends StatelessWidget {
                           Text(
                             "訪客可瀏覽公開廣場與推廣；好友與私聊需帳號。",
                             textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                    ),
                           ),
                           const SizedBox(height: 12),
                           Text(
                             ApiDevSemantics.authRequiredGateApiFootnote,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                    ),
                           ),
                         ],
                       ),
@@ -113,8 +109,7 @@ class AuthRequiredGate extends StatelessWidget {
                         onPressed: () {
                           final u = GoRouterState.of(context).uri;
                           final path = u.path.isEmpty ? "/" : u.path;
-                          final target =
-                              u.hasQuery ? "$path?${u.query}" : path;
+                          final target = u.hasQuery ? "$path?${u.query}" : path;
                           unawaitedDebugFuture(
                             "AuthRequiredGate.pushLogin",
                             context.push(
@@ -136,9 +131,9 @@ class AuthRequiredGate extends StatelessWidget {
                       excludeSemantics: true,
                       child: OutlinedButton(
                         onPressed: () => unawaitedDebugFuture(
-                              "AuthRequiredGate.pushRegister",
-                              context.push("/register"),
-                            ),
+                          "AuthRequiredGate.pushRegister",
+                          context.push("/register"),
+                        ),
                         child: const Text("還沒有帳號？註冊"),
                       ),
                     ),

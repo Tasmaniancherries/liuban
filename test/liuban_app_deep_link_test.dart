@@ -42,7 +42,8 @@ void main() {
     expect(isValidComparableAuthorityHost("[2001:db8::1"), isFalse);
   });
 
-  test("normalizeAppLocationForDeepLinkCompare falls back for invalid host", () {
+  test("normalizeAppLocationForDeepLinkCompare falls back for invalid host",
+      () {
     expect(
       normalizeAppLocationForDeepLinkCompare("//bad host.com/feed?x=1"),
       "/bad%20host.com/feed?x=1",
@@ -60,7 +61,8 @@ void main() {
     );
   });
 
-  test("normalizeAppLocationForDeepLinkCompare accepts IPv6 authority host", () {
+  test("normalizeAppLocationForDeepLinkCompare accepts IPv6 authority host",
+      () {
     expect(
       normalizeAppLocationForDeepLinkCompare("//[::1]/feed?x=1"),
       "/feed?x=1",
@@ -69,12 +71,14 @@ void main() {
 
   test("normalizeAppLocationForDeepLinkCompare strips scheme and host", () {
     expect(
-      normalizeAppLocationForDeepLinkCompare("https://liuban.app/feed?x=1#frag"),
+      normalizeAppLocationForDeepLinkCompare(
+          "https://liuban.app/feed?x=1#frag"),
       "/feed?x=1",
     );
   });
 
-  test("normalizeAppLocationForDeepLinkCompare defaults to root for host-only URI",
+  test(
+      "normalizeAppLocationForDeepLinkCompare defaults to root for host-only URI",
       () {
     expect(
       normalizeAppLocationForDeepLinkCompare("https://liuban.app"),
@@ -82,7 +86,8 @@ void main() {
     );
   });
 
-  test("normalizeAppLocationForDeepLinkCompare handles non-http URI schemes", () {
+  test("normalizeAppLocationForDeepLinkCompare handles non-http URI schemes",
+      () {
     expect(
       normalizeAppLocationForDeepLinkCompare("wss://liuban.app/messages?x=1"),
       "/messages?x=1",
@@ -121,14 +126,16 @@ void main() {
     );
   });
 
-  test("normalizeAppLocationForDeepLinkCompare parses //userinfo@authority", () {
+  test("normalizeAppLocationForDeepLinkCompare parses //userinfo@authority",
+      () {
     expect(
       normalizeAppLocationForDeepLinkCompare("//user@liuban.app/feed?x=1"),
       "/feed?x=1",
     );
   });
 
-  test("normalizeAppLocationForDeepLinkCompare host-only localhost to root", () {
+  test("normalizeAppLocationForDeepLinkCompare host-only localhost to root",
+      () {
     expect(
       normalizeAppLocationForDeepLinkCompare("//localhost"),
       "/",
@@ -156,14 +163,16 @@ void main() {
     );
   });
 
-  test("normalizeAppLocationForDeepLinkCompare normalizes query-only input", () {
+  test("normalizeAppLocationForDeepLinkCompare normalizes query-only input",
+      () {
     expect(
       normalizeAppLocationForDeepLinkCompare("?x=1&b=2"),
       "/?b=2&x=1",
     );
   });
 
-  test("normalizeAppLocationForDeepLinkCompare maps fragment-only input to root",
+  test(
+      "normalizeAppLocationForDeepLinkCompare maps fragment-only input to root",
       () {
     expect(
       normalizeAppLocationForDeepLinkCompare("#top"),
@@ -231,7 +240,8 @@ void main() {
     );
   });
 
-  test("isSameAppLocationForDeepLink matches missing-leading-slash variant", () {
+  test("isSameAppLocationForDeepLink matches missing-leading-slash variant",
+      () {
     expect(
       isSameAppLocationForDeepLink(
         currentLocation: "feed?x=1",
@@ -274,7 +284,8 @@ void main() {
     );
   });
 
-  test("isWithinDeepLinkDedupWindow treats same timestamp as within window", () {
+  test("isWithinDeepLinkDedupWindow treats same timestamp as within window",
+      () {
     expect(
       isWithinDeepLinkDedupWindow(nowMs: 1000, lastMs: 1000, windowMs: 1500),
       isTrue,
@@ -332,8 +343,10 @@ void main() {
   });
 
   test("buildDeepLinkDedupSignature differs for different long inputs", () {
-    final sigA = buildDeepLinkDedupSignature("/feed?q=${"a" * 5000}", maxChars: 64);
-    final sigB = buildDeepLinkDedupSignature("/feed?q=${"b" * 5000}", maxChars: 64);
+    final sigA =
+        buildDeepLinkDedupSignature("/feed?q=${"a" * 5000}", maxChars: 64);
+    final sigB =
+        buildDeepLinkDedupSignature("/feed?q=${"b" * 5000}", maxChars: 64);
     expect(sigA, isNot(sigB));
   });
 
@@ -362,8 +375,10 @@ void main() {
     expect(buildDeepLinkDedupSignature("/feed?x=1", maxChars: -1), "");
   });
 
-  test("buildDeepLinkDedupSignature uses prefix-only mode for tiny maxChars", () {
-    final sig = buildDeepLinkDedupSignature("/feed?q=${"a" * 100}", maxChars: 8);
+  test("buildDeepLinkDedupSignature uses prefix-only mode for tiny maxChars",
+      () {
+    final sig =
+        buildDeepLinkDedupSignature("/feed?q=${"a" * 100}", maxChars: 8);
     expect(sig.length, 8);
     expect(sig, "/feed?q=");
   });

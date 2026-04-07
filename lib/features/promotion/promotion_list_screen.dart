@@ -218,16 +218,16 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                               semanticLabel: "前往詳情",
                             ),
                             onTap: () => unawaitedDebugFuture(
-                                  "PromotionListScreen.openDetail",
-                                  context.push("/promotion/${items[i].id}"),
-                                ),
+                              "PromotionListScreen.openDetail",
+                              context.push("/promotion/${items[i].id}"),
+                            ),
                             onLongPress: () => unawaitedDebug(
-                                  "PromotionListScreen.openPromotionShareActions",
-                                  openPromotionShareActions(
-                                    context,
-                                    items[i].id,
-                                  ),
-                                ),
+                              "PromotionListScreen.openPromotionShareActions",
+                              openPromotionShareActions(
+                                context,
+                                items[i].id,
+                              ),
+                            ),
                           ),
                         ),
                       ),

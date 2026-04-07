@@ -6,8 +6,8 @@ void main() {
       () {
     expect(
         parseShareLinkOrigin("https://www.liuban.app/").host, "www.liuban.app");
-    expect(
-        parseShareLinkOrigin("https://www.liuban.app////").host, "www.liuban.app");
+    expect(parseShareLinkOrigin("https://www.liuban.app////").host,
+        "www.liuban.app");
     expect(parseShareLinkOrigin("https://liuban.app.").host, "liuban.app");
     expect(parseShareLinkOrigin("liuban.app...").host, "liuban.app");
     expect(parseShareLinkOrigin("liuban.app").host, "liuban.app");
@@ -294,7 +294,8 @@ void main() {
 
   test("repeated query key picks first non-empty value", () {
     final reset = shareUriToAppLocation(
-      Uri.parse("https://liuban.app/reset-password?token=&token=%20%20&token=abc"),
+      Uri.parse(
+          "https://liuban.app/reset-password?token=&token=%20%20&token=abc"),
     );
     final login = shareUriToAppLocation(
       Uri.parse(
@@ -450,7 +451,8 @@ void main() {
       "/dm/u1?custom=a",
     );
     expect(
-      shareUriToAppLocation(Uri.parse("https://liuban.app/Settings/Blocked-Users")),
+      shareUriToAppLocation(
+          Uri.parse("https://liuban.app/Settings/Blocked-Users")),
       "/settings/blocked-users",
     );
   });
@@ -461,7 +463,8 @@ void main() {
       "/feed",
     );
     expect(
-      shareUriToAppLocation(Uri.parse("https://liuban.app/Login?Redirect=%2Ffeed")),
+      shareUriToAppLocation(
+          Uri.parse("https://liuban.app/Login?Redirect=%2Ffeed")),
       "/login?redirect=%2Ffeed",
     );
     expect(

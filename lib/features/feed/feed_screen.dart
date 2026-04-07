@@ -163,13 +163,13 @@ class _FeedScreenState extends State<FeedScreen>
                 title: "本校動態",
                 message: "登入並通過身分審核後，可瀏覽與發佈本校可見內容。",
                 onGoToLogin: () => unawaitedDebugFuture(
-                      "FeedScreen.guestLockGoToLogin",
-                      context.push("/login"),
-                    ),
+                  "FeedScreen.guestLockGoToLogin",
+                  context.push("/login"),
+                ),
                 onGoToRegister: () => unawaitedDebugFuture(
-                      "FeedScreen.guestLockGoToRegister",
-                      context.push("/register"),
-                    ),
+                  "FeedScreen.guestLockGoToRegister",
+                  context.push("/register"),
+                ),
                 child: _FeedStreamTab(
                   kind: FeedStreamKind.school,
                   refreshTick: _feedRefreshTick,
@@ -181,13 +181,13 @@ class _FeedScreenState extends State<FeedScreen>
                 title: "好友動態",
                 message: "通過審核並互相添加好友後，可在此查看好友動態。",
                 onGoToLogin: () => unawaitedDebugFuture(
-                      "FeedScreen.guestLockGoToLogin",
-                      context.push("/login"),
-                    ),
+                  "FeedScreen.guestLockGoToLogin",
+                  context.push("/login"),
+                ),
                 onGoToRegister: () => unawaitedDebugFuture(
-                      "FeedScreen.guestLockGoToRegister",
-                      context.push("/register"),
-                    ),
+                  "FeedScreen.guestLockGoToRegister",
+                  context.push("/register"),
+                ),
                 child: _FeedStreamTab(
                   kind: FeedStreamKind.friends,
                   refreshTick: _feedRefreshTick,
@@ -646,9 +646,9 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
                         excludeSemantics: true,
                         child: TextButton(
                           onPressed: () => unawaitedDebug(
-                                "FeedStreamTab._onLoadMore",
-                                _onLoadMore(),
-                              ),
+                            "FeedStreamTab._onLoadMore",
+                            _onLoadMore(),
+                          ),
                           child: const Text("載入更多"),
                         ),
                       ),

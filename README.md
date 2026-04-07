@@ -39,6 +39,7 @@ flutter run -d android
 
 ```bash
 flutter pub get
+dart format .   # CI 會檢查格式；也可用 dart format --output=none --set-exit-if-changed . 只檢查不寫入
 dart analyze
 flutter test
 ```

@@ -300,9 +300,9 @@ class _BlockedUsersScreenState extends State<BlockedUsersScreen> {
                                   excludeSemantics: true,
                                   child: TextButton(
                                     onPressed: () => unawaitedDebug(
-                                          "BlockedUsersScreen._confirmUnblock",
-                                          _confirmUnblock(b),
-                                        ),
+                                      "BlockedUsersScreen._confirmUnblock",
+                                      _confirmUnblock(b),
+                                    ),
                                     child: const Text("解除"),
                                   ),
                                 ),

@@ -32,7 +32,8 @@ void main() {
   });
 
   test("sanitizeNetworkLogLine redacts digest authorization headers", () {
-    const line = 'Authorization: Digest username="Mufasa", realm="testrealm@host.com", nonce="abc"';
+    const line =
+        'Authorization: Digest username="Mufasa", realm="testrealm@host.com", nonce="abc"';
     final safe = DioClient.sanitizeNetworkLogLine(line);
     expect(safe, "Authorization: Digest ***");
     expect(safe.contains('username="Mufasa"'), isFalse);

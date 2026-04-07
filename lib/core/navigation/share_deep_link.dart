@@ -100,12 +100,10 @@ List<int>? _ipv6HextetsForHostMatch(String host) {
   if (compressIdx < 0) {
     if (left.length != 8) return null;
     try {
-      return left
-          .map((s) {
-            if (s.length > 4) throw const FormatException();
-            return int.parse(s, radix: 16);
-          })
-          .toList();
+      return left.map((s) {
+        if (s.length > 4) throw const FormatException();
+        return int.parse(s, radix: 16);
+      }).toList();
     } catch (_) {
       return null;
     }
@@ -145,7 +143,8 @@ const int _kMaxSharePathSegments = 8;
 const int _kMaxSharePathSegmentChars = 256;
 
 bool _isRouteManagedLongQueryKey(String key) =>
-    _normalizedQueryKey(key) == "token" || _normalizedQueryKey(key) == "redirect";
+    _normalizedQueryKey(key) == "token" ||
+    _normalizedQueryKey(key) == "redirect";
 
 String _normalizedQueryKey(String key) => key.trim().toLowerCase();
 
@@ -255,7 +254,9 @@ String? _encodePathParam(String rawIdSegment) {
   }
   if (_hasControlChars(decoded)) return null;
   final normalized = decoded.trim();
-  if (normalized.isEmpty || normalized.length > _kMaxPathParamChars) return null;
+  if (normalized.isEmpty || normalized.length > _kMaxPathParamChars) {
+    return null;
+  }
   return Uri.encodeComponent(normalized);
 }
 
@@ -431,8 +432,8 @@ String? shareUriToAppLocation(
 
     final scheme = uri.scheme.toLowerCase();
     final expectedOrigin = (shareLinkOriginOverride != null
-            ? parseShareLinkOrigin(shareLinkOriginOverride)
-            : _shareOriginUri());
+        ? parseShareLinkOrigin(shareLinkOriginOverride)
+        : _shareOriginUri());
     final expectedHost = expectedOrigin.host;
 
     if (scheme == "http" || scheme == "https") {

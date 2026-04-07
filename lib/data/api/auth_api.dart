@@ -70,10 +70,8 @@ class AuthApi {
       final file =
           MultipartFile.fromBytes(documentBytes, filename: documentFilename);
       final kindStr = switch (verificationDocumentKind) {
-        RegistrationVerificationDocumentKind.offerOrAdmissionProof =>
-          "offer",
-        RegistrationVerificationDocumentKind.studentIdCard =>
-          "student_id_card",
+        RegistrationVerificationDocumentKind.offerOrAdmissionProof => "offer",
+        RegistrationVerificationDocumentKind.studentIdCard => "student_id_card",
       };
       final map = <String, dynamic>{
         "custom_id": customId,

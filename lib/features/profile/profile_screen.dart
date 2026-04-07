@@ -121,7 +121,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
           ApiDevSemantics.verificationSyncGenericFailureMessage,
-          semanticsHint: ApiDevSemantics.verificationSyncGenericFailureSnackHint,
+          semanticsHint:
+              ApiDevSemantics.verificationSyncGenericFailureSnackHint,
         ),
       );
     }
@@ -174,9 +175,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: IconButton(
                   tooltip: "設定",
                   onPressed: () => unawaitedDebugFuture(
-                        "ProfileScreen.appBar.pushSettings",
-                        context.push("/settings"),
-                      ),
+                    "ProfileScreen.appBar.pushSettings",
+                    context.push("/settings"),
+                  ),
                   icon: const Icon(
                     Icons.settings_outlined,
                     semanticLabel: "設定",
@@ -218,9 +219,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         semanticLabel: "前往詳情",
                       ),
                       onTap: () => unawaitedDebugFuture(
-                            "ProfileScreen.settingsTile.pushSettings",
-                            context.push("/settings"),
-                          ),
+                        "ProfileScreen.settingsTile.pushSettings",
+                        context.push("/settings"),
+                      ),
                     ),
                   ),
                 ),
@@ -444,9 +445,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         onTap: () => unawaitedDebug(
-                              "ProfileScreen._syncVerificationStatus",
-                              _syncVerificationStatus(session),
-                            ),
+                          "ProfileScreen._syncVerificationStatus",
+                          _syncVerificationStatus(session),
+                        ),
                       ),
                     ),
                   ),
@@ -468,9 +469,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Text(ApiDevSemantics.profileMeGet),
                         ),
                         onTap: () => unawaitedDebugFuture(
-                              "ProfileScreen._loadMe",
-                              _loadMe(),
-                            ),
+                          "ProfileScreen._loadMe",
+                          _loadMe(),
+                        ),
                       ),
                     ),
                   ),
@@ -485,9 +486,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     excludeSemantics: true,
                     child: FilledButton(
                       onPressed: () => unawaitedDebugFuture(
-                            "ProfileScreen.guest.pushRegister",
-                            context.push("/register"),
-                          ),
+                        "ProfileScreen.guest.pushRegister",
+                        context.push("/register"),
+                      ),
                       child: const Text("前往註冊／審核"),
                     ),
                   ),
@@ -502,9 +503,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     excludeSemantics: true,
                     child: FilledButton.tonal(
                       onPressed: () => unawaitedDebugFuture(
-                            "ProfileScreen.guest.pushLogin",
-                            context.push("/login"),
-                          ),
+                        "ProfileScreen.guest.pushLogin",
+                        context.push("/login"),
+                      ),
                       child: const Text("已有帳號 · 登入"),
                     ),
                   ),

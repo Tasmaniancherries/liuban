@@ -83,13 +83,13 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     title: "好友私信",
                     message: "通過身分審核並互為好友後，可在此發起聊天。",
                     onGoToLogin: () => unawaitedDebugFuture(
-                          "MessagesScreen.guestLockGoToLogin",
-                          context.push("/login"),
-                        ),
+                      "MessagesScreen.guestLockGoToLogin",
+                      context.push("/login"),
+                    ),
                     onGoToRegister: () => unawaitedDebugFuture(
-                          "MessagesScreen.guestLockGoToRegister",
-                          context.push("/register"),
-                        ),
+                      "MessagesScreen.guestLockGoToRegister",
+                      context.push("/register"),
+                    ),
                     child: _FriendsInbox(
                       refreshTick: _inboxRefreshTick,
                       guestLocked: session.isGuestLike,
@@ -273,9 +273,9 @@ class _SupportEntryState extends State<_SupportEntry>
                       excludeSemantics: true,
                       child: FilledButton.icon(
                         onPressed: () => unawaitedDebugFuture(
-                              "MessagesScreen._SupportEntry.pushSupport",
-                              context.push<void>("/support"),
-                            ),
+                          "MessagesScreen._SupportEntry.pushSupport",
+                          context.push<void>("/support"),
+                        ),
                         icon: const Icon(Icons.chat, semanticLabel: "進入對話"),
                         label: const Text("進入對話"),
                       ),
@@ -605,9 +605,9 @@ class _InboxHeader extends StatelessWidget {
                 excludeSemantics: true,
                 child: TextButton(
                   onPressed: () => unawaitedDebugFuture(
-                        "MessagesScreen._InboxHeader.pushFriendRequests",
-                        context.push("/friend-requests"),
-                      ),
+                    "MessagesScreen._InboxHeader.pushFriendRequests",
+                    context.push("/friend-requests"),
+                  ),
                   child: const Text("待處理申請"),
                 ),
               ),
@@ -621,9 +621,9 @@ class _InboxHeader extends StatelessWidget {
               excludeSemantics: true,
               child: FilledButton.tonalIcon(
                 onPressed: () => unawaitedDebug(
-                      "MessagesScreen._InboxHeader.onAddFriend",
-                      onAddFriend(),
-                    ),
+                  "MessagesScreen._InboxHeader.onAddFriend",
+                  onAddFriend(),
+                ),
                 icon: const Icon(
                   Icons.person_add_alt_1,
                   size: 20,

@@ -238,9 +238,9 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
                     } else if (v == "edit" && isMine) {
                       final enc = Uri.encodeComponent(post.id);
                       final summary = await this.context.push<String>(
-                        "/compose/edit/$enc",
-                        extra: post,
-                      );
+                            "/compose/edit/$enc",
+                            extra: post,
+                          );
                       if (!mounted) return;
                       if (summary != null) {
                         _refreshDetail();

@@ -380,9 +380,9 @@ class _IncomingPanel extends StatelessWidget {
                                   child: IconButton(
                                     tooltip: "拒絕",
                                     onPressed: () => unawaitedDebug(
-                                          "FriendRequestsScreen._respond.decline",
-                                          onRespond(r.id, false),
-                                        ),
+                                      "FriendRequestsScreen._respond.decline",
+                                      onRespond(r.id, false),
+                                    ),
                                     icon: const Icon(
                                       Icons.close,
                                       semanticLabel: "拒絕",
@@ -394,9 +394,9 @@ class _IncomingPanel extends StatelessWidget {
                                   child: IconButton.filledTonal(
                                     tooltip: "接受",
                                     onPressed: () => unawaitedDebug(
-                                          "FriendRequestsScreen._respond.accept",
-                                          onRespond(r.id, true),
-                                        ),
+                                      "FriendRequestsScreen._respond.accept",
+                                      onRespond(r.id, true),
+                                    ),
                                     icon: const Icon(
                                       Icons.check,
                                       semanticLabel: "接受",

@@ -7,7 +7,8 @@ import "package:liuban/core/network/auth_session_tokens.dart";
 import "package:liuban/core/session/app_session.dart";
 
 void main() {
-  testWidgets("SessionHydrator calls signOut when access token is cleared", (tester) async {
+  testWidgets("SessionHydrator calls signOut when access token is cleared",
+      (tester) async {
     final session = AppSession()..setPhase(AccountPhase.verifiedStudent);
     final tokens = AuthSessionTokens(accessToken: "a", refreshToken: "r");
     final container = AppContainer(

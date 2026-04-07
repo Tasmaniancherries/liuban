@@ -28,8 +28,7 @@ class GuestLockOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!locked) return child;
 
-    final hasAuthShortcuts =
-        onGoToLogin != null || onGoToRegister != null;
+    final hasAuthShortcuts = onGoToLogin != null || onGoToRegister != null;
     final lockHint = hasAuthShortcuts
         ? "底層內容已鎖定，可使用下方按鈕前往登入或註冊，通過身分審核後可使用完整功能 ${ApiDevSemantics.docsTrail}"
         : "底層內容已鎖定，完成登入或身分審核後可使用完整功能 ${ApiDevSemantics.docsTrail}";

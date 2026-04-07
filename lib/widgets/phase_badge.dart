@@ -20,8 +20,7 @@ class PhaseBadge extends StatelessWidget {
         return Semantics(
           container: true,
           label: "帳戶狀態：$label",
-          hint:
-              "目前審核階段標示，非按鈕。${ApiDevSemantics.phaseBadgeDevNote}",
+          hint: "目前審核階段標示，非按鈕。${ApiDevSemantics.phaseBadgeDevNote}",
           excludeSemantics: true,
           child: Chip(
             label: Text(label, style: const TextStyle(fontSize: 12)),

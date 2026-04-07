@@ -267,9 +267,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
               excludeSemantics: true,
               child: TextButton(
                 onPressed: () => unawaitedDebug(
-                      "ForgotPasswordScreen._tryPop",
-                      _tryPop(),
-                    ),
+                  "ForgotPasswordScreen._tryPop",
+                  _tryPop(),
+                ),
                 child: const Text("返回登入"),
               ),
             ),
@@ -284,9 +284,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
               excludeSemantics: true,
               child: TextButton(
                 onPressed: () => unawaitedDebugFuture(
-                      "ForgotPasswordScreen._emailTabSent.pushRegister",
-                      context.push("/register"),
-                    ),
+                  "ForgotPasswordScreen._emailTabSent.pushRegister",
+                  context.push("/register"),
+                ),
                 child: const Text("還沒有帳號？註冊"),
               ),
             ),
@@ -344,9 +344,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                 border: OutlineInputBorder(),
               ),
               onSubmitted: (_) => unawaitedDebug(
-                    "ForgotPasswordScreen._sendEmail",
-                    _sendEmail(),
-                  ),
+                "ForgotPasswordScreen._sendEmail",
+                _sendEmail(),
+              ),
             ),
           ),
           const SizedBox(height: 24),
@@ -388,9 +388,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
               excludeSemantics: true,
               child: TextButton(
                 onPressed: () => unawaitedDebugFuture(
-                      "ForgotPasswordScreen._emailTabForm.pushResetPassword",
-                      context.push("/reset-password"),
-                    ),
+                  "ForgotPasswordScreen._emailTabForm.pushResetPassword",
+                  context.push("/reset-password"),
+                ),
                 child: const Text("已有郵件連結？前往輸入 token"),
               ),
             ),
@@ -405,9 +405,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
               excludeSemantics: true,
               child: TextButton(
                 onPressed: () => unawaitedDebug(
-                      "ForgotPasswordScreen._tryPop",
-                      _tryPop(),
-                    ),
+                  "ForgotPasswordScreen._tryPop",
+                  _tryPop(),
+                ),
                 child: const Text("返回登入"),
               ),
             ),
@@ -422,9 +422,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
               excludeSemantics: true,
               child: TextButton(
                 onPressed: () => unawaitedDebugFuture(
-                      "ForgotPasswordScreen._emailTabForm.pushRegister",
-                      context.push("/register"),
-                    ),
+                  "ForgotPasswordScreen._emailTabForm.pushRegister",
+                  context.push("/register"),
+                ),
                 child: const Text("還沒有帳號？註冊"),
               ),
             ),
@@ -469,9 +469,9 @@ class _SupportPanel extends StatelessWidget {
             excludeSemantics: true,
             child: FilledButton(
               onPressed: () => unawaitedDebugFuture(
-                    "ForgotPasswordScreen._SupportPanel.pushSupport",
-                    context.push("/support"),
-                  ),
+                "ForgotPasswordScreen._SupportPanel.pushSupport",
+                context.push("/support"),
+              ),
               child: const Text("前往官方客服"),
             ),
           ),
@@ -486,9 +486,9 @@ class _SupportPanel extends StatelessWidget {
             excludeSemantics: true,
             child: TextButton(
               onPressed: () => unawaitedDebug(
-                    "ForgotPasswordScreen._tryPop.support",
-                    onPopLogin(),
-                  ),
+                "ForgotPasswordScreen._tryPop.support",
+                onPopLogin(),
+              ),
               child: const Text("返回登入"),
             ),
           ),
@@ -503,9 +503,9 @@ class _SupportPanel extends StatelessWidget {
             excludeSemantics: true,
             child: TextButton(
               onPressed: () => unawaitedDebugFuture(
-                    "ForgotPasswordScreen._SupportPanel.pushRegister",
-                    context.push("/register"),
-                  ),
+                "ForgotPasswordScreen._SupportPanel.pushRegister",
+                context.push("/register"),
+              ),
               child: const Text("還沒有帳號？註冊"),
             ),
           ),

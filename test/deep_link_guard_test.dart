@@ -77,7 +77,8 @@ void main() {
     final longQueryKey = List.filled(140, "k").join();
     expect(isAllowedDeepLinkLocation("/login?$longQueryKey=x"), isFalse);
     final longQueryValue = List.filled(600, "v").join();
-    expect(isAllowedDeepLinkLocation("/login?redirect=$longQueryValue"), isFalse);
+    expect(
+        isAllowedDeepLinkLocation("/login?redirect=$longQueryValue"), isFalse);
     final tooManyQueryKeys = List.generate(40, (i) => "k$i=v").join("&");
     expect(isAllowedDeepLinkLocation("/login?$tooManyQueryKeys"), isFalse);
     final tooManyQueryValues = List.generate(40, (i) => "x=$i").join("&");
@@ -151,7 +152,8 @@ void main() {
     expect(safe.contains("_1="), isTrue);
   });
 
-  test("safeUriForLog keeps repeated keys and redacts all sensitive values", () {
+  test("safeUriForLog keeps repeated keys and redacts all sensitive values",
+      () {
     final uri = Uri.parse(
       "https://liuban.app/login?x=1&x=2&token=a&token=b",
     );
@@ -241,7 +243,8 @@ void main() {
     expect(safe, "mailto:foo@bar.com?subject=hi&token=%2A%2A%2A");
   });
 
-  test("safeLocationForLog redacts sensitive query values and drops fragment", () {
+  test("safeLocationForLog redacts sensitive query values and drops fragment",
+      () {
     final safe = safeLocationForLog(
       "/reset-password?token=abc&password=pwd&state=ok#secret",
     );
@@ -397,7 +400,8 @@ void main() {
     expect(safe, "/feed/sub?state=ok");
   });
 
-  test("safeLocationForLog normalizes duplicate slashes and trailing slash", () {
+  test("safeLocationForLog normalizes duplicate slashes and trailing slash",
+      () {
     final safe = safeLocationForLog("/feed///sub///?state=ok");
     expect(safe, "/feed/sub?state=ok");
   });
