@@ -43,6 +43,8 @@ flutter build apk --debug
 
 If you changed dependencies in `pubspec.yaml`, commit `pubspec.lock` in the same PR.
 
+Android: `android/gradle.properties` uses JVM heap settings that fit typical laptops and GitHub-hosted runners; if local builds are slow, you can raise `-Xmx` for your machine only (avoid committing very large values).
+
 ## PR Quality
 
 - Use `.github/pull_request_template.md`.
