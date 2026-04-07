@@ -1,0 +1,19 @@
+# Flutter / Dart
+.dart_tool/
+.buildlog/
+.packages
+.pub-cache/
+.pub/
+build/
+**/generated_plugin_registrant.dart
+*.iml
+.idea/
+.vscode/
+
+# iOS / Android（generate 後）
+**/Pods/
+**/DerivedData/
+
+# Misc
+*.swp
+.DS_Store

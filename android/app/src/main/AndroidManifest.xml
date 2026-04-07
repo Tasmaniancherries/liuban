@@ -1,0 +1,224 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <application
+        android:label="留伴"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:taskAffinity=""
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            <!-- Specifies an Android theme to apply to this Activity as soon as
+                 the Android process has started. This theme is visible to the user
+                 while the Flutter UI initializes. After that, this theme continues
+                 to determine the Window background behind the Flutter UI. -->
+            <meta-data
+              android:name="io.flutter.embedding.android.NormalTheme"
+              android:resource="@style/NormalTheme"
+              />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <!-- 與 SHARE_LINK_ORIGIN 預設 host 對齊；正式網域需放置 assetlinks.json 後 autoVerify 才會自動核准。 -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/post" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/promotion" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/reset-password" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/dm" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/register" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/login" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/settings" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/forgot-password" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/add-friend" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/friend-requests" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/compose" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/support" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/account" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/feed" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/messages" />
+                <data
+                    android:scheme="https"
+                    android:host="liuban.app"
+                    android:pathPrefix="/profile" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/post" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/promotion" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/reset-password" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/dm" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/register" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/login" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/settings" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/forgot-password" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/add-friend" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/friend-requests" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/compose" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/support" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/account" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/feed" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/messages" />
+                <data
+                    android:scheme="https"
+                    android:host="www.liuban.app"
+                    android:pathPrefix="/profile" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="liuban"
+                    android:host="post"
+                    android:pathPrefix="/" />
+                <data
+                    android:scheme="liuban"
+                    android:host="promotion"
+                    android:pathPrefix="/" />
+                <data android:scheme="liuban" android:host="reset-password" />
+                <data
+                    android:scheme="liuban"
+                    android:host="dm"
+                    android:pathPrefix="/" />
+                <data android:scheme="liuban" android:host="register" />
+                <data android:scheme="liuban" android:host="login" />
+                <data android:scheme="liuban" android:host="settings" />
+                <data android:scheme="liuban" android:host="forgot-password" />
+                <data android:scheme="liuban" android:host="add-friend" />
+                <data android:scheme="liuban" android:host="friend-requests" />
+                <data
+                    android:scheme="liuban"
+                    android:host="compose"
+                    android:pathPrefix="/" />
+                <data android:scheme="liuban" android:host="compose" />
+                <data android:scheme="liuban" android:host="support" />
+                <data
+                    android:scheme="liuban"
+                    android:host="account"
+                    android:pathPrefix="/" />
+                <data android:scheme="liuban" android:host="feed" />
+                <data android:scheme="liuban" android:host="promotion" />
+                <data android:scheme="liuban" android:host="messages" />
+                <data android:scheme="liuban" android:host="profile" />
+            </intent-filter>
+        </activity>
+        <!-- Don't delete the meta-data below.
+             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+    </application>
+    <!-- Required to query activities that can process text, see:
+         https://developer.android.com/training/package-visibility and
+         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+
+         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT"/>
+            <data android:mimeType="text/plain"/>
+        </intent>
+    </queries>
+</manifest>
