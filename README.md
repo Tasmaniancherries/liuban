@@ -2,6 +2,10 @@
 
 在港留學生社交應用 — 使用 **Flutter** 同時支援 **iOS** 與 **Android**。
 
+[![Flutter CI](https://github.com/Tasmaniancherries/liuban/actions/workflows/flutter.yml/badge.svg)](https://github.com/Tasmaniancherries/liuban/actions/workflows/flutter.yml)
+[![Meta lint](https://github.com/Tasmaniancherries/liuban/actions/workflows/meta-lint.yml/badge.svg)](https://github.com/Tasmaniancherries/liuban/actions/workflows/meta-lint.yml)
+[![Dependency review](https://github.com/Tasmaniancherries/liuban/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/Tasmaniancherries/liuban/actions/workflows/dependency-review.yml)
+
 ## 環境準備
 
 1. 安裝 [Flutter SDK](https://docs.flutter.dev/get-started/install)（穩定版；建議與 CI 一致，見下方 GitHub 自動化中的 **`FLUTTER_VERSION`**）。`pubspec.yaml` 要求 **Dart `>=3.9.0 <4.0.0`**（隨 Flutter 內建 Dart 一併滿足即可）。
