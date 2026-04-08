@@ -23,7 +23,7 @@ When upgrading Flutter for the whole team, bump **`env.FLUTTER_VERSION`** at the
 Run the same checks as CI:
 
 ```bash
-bash tool/ci_quality.sh
+./tool/ci_quality.sh
 ```
 
 Optional coverage (matches CI’s `flutter test --coverage`; output is gitignored under `coverage/`):
@@ -47,7 +47,7 @@ flutter build apk --debug
 Combined smoke build command used by CI compile job:
 
 ```bash
-bash tool/ci_smoke_builds.sh
+./tool/ci_smoke_builds.sh
 ```
 
 If you changed dependencies in `pubspec.yaml`, commit `pubspec.lock` in the same PR.

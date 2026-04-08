@@ -52,7 +52,7 @@ flutter build apk --debug
 ## 開發與測試
 
 ```bash
-bash tool/ci_quality.sh   # 與 CI quality job 完全一致（含 lockfile/format/analyze/test+coverage）
+./tool/ci_quality.sh   # 與 CI quality job 完全一致（含 lockfile/format/analyze/test+coverage）
 ```
 
 產生覆蓋率報告（`coverage/lcov.info`；可本機用 IDE／[`lcov`](https://github.com/linux-test-project/lcov) 檢視；CI 將此檔上傳為 **artifact**）：
