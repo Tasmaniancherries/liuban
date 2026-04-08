@@ -1,0 +1,39 @@
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/**"
+          - "tool/ci_*.sh"
+          - "Makefile"
+          - "analysis_options.yaml"
+
+docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - "LICENSE"
+          - ".github/ISSUE_TEMPLATE/**"
+          - ".github/pull_request_template.md"
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "pubspec.yaml"
+          - "pubspec.lock"
+          - ".github/dependabot.yml"
+
+android:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "android/**"
+
+ios:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "ios/**"
+
+flutter:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "lib/**"
+          - "test/**"
+          - "web/**"

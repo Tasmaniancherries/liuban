@@ -109,6 +109,7 @@ flutter test test/unawaited_debug_test.dart
 - 內容：`dart format`（檢查）、`dart analyze --fatal-infos`、`flutter test --coverage`（上傳 `lcov` artifact）、`flutter build web --release` 與 **`flutter build apk --debug`**（安裝 **Android API 36** + **NDK 28.2.13676358**；並上傳 **debug APK** artifact 約 7 天供抽查）、`flutter pub get --enforce-lockfile`
 - 對 `main` 的 PR 另跑依賴審查：`.github/workflows/dependency-review.yml`（僅在依賴相關檔案變更時觸發；也可手動觸發；需啟用 [Dependency graph](https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-the-dependency-graph)）
 - 依賴更新：`.github/dependabot.yml` 每週檢查 **GitHub Actions** 與 **pub**（`pubspec.yaml`），並以 **groups** 盡量合併為較少筆 PR
+- PR 標籤：`.github/workflows/pr-labeler.yml` 依路徑自動加上 `ci` / `docs` / `dependencies` / `android` / `ios` / `flutter`
 - 安全性回報：見 `SECURITY.md`
 - **Artifacts**（在 Actions 單次 run 頁面下載）：`coverage-lcov`（`lcov.info`）、`app-debug-apk`（CI 產生的 debug APK，預設約保留 7 日，非上架包）
 
