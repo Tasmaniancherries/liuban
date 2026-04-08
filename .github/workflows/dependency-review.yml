@@ -23,5 +23,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      # pull_request 會自動帶入 base/head；workflow_dispatch 沒有 PR 內容，必須手動指定 ref，否則會失敗：
+      # "Both a base ref and head ref must be provided..."
       - name: Dependency review
-        uses: actions/dependency-review-action@v4
+        uses: actions/dependency-review-action@v4.9.0
+        with:
+          base-ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
+          head-ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
