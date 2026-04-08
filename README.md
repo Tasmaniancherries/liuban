@@ -85,6 +85,8 @@ flutter test test/unawaited_debug_test.dart
 
 其他（DTO／session／設定）：`test/data_models_dto_test.dart`（各資料模型 `fromJson`／`listFromResponse`）、`test/app_session_test.dart`（`AppSession` 階段與通知）、`test/post_audience_test.dart`（`PostAudience` 與 API 字串）、`test/app_config_test.dart`（`AppConfig` 預設編譯期常數）、`test/promotion_models_test.dart`（`PromotionItem.fromDto`／`promotionById`）。
 
+其他（路由／門檻／UI 小件）：`test/router_build_test.dart`（`buildRouter` 首屏與錯誤頁）、`test/auth_required_gate_test.dart`、`test/compose_access_gate_test.dart`、`test/widget_phase_guest_lock_test.dart`（`PhaseBadge`／`GuestLockOverlay`）、`test/scroll_behavior_test.dart`、`test/liuban_snackbar_test.dart`。
+
 ## 專案結構（概要）
 
 | 路徑 | 說明 |
