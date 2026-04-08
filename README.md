@@ -115,6 +115,7 @@ flutter test test/unawaited_debug_test.dart
 - Meta lint：`.github/workflows/meta-lint.yml` 會檢查 workflow 語法（actionlint）與 `tool/*.sh`（shellcheck）
 - 安全性回報：見 `SECURITY.md`
 - **Artifacts**（在 Actions 單次 run 頁面下載）：`coverage-lcov`（`lcov.info`）、`app-debug-apk`（CI 產生的 debug APK，預設約保留 7 日，非上架包）
+- Workflow 入口（可直接查看）：[Flutter CI](https://github.com/Tasmaniancherries/liuban/actions/workflows/flutter.yml) / [Dependency review](https://github.com/Tasmaniancherries/liuban/actions/workflows/dependency-review.yml) / [Meta lint](https://github.com/Tasmaniancherries/liuban/actions/workflows/meta-lint.yml)
 
 若 **Build Android APK** 失敗且訊息與 **NDK／CMake／platform** 相關，請對照 `.github/workflows/flutter.yml` 內 `setup-android` 的 `packages`（需與你使用的 Flutter stable 預設 `compileSdk`／`ndkVersion` 一致），或把該 job 的完整 log 附在 Issue／PR。
 
