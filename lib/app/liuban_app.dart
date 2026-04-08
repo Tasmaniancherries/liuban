@@ -460,7 +460,7 @@ class _LiubanAppState extends State<LiubanApp> {
 
   @override
   void dispose() {
-    _appLinkSub?.cancel();
+    unawaited(_appLinkSub?.cancel() ?? Future<void>.value());
     super.dispose();
   }
 
