@@ -41,3 +41,13 @@ linter:
     use_is_even_rather_than_modulo: true
     use_string_buffers: true
     use_super_parameters: true
+
+    # Hygiene & API clarity
+    collection_methods_unrelated_type: true
+    depend_on_referenced_packages: true
+    implicit_call_tearoffs: true
+    null_check_on_nullable_type_parameter: true
+    parameter_assignments: true
+    sort_pub_dependencies: true
+    tighten_type_of_initializing_formals: true
+    unnecessary_nullable_for_final_variable_declarations: true
