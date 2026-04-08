@@ -3,8 +3,14 @@
 name: Dependency review
 
 on:
+  workflow_dispatch: {}
   pull_request:
     branches: ["main"]
+    paths:
+      - "pubspec.yaml"
+      - "pubspec.lock"
+      - ".github/dependabot.yml"
+      - ".github/workflows/**"
 
 permissions:
   contents: read
