@@ -8,6 +8,8 @@ coverage/
 build/
 .flutter-plugins-dependencies
 **/generated_plugin_registrant.dart
+linux/flutter/generated_plugins.cmake
+windows/flutter/generated_plugins.cmake
 *.iml
 .idea/
 .vscode/*
