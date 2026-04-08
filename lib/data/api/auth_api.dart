@@ -67,8 +67,10 @@ class AuthApi {
         RegistrationVerificationDocumentKind.offerOrAdmissionProof,
   }) async {
     try {
-      final file =
-          MultipartFile.fromBytes(documentBytes, filename: documentFilename);
+      final file = MultipartFile.fromBytes(
+        documentBytes,
+        filename: documentFilename,
+      );
       final kindStr = switch (verificationDocumentKind) {
         RegistrationVerificationDocumentKind.offerOrAdmissionProof => "offer",
         RegistrationVerificationDocumentKind.studentIdCard => "student_id_card",
@@ -123,10 +125,7 @@ class AuthApi {
     try {
       final res = await _dio.post<dynamic>(
         _path("/auth/login"),
-        data: <String, dynamic>{
-          "account": account,
-          "password": password,
-        },
+        data: <String, dynamic>{"account": account, "password": password},
       );
       return TokenPairDto.fromJson(asJsonMap(res.data));
     } on DioException catch (e) {
@@ -173,10 +172,7 @@ class AuthApi {
     try {
       await _dio.post<dynamic>(
         _path("/auth/password/reset/complete"),
-        data: <String, dynamic>{
-          "token": token,
-          "new_password": newPassword,
-        },
+        data: <String, dynamic>{"token": token, "new_password": newPassword},
       );
     } on DioException catch (e) {
       throw LiubanApiException.fromDio(e);

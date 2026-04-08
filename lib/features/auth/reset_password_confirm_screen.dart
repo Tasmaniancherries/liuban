@@ -50,9 +50,7 @@ class _ResetPasswordConfirmScreenState
         hint: ApiDevSemantics.discardUnsavedLocalFormDialogHint,
         child: AlertDialog(
           title: const Text("捨棄輸入？"),
-          content: const SelectionArea(
-            child: Text("重設憑證或新密碼已輸入，確定離開？"),
-          ),
+          content: const SelectionArea(child: Text("重設憑證或新密碼已輸入，確定離開？")),
           actions: [
             Tooltip(
               message: "繼續輸入",
@@ -141,10 +139,9 @@ class _ResetPasswordConfirmScreenState
     }
     setState(() => _submitting = true);
     try {
-      await AppContainerScope.of(context).auth.completePasswordResetWithToken(
-            token: raw,
-            newPassword: p,
-          );
+      await AppContainerScope.of(
+        context,
+      ).auth.completePasswordResetWithToken(token: raw, newPassword: p);
       if (!mounted) return;
       TextInput.finishAutofillContext(shouldSave: true);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -185,10 +182,7 @@ class _ResetPasswordConfirmScreenState
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "重設密碼",
-            semanticsLabel: "重設登入密碼",
-          ),
+          title: const Text("重設密碼", semanticsLabel: "重設登入密碼"),
           leading: Semantics(
             hint: "返回上一頁；表單有內容時會先詢問是否捨棄",
             child: IconButton(
@@ -197,9 +191,9 @@ class _ResetPasswordConfirmScreenState
               onPressed: _submitting
                   ? null
                   : () => unawaitedDebug(
-                        "ResetPasswordConfirmScreen._tryPop",
-                        _tryPop(),
-                      ),
+                      "ResetPasswordConfirmScreen._tryPop",
+                      _tryPop(),
+                    ),
             ),
           ),
         ),
@@ -218,8 +212,8 @@ class _ResetPasswordConfirmScreenState
                   child: Text(
                     ApiDevSemantics.passwordResetComplete,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
               ),
@@ -325,9 +319,9 @@ class _ResetPasswordConfirmScreenState
                     onPressed: _submitting
                         ? null
                         : () => unawaitedDebug(
-                              "ResetPasswordConfirmScreen._submit",
-                              _submit(),
-                            ),
+                            "ResetPasswordConfirmScreen._submit",
+                            _submit(),
+                          ),
                     child: _submitting
                         ? const SizedBox(
                             height: 22,
@@ -369,9 +363,9 @@ class _ResetPasswordConfirmScreenState
                     onPressed: _submitting
                         ? null
                         : () => unawaitedDebugFuture(
-                              "ResetPasswordConfirmScreen.pushForgotPassword",
-                              context.push("/forgot-password"),
-                            ),
+                            "ResetPasswordConfirmScreen.pushForgotPassword",
+                            context.push("/forgot-password"),
+                          ),
                     child: const Text("忘記密碼？"),
                   ),
                 ),
@@ -389,9 +383,9 @@ class _ResetPasswordConfirmScreenState
                     onPressed: _submitting
                         ? null
                         : () => unawaitedDebugFuture(
-                              "ResetPasswordConfirmScreen.pushRegister",
-                              context.push("/register"),
-                            ),
+                            "ResetPasswordConfirmScreen.pushRegister",
+                            context.push("/register"),
+                          ),
                     child: const Text("還沒有帳號？註冊"),
                   ),
                 ),

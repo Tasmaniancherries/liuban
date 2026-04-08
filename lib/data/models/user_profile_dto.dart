@@ -21,14 +21,16 @@ class UserProfileDto {
     final eduRaw = json["educations"] ?? json["schools"] ?? json["degrees"];
     return UserProfileDto(
       userId: json["id"]?.toString() ?? json["user_id"]?.toString() ?? "",
-      customId: json["custom_id"] as String? ??
+      customId:
+          json["custom_id"] as String? ??
           json["username"] as String? ??
           json["login"] as String? ??
           "",
       displayName:
           json["display_name"] as String? ?? json["nickname"] as String?,
-      educations:
-          eduRaw != null ? EducationEntryDto.listFromJson(eduRaw) : const [],
+      educations: eduRaw != null
+          ? EducationEntryDto.listFromJson(eduRaw)
+          : const [],
     );
   }
 
@@ -36,11 +38,11 @@ class UserProfileDto {
       UserProfileDto.fromJson(asJsonMap(data));
 
   static UserProfileDto previewFallback() => const UserProfileDto(
-        userId: "local",
-        customId: "demo_id",
-        educations: <EducationEntryDto>[
-          EducationEntryDto(schoolShortName: "港大", alumni: true),
-          EducationEntryDto(schoolShortName: "中大", alumni: false),
-        ],
-      );
+    userId: "local",
+    customId: "demo_id",
+    educations: <EducationEntryDto>[
+      EducationEntryDto(schoolShortName: "港大", alumni: true),
+      EducationEntryDto(schoolShortName: "中大", alumni: false),
+    ],
+  );
 }

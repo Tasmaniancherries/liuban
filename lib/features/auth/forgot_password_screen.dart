@@ -42,9 +42,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
         hint: ApiDevSemantics.discardUnsavedLocalFormDialogHint,
         child: AlertDialog(
           title: const Text("捨棄輸入？"),
-          content: const SelectionArea(
-            child: Text("已輸入郵箱，確定離開？"),
-          ),
+          content: const SelectionArea(child: Text("已輸入郵箱，確定離開？")),
           actions: [
             Tooltip(
               message: "繼續輸入",
@@ -114,9 +112,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
     if (_submitting) return;
     setState(() => _submitting = true);
     try {
-      await AppContainerScope.of(context)
-          .auth
-          .requestPasswordResetEmail(email: addr);
+      await AppContainerScope.of(
+        context,
+      ).auth.requestPasswordResetEmail(email: addr);
       if (!mounted) return;
       setState(() => _sent = true);
     } on LiubanApiException catch (e) {
@@ -152,10 +150,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "忘記密碼",
-            semanticsLabel: "忘記密碼與重設",
-          ),
+          title: const Text("忘記密碼", semanticsLabel: "忘記密碼與重設"),
           leading: Semantics(
             hint: "返回上一頁；郵箱分頁有輸入時可能先詢問是否捨棄",
             child: IconButton(
@@ -164,9 +159,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
               onPressed: _submitting
                   ? null
                   : () => unawaitedDebug(
-                        "ForgotPasswordScreen._tryPop",
-                        _tryPop(),
-                      ),
+                      "ForgotPasswordScreen._tryPop",
+                      _tryPop(),
+                    ),
             ),
           ),
           bottom: TabBar(
@@ -175,19 +170,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
               Tab(
                 child: Semantics(
                   hint: "切換至以郵箱寄送重設連結",
-                  child: const Text(
-                    "郵箱重設",
-                    semanticsLabel: "以郵箱重設密碼",
-                  ),
+                  child: const Text("郵箱重設", semanticsLabel: "以郵箱重設密碼"),
                 ),
               ),
               Tab(
                 child: Semantics(
                   hint: "切換至官方客服協助與身分核實說明",
-                  child: const Text(
-                    "客服協助",
-                    semanticsLabel: "透過客服協助重設",
-                  ),
+                  child: const Text("客服協助", semanticsLabel: "透過客服協助重設"),
                 ),
               ),
             ],
@@ -220,7 +209,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
           const SizedBox(height: 16),
           Semantics(
             header: true,
-            label: "若該郵箱已註冊留伴，我們已寄出重設信。請檢查收件匣與垃圾郵件。"
+            label:
+                "若該郵箱已註冊留伴，我們已寄出重設信。請檢查收件匣與垃圾郵件。"
                 "為安全起見，未註冊的郵箱不會提示「是否存在」；連結開啟後請在「重設密碼」頁設定新密碼。",
             hint: "下方可改用其他郵箱或返回登入",
             excludeSemantics: true,
@@ -236,8 +226,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                   Text(
                     "為安全起見，未註冊的郵箱不會提示「是否存在」；連結開啟後請在「重設密碼」頁設定新密碼。",
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ],
               ),
@@ -266,10 +256,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
               hint: "離開忘記密碼並回到登入畫面",
               excludeSemantics: true,
               child: TextButton(
-                onPressed: () => unawaitedDebug(
-                  "ForgotPasswordScreen._tryPop",
-                  _tryPop(),
-                ),
+                onPressed: () =>
+                    unawaitedDebug("ForgotPasswordScreen._tryPop", _tryPop()),
                 child: const Text("返回登入"),
               ),
             ),
@@ -319,8 +307,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                   Text(
                     ApiDevSemantics.passwordResetRequest,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ],
               ),
@@ -362,9 +350,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                 onPressed: _submitting
                     ? null
                     : () => unawaitedDebug(
-                          "ForgotPasswordScreen._sendEmail",
-                          _sendEmail(),
-                        ),
+                        "ForgotPasswordScreen._sendEmail",
+                        _sendEmail(),
+                      ),
                 child: _submitting
                     ? const SizedBox(
                         height: 22,
@@ -404,10 +392,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
               hint: "關閉並回到登入畫面",
               excludeSemantics: true,
               child: TextButton(
-                onPressed: () => unawaitedDebug(
-                  "ForgotPasswordScreen._tryPop",
-                  _tryPop(),
-                ),
+                onPressed: () =>
+                    unawaitedDebug("ForgotPasswordScreen._tryPop", _tryPop()),
                 child: const Text("返回登入"),
               ),
             ),

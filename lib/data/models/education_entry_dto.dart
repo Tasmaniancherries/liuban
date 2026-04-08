@@ -16,11 +16,13 @@ class EducationEntryDto {
       alumni ? "$schoolShortName 校友" : "$schoolShortName 在讀";
 
   factory EducationEntryDto.fromJson(Map<String, dynamic> json) {
-    final short = json["school_short_name"] as String? ??
+    final short =
+        json["school_short_name"] as String? ??
         json["school"] as String? ??
         json["name"] as String? ??
         "";
-    final alumni = json["alumni"] as bool? ??
+    final alumni =
+        json["alumni"] as bool? ??
         json["is_alumni"] as bool? ??
         (json["status"] == "alumni" || json["status"] == "graduated");
     return EducationEntryDto(schoolShortName: short, alumni: alumni);

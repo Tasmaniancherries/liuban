@@ -20,15 +20,14 @@ class FeedApi {
     return "$apiPrefix/$relative";
   }
 
-  Future<List<FeedPostDto>> listPublicFeed(
-      {int page = 1, int pageSize = 20}) async {
+  Future<List<FeedPostDto>> listPublicFeed({
+    int page = 1,
+    int pageSize = 20,
+  }) async {
     try {
       final res = await _dio.get<dynamic>(
         _path("/feed/public"),
-        queryParameters: <String, dynamic>{
-          "page": page,
-          "page_size": pageSize,
-        },
+        queryParameters: <String, dynamic>{"page": page, "page_size": pageSize},
       );
       return FeedPostDto.listFromResponse(res.data);
     } on DioException catch (e) {
@@ -37,15 +36,14 @@ class FeedApi {
   }
 
   /// 本校可見動態列表；路徑與 Query 見 `docs/backend_domain_apis_contract.md`。
-  Future<List<FeedPostDto>> listSchoolFeed(
-      {int page = 1, int pageSize = 20}) async {
+  Future<List<FeedPostDto>> listSchoolFeed({
+    int page = 1,
+    int pageSize = 20,
+  }) async {
     try {
       final res = await _dio.get<dynamic>(
         _path("/feed/school"),
-        queryParameters: <String, dynamic>{
-          "page": page,
-          "page_size": pageSize,
-        },
+        queryParameters: <String, dynamic>{"page": page, "page_size": pageSize},
       );
       return FeedPostDto.listFromResponse(res.data);
     } on DioException catch (e) {
@@ -53,15 +51,14 @@ class FeedApi {
     }
   }
 
-  Future<List<FeedPostDto>> listFriendsFeed(
-      {int page = 1, int pageSize = 20}) async {
+  Future<List<FeedPostDto>> listFriendsFeed({
+    int page = 1,
+    int pageSize = 20,
+  }) async {
     try {
       final res = await _dio.get<dynamic>(
         _path("/feed/friends"),
-        queryParameters: <String, dynamic>{
-          "page": page,
-          "page_size": pageSize,
-        },
+        queryParameters: <String, dynamic>{"page": page, "page_size": pageSize},
       );
       return FeedPostDto.listFromResponse(res.data);
     } on DioException catch (e) {
@@ -146,10 +143,7 @@ class FeedApi {
   }
 
   /// 檢舉動態。預設：`POST {apiPrefix}/feed/posts/{id}/report`，body 可含 `reason`。
-  Future<void> reportPost({
-    required String postId,
-    String? reason,
-  }) async {
+  Future<void> reportPost({required String postId, String? reason}) async {
     try {
       final enc = Uri.encodeComponent(postId);
       await _dio.post<dynamic>(

@@ -16,12 +16,12 @@ class PromotionItem {
   final String body;
 
   factory PromotionItem.fromDto(PromotionDto d) => PromotionItem(
-        id: d.id,
-        title: d.title,
-        subtitle: d.subtitle,
-        publishedAt: d.publishedAt,
-        body: d.body,
-      );
+    id: d.id,
+    title: d.title,
+    subtitle: d.subtitle,
+    publishedAt: d.publishedAt,
+    body: d.body,
+  );
 }
 
 const kMockPromotions = <PromotionItem>[

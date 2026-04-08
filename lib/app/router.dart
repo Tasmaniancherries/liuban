@@ -94,24 +94,24 @@ GoRouter buildRouter(
                           Text(
                             "嘗試開啟（已脫敏）：$safeLoc",
                             textAlign: TextAlign.center,
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                    ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
                           ),
                         ],
                         const SizedBox(height: 16),
                         Text(
                           ApiDevSemantics.routeNotFoundFootnote,
                           textAlign: TextAlign.center,
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                  ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
                         ),
                       ],
                     ),
@@ -173,10 +173,8 @@ GoRouter buildRouter(
       GoRoute(
         path: "/settings/blocked-users",
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => const AuthRequiredGate(
-          title: "已屏蔽用戶",
-          child: BlockedUsersScreen(),
-        ),
+        builder: (context, state) =>
+            const AuthRequiredGate(title: "已屏蔽用戶", child: BlockedUsersScreen()),
       ),
       GoRoute(
         path: "/account/password",
@@ -197,17 +195,16 @@ GoRouter buildRouter(
       GoRoute(
         path: "/add-friend",
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => const AuthRequiredGate(
-          title: "添加好友",
-          child: AddFriendScreen(),
-        ),
+        builder: (context, state) =>
+            const AuthRequiredGate(title: "添加好友", child: AddFriendScreen()),
       ),
       GoRoute(
         path: "/dm/:peerId",
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) {
-          final peerId =
-              Uri.decodeComponent(state.pathParameters["peerId"] ?? "");
+          final peerId = Uri.decodeComponent(
+            state.pathParameters["peerId"] ?? "",
+          );
           final custom = state.uri.queryParameters["custom"] ?? peerId;
           return AuthRequiredGate(
             title: "@$custom",
@@ -262,9 +259,8 @@ GoRouter buildRouter(
             routes: [
               GoRoute(
                 path: "/feed",
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: FeedScreen(),
-                ),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: FeedScreen()),
               ),
             ],
           ),
@@ -272,9 +268,8 @@ GoRouter buildRouter(
             routes: [
               GoRoute(
                 path: "/promotion",
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: PromotionListScreen(),
-                ),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: PromotionListScreen()),
                 routes: [
                   GoRoute(
                     path: ":id",
@@ -292,9 +287,8 @@ GoRouter buildRouter(
             routes: [
               GoRoute(
                 path: "/messages",
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: MessagesScreen(),
-                ),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: MessagesScreen()),
               ),
             ],
           ),
@@ -302,9 +296,8 @@ GoRouter buildRouter(
             routes: [
               GoRoute(
                 path: "/profile",
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: ProfileScreen(),
-                ),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage(child: ProfileScreen()),
               ),
             ],
           ),

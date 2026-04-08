@@ -127,18 +127,16 @@ bool isWithinDeepLinkDedupWindow({
 }
 
 @visibleForTesting
-String buildDeepLinkDedupSignature(
-  String uriText, {
-  int maxChars = 1024,
-}) {
+String buildDeepLinkDedupSignature(String uriText, {int maxChars = 1024}) {
   final normalized = routeDedupKey(uriText);
   if (maxChars <= 0) return "";
   if (normalized.length <= maxChars) return normalized;
   if (maxChars <= 16) return normalized.substring(0, maxChars);
   const digestChars = 8;
   const fixedOverhead = 4; // ... + #
-  final digest =
-      stableFnv1a32(normalized).toRadixString(16).padLeft(digestChars, "0");
+  final digest = stableFnv1a32(
+    normalized,
+  ).toRadixString(16).padLeft(digestChars, "0");
   final budget = maxChars - fixedOverhead - digestChars;
   final head = budget ~/ 2;
   final tail = budget - head;
@@ -266,7 +264,8 @@ class _LiubanAppState extends State<LiubanApp> {
   }
 
   bool _isDuplicateDeepLink(String sig, int nowMs) {
-    final duplicate = _lastHandledDeepLinkSignature == sig &&
+    final duplicate =
+        _lastHandledDeepLinkSignature == sig &&
         _withinDedupWindow(nowMs, _lastHandledDeepLinkMs);
     if (!duplicate) {
       _lastHandledDeepLinkSignature = sig;
@@ -276,7 +275,8 @@ class _LiubanAppState extends State<LiubanApp> {
   }
 
   bool _isDuplicateRouteLocation(String dedupKey, int nowMs) {
-    final duplicate = _lastRoutedDeepLinkLocation == dedupKey &&
+    final duplicate =
+        _lastRoutedDeepLinkLocation == dedupKey &&
         _withinDedupWindow(nowMs, _lastRoutedDeepLinkMs);
     if (!duplicate) {
       _lastRoutedDeepLinkLocation = dedupKey;
@@ -357,9 +357,7 @@ class _LiubanAppState extends State<LiubanApp> {
       _debugDeepLinkLazy(
         () => "[$source] ignore unmapped deep link: ${safeUriForLog(uri)}",
       );
-      _notifyDeepLinkRejected(
-        ApiDevSemantics.deepLinkUserMessageUnrecognized,
-      );
+      _notifyDeepLinkRejected(ApiDevSemantics.deepLinkUserMessageUnrecognized);
       return;
     }
     if (loc.length > _maxIncomingDeepLinkLocationChars) {
@@ -443,11 +441,7 @@ class _LiubanAppState extends State<LiubanApp> {
     try {
       final uri = await _appLinks.getInitialLink();
       if (uri == null || !mounted) return;
-      _goFromDeepLink(
-        uri,
-        postFrame: true,
-        source: _deepLinkSourceInitial,
-      );
+      _goFromDeepLink(uri, postFrame: true, source: _deepLinkSourceInitial);
     } catch (e, st) {
       _debugDeepLinkLazy(() => "initial app link failed: $e\n$st");
     }
@@ -456,11 +450,7 @@ class _LiubanAppState extends State<LiubanApp> {
   void _onIncomingLink(Uri uri) {
     try {
       if (!mounted) return;
-      _goFromDeepLink(
-        uri,
-        postFrame: false,
-        source: _deepLinkSourceStream,
-      );
+      _goFromDeepLink(uri, postFrame: false, source: _deepLinkSourceStream);
     } catch (e, st) {
       _debugDeepLinkLazy(
         () => "incoming link failed: ${safeUriForLog(uri)}\n$e\n$st",

@@ -13,6 +13,8 @@ String promotionShareUrl(String promotionId) {
 }
 
 Future<void> openPromotionShareActions(
-    BuildContext context, String promotionId) {
+  BuildContext context,
+  String promotionId,
+) {
   return showShareLinkSheet(context, url: promotionShareUrl(promotionId));
 }

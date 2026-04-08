@@ -34,8 +34,9 @@ class _BlockedUsersScreenState extends State<BlockedUsersScreen> {
 
   Future<_BlockedUsersLoad> _load() async {
     try {
-      final list =
-          await AppContainerScope.of(context).friends.listBlockedUsers();
+      final list = await AppContainerScope.of(
+        context,
+      ).friends.listBlockedUsers();
       return _BlockedUsersLoad(items: list, usedErrorFallback: false);
     } on LiubanApiException catch (e) {
       return _BlockedUsersLoad(
@@ -86,9 +87,7 @@ class _BlockedUsersScreenState extends State<BlockedUsersScreen> {
         child: AlertDialog(
           title: const Text("解除屏蔽"),
           content: SelectionArea(
-            child: Text(
-              "確定要對 ${b.displayLabel ?? b.userId} 解除屏蔽嗎？",
-            ),
+            child: Text("確定要對 ${b.displayLabel ?? b.userId} 解除屏蔽嗎？"),
           ),
           actions: [
             Tooltip(
@@ -163,10 +162,7 @@ class _BlockedUsersScreenState extends State<BlockedUsersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "已屏蔽用戶",
-          semanticsLabel: "已屏蔽用戶名單",
-        ),
+        title: const Text("已屏蔽用戶", semanticsLabel: "已屏蔽用戶名單"),
         leading: Semantics(
           hint: "關閉已屏蔽名單並返回上一頁",
           child: IconButton(
@@ -193,9 +189,7 @@ class _BlockedUsersScreenState extends State<BlockedUsersScreen> {
                         minHeight: constraints.maxHeight,
                       ),
                       child: const Center(
-                        child: CircularProgressIndicator(
-                          semanticsLabel: "載入中",
-                        ),
+                        child: CircularProgressIndicator(semanticsLabel: "載入中"),
                       ),
                     ),
                   );
@@ -218,12 +212,12 @@ class _BlockedUsersScreenState extends State<BlockedUsersScreen> {
                       child: SelectionArea(
                         child: Text(
                           ApiDevSemantics.friendsBlocks,
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                  ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
                         ),
                       ),
                     ),
@@ -240,9 +234,7 @@ class _BlockedUsersScreenState extends State<BlockedUsersScreen> {
                           child: Text(
                             ApiDevSemantics
                                 .blockedUsersMockDataBannerVisibleText,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium
+                            style: Theme.of(context).textTheme.labelMedium
                                 ?.copyWith(
                                   color: Theme.of(context).colorScheme.tertiary,
                                 ),

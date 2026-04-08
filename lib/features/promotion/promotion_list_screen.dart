@@ -90,12 +90,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
     _future ??= _loadAndNotify();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "推廣",
-          semanticsLabel: "推廣與活動列表",
-        ),
-      ),
+      appBar: AppBar(title: const Text("推廣", semanticsLabel: "推廣與活動列表")),
       body: RefreshIndicator(
         onRefresh: _onRefresh,
         child: LayoutBuilder(
@@ -113,9 +108,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                         minHeight: constraints.maxHeight,
                       ),
                       child: const Center(
-                        child: CircularProgressIndicator(
-                          semanticsLabel: "載入中",
-                        ),
+                        child: CircularProgressIndicator(semanticsLabel: "載入中"),
                       ),
                     ),
                   );
@@ -140,12 +133,12 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                         child: SelectionArea(
                           child: Text(
                             ApiDevSemantics.promotionListBanner,
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                    ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
                           ),
                         ),
                       ),
@@ -164,12 +157,11 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                             child: Text(
                               ApiDevSemantics
                                   .promotionListMockDataBannerVisibleText,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium
+                              style: Theme.of(context).textTheme.labelMedium
                                   ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.tertiary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.tertiary,
                                   ),
                             ),
                           ),
@@ -185,18 +177,18 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                           label:
                               "${items[i].title}。${items[i].subtitle} · ${items[i].publishedAt}",
                           hint: "點擊看詳情；長按分享連結",
-                          customSemanticsActions: <CustomSemanticsAction,
-                              VoidCallback>{
-                            const CustomSemanticsAction(
-                              label: "分享或複製此推廣連結",
-                            ): () => unawaitedDebug(
+                          customSemanticsActions:
+                              <CustomSemanticsAction, VoidCallback>{
+                                const CustomSemanticsAction(
+                                  label: "分享或複製此推廣連結",
+                                ): () => unawaitedDebug(
                                   "PromotionListScreen.openPromotionShareActions",
                                   openPromotionShareActions(
                                     context,
                                     items[i].id,
                                   ),
                                 ),
-                          },
+                              },
                           excludeSemantics: true,
                           child: ListTile(
                             title: SelectionArea(
@@ -223,10 +215,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                             ),
                             onLongPress: () => unawaitedDebug(
                               "PromotionListScreen.openPromotionShareActions",
-                              openPromotionShareActions(
-                                context,
-                                items[i].id,
-                              ),
+                              openPromotionShareActions(context, items[i].id),
                             ),
                           ),
                         ),

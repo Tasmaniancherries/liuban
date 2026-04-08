@@ -51,9 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
         hint: ApiDevSemantics.discardUnsavedLocalFormDialogHint,
         child: AlertDialog(
           title: const Text("捨棄輸入？"),
-          content: const SelectionArea(
-            child: Text("帳號或密碼已輸入，確定離開？"),
-          ),
+          content: const SelectionArea(child: Text("帳號或密碼已輸入，確定離開？")),
           actions: [
             Tooltip(
               message: "繼續輸入",
@@ -121,8 +119,10 @@ class _LoginScreenState extends State<LoginScreen> {
     final session = AppSessionScope.of(context);
     setState(() => _loading = true);
     try {
-      final pair =
-          await container.auth.login(account: account, password: password);
+      final pair = await container.auth.login(
+        account: account,
+        password: password,
+      );
       container.sessionTokens.applyPair(
         access: pair.accessToken,
         refresh: pair.refreshToken,
@@ -178,10 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "登入",
-            semanticsLabel: "登入留伴帳號",
-          ),
+          title: const Text("登入", semanticsLabel: "登入留伴帳號"),
           leading: Semantics(
             hint: "返回上一頁；帳密欄位有內容時會先詢問是否捨棄",
             child: IconButton(
@@ -189,10 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
               icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
               onPressed: _loading
                   ? null
-                  : () => unawaitedDebug(
-                        "LoginScreen._tryPop",
-                        _tryPop(),
-                      ),
+                  : () => unawaitedDebug("LoginScreen._tryPop", _tryPop()),
             ),
           ),
         ),
@@ -285,9 +279,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: _loading
                           ? null
                           : () => unawaitedDebugFuture(
-                                "LoginScreen.pushForgotPassword",
-                                context.push("/forgot-password"),
-                              ),
+                              "LoginScreen.pushForgotPassword",
+                              context.push("/forgot-password"),
+                            ),
                       child: const Text("忘記密碼？"),
                     ),
                   ),
@@ -305,10 +299,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: FilledButton(
                     onPressed: _loading
                         ? null
-                        : () => unawaitedDebug(
-                              "LoginScreen._submit",
-                              _submit(),
-                            ),
+                        : () =>
+                              unawaitedDebug("LoginScreen._submit", _submit()),
                     child: _loading
                         ? const SizedBox(
                             height: 22,
@@ -334,10 +326,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: TextButton(
                     onPressed: _loading
                         ? null
-                        : () => unawaitedDebug(
-                              "LoginScreen._tryPop",
-                              _tryPop(),
-                            ),
+                        : () =>
+                              unawaitedDebug("LoginScreen._tryPop", _tryPop()),
                     child: const Text("返回"),
                   ),
                 ),
@@ -355,9 +345,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: _loading
                         ? null
                         : () => unawaitedDebugFuture(
-                              "LoginScreen.pushRegister",
-                              context.push("/register"),
-                            ),
+                            "LoginScreen.pushRegister",
+                            context.push("/register"),
+                          ),
                     child: const Text("還沒有帳號？註冊"),
                   ),
                 ),
@@ -375,9 +365,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: _loading
                         ? null
                         : () => unawaitedDebugFuture(
-                              "LoginScreen.pushResetPassword",
-                              context.push("/reset-password"),
-                            ),
+                            "LoginScreen.pushResetPassword",
+                            context.push("/reset-password"),
+                          ),
                     child: const Text("已有郵件重設連結？"),
                   ),
                 ),

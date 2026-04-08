@@ -42,17 +42,19 @@ void main() {
     expect(isValidComparableAuthorityHost("[2001:db8::1"), isFalse);
   });
 
-  test("normalizeAppLocationForDeepLinkCompare falls back for invalid host",
-      () {
-    expect(
-      normalizeAppLocationForDeepLinkCompare("//bad host.com/feed?x=1"),
-      "/bad%20host.com/feed?x=1",
-    );
-    expect(
-      normalizeAppLocationForDeepLinkCompare("//-bad.liuban.app/feed"),
-      "/-bad.liuban.app/feed",
-    );
-  });
+  test(
+    "normalizeAppLocationForDeepLinkCompare falls back for invalid host",
+    () {
+      expect(
+        normalizeAppLocationForDeepLinkCompare("//bad host.com/feed?x=1"),
+        "/bad%20host.com/feed?x=1",
+      );
+      expect(
+        normalizeAppLocationForDeepLinkCompare("//-bad.liuban.app/feed"),
+        "/-bad.liuban.app/feed",
+      );
+    },
+  );
 
   test("normalizeAppLocationForDeepLinkCompare accepts trailing-dot host", () {
     expect(
@@ -61,124 +63,127 @@ void main() {
     );
   });
 
-  test("normalizeAppLocationForDeepLinkCompare accepts IPv6 authority host",
-      () {
-    expect(
-      normalizeAppLocationForDeepLinkCompare("//[::1]/feed?x=1"),
-      "/feed?x=1",
-    );
-  });
+  test(
+    "normalizeAppLocationForDeepLinkCompare accepts IPv6 authority host",
+    () {
+      expect(
+        normalizeAppLocationForDeepLinkCompare("//[::1]/feed?x=1"),
+        "/feed?x=1",
+      );
+    },
+  );
 
   test("normalizeAppLocationForDeepLinkCompare strips scheme and host", () {
     expect(
       normalizeAppLocationForDeepLinkCompare(
-          "https://liuban.app/feed?x=1#frag"),
+        "https://liuban.app/feed?x=1#frag",
+      ),
       "/feed?x=1",
     );
   });
 
   test(
-      "normalizeAppLocationForDeepLinkCompare defaults to root for host-only URI",
-      () {
-    expect(
-      normalizeAppLocationForDeepLinkCompare("https://liuban.app"),
-      "/",
-    );
-  });
-
-  test("normalizeAppLocationForDeepLinkCompare handles non-http URI schemes",
-      () {
-    expect(
-      normalizeAppLocationForDeepLinkCompare("wss://liuban.app/messages?x=1"),
-      "/messages?x=1",
-    );
-  });
+    "normalizeAppLocationForDeepLinkCompare defaults to root for host-only URI",
+    () {
+      expect(normalizeAppLocationForDeepLinkCompare("https://liuban.app"), "/");
+    },
+  );
 
   test(
-      "normalizeAppLocationForDeepLinkCompare normalizes scheme-only URI path shape",
-      () {
-    expect(
-      normalizeAppLocationForDeepLinkCompare("mailto:foo@bar.com"),
-      "/foo@bar.com",
-    );
-  });
+    "normalizeAppLocationForDeepLinkCompare handles non-http URI schemes",
+    () {
+      expect(
+        normalizeAppLocationForDeepLinkCompare("wss://liuban.app/messages?x=1"),
+        "/messages?x=1",
+      );
+    },
+  );
 
-  test("normalizeAppLocationForDeepLinkCompare parses scheme-relative host URI",
-      () {
-    expect(
-      normalizeAppLocationForDeepLinkCompare("//liuban.app/feed?x=1"),
-      "/feed?x=1",
-    );
-  });
+  test(
+    "normalizeAppLocationForDeepLinkCompare normalizes scheme-only URI path shape",
+    () {
+      expect(
+        normalizeAppLocationForDeepLinkCompare("mailto:foo@bar.com"),
+        "/foo@bar.com",
+      );
+    },
+  );
+
+  test(
+    "normalizeAppLocationForDeepLinkCompare parses scheme-relative host URI",
+    () {
+      expect(
+        normalizeAppLocationForDeepLinkCompare("//liuban.app/feed?x=1"),
+        "/feed?x=1",
+      );
+    },
+  );
 
   test("normalizeAppLocationForDeepLinkCompare keeps app-style //path", () {
-    expect(
-      normalizeAppLocationForDeepLinkCompare("//feed///"),
-      "/feed",
-    );
-  });
-
-  test("normalizeAppLocationForDeepLinkCompare parses //localhost as authority",
-      () {
-    expect(
-      normalizeAppLocationForDeepLinkCompare("//localhost/feed?x=1"),
-      "/feed?x=1",
-    );
-  });
-
-  test("normalizeAppLocationForDeepLinkCompare parses //userinfo@authority",
-      () {
-    expect(
-      normalizeAppLocationForDeepLinkCompare("//user@liuban.app/feed?x=1"),
-      "/feed?x=1",
-    );
-  });
-
-  test("normalizeAppLocationForDeepLinkCompare host-only localhost to root",
-      () {
-    expect(
-      normalizeAppLocationForDeepLinkCompare("//localhost"),
-      "/",
-    );
+    expect(normalizeAppLocationForDeepLinkCompare("//feed///"), "/feed");
   });
 
   test(
-      "normalizeAppLocationForDeepLinkCompare falls back when authority has no host",
-      () {
-    expect(
-      normalizeAppLocationForDeepLinkCompare("//:8080/feed"),
-      "/:8080/feed",
-    );
-  });
+    "normalizeAppLocationForDeepLinkCompare parses //localhost as authority",
+    () {
+      expect(
+        normalizeAppLocationForDeepLinkCompare("//localhost/feed?x=1"),
+        "/feed?x=1",
+      );
+    },
+  );
+
+  test(
+    "normalizeAppLocationForDeepLinkCompare parses //userinfo@authority",
+    () {
+      expect(
+        normalizeAppLocationForDeepLinkCompare("//user@liuban.app/feed?x=1"),
+        "/feed?x=1",
+      );
+    },
+  );
+
+  test(
+    "normalizeAppLocationForDeepLinkCompare host-only localhost to root",
+    () {
+      expect(normalizeAppLocationForDeepLinkCompare("//localhost"), "/");
+    },
+  );
+
+  test(
+    "normalizeAppLocationForDeepLinkCompare falls back when authority has no host",
+    () {
+      expect(
+        normalizeAppLocationForDeepLinkCompare("//:8080/feed"),
+        "/:8080/feed",
+      );
+    },
+  );
 
   test("normalizeAppLocationForDeepLinkCompare keeps relative location", () {
     expect(normalizeAppLocationForDeepLinkCompare("/messages"), "/messages");
   });
 
-  test("normalizeAppLocationForDeepLinkCompare adds leading slash to raw path",
-      () {
-    expect(
-      normalizeAppLocationForDeepLinkCompare("feed?x=1"),
-      "/feed?x=1",
-    );
-  });
-
-  test("normalizeAppLocationForDeepLinkCompare normalizes query-only input",
-      () {
-    expect(
-      normalizeAppLocationForDeepLinkCompare("?x=1&b=2"),
-      "/?b=2&x=1",
-    );
-  });
+  test(
+    "normalizeAppLocationForDeepLinkCompare adds leading slash to raw path",
+    () {
+      expect(normalizeAppLocationForDeepLinkCompare("feed?x=1"), "/feed?x=1");
+    },
+  );
 
   test(
-      "normalizeAppLocationForDeepLinkCompare maps fragment-only input to root",
-      () {
-    expect(
-      normalizeAppLocationForDeepLinkCompare("#top"),
-      "/",
-    );
-  });
+    "normalizeAppLocationForDeepLinkCompare normalizes query-only input",
+    () {
+      expect(normalizeAppLocationForDeepLinkCompare("?x=1&b=2"), "/?b=2&x=1");
+    },
+  );
+
+  test(
+    "normalizeAppLocationForDeepLinkCompare maps fragment-only input to root",
+    () {
+      expect(normalizeAppLocationForDeepLinkCompare("#top"), "/");
+    },
+  );
 
   test("isSameAppLocationForDeepLink matches normalized equivalent paths", () {
     expect(
@@ -240,16 +245,18 @@ void main() {
     );
   });
 
-  test("isSameAppLocationForDeepLink matches missing-leading-slash variant",
-      () {
-    expect(
-      isSameAppLocationForDeepLink(
-        currentLocation: "feed?x=1",
-        targetLocation: "/feed?x=1",
-      ),
-      isTrue,
-    );
-  });
+  test(
+    "isSameAppLocationForDeepLink matches missing-leading-slash variant",
+    () {
+      expect(
+        isSameAppLocationForDeepLink(
+          currentLocation: "feed?x=1",
+          targetLocation: "/feed?x=1",
+        ),
+        isTrue,
+      );
+    },
+  );
 
   test("isWithinDeepLinkDedupWindow handles forward time within boundary", () {
     expect(
@@ -284,13 +291,15 @@ void main() {
     );
   });
 
-  test("isWithinDeepLinkDedupWindow treats same timestamp as within window",
-      () {
-    expect(
-      isWithinDeepLinkDedupWindow(nowMs: 1000, lastMs: 1000, windowMs: 1500),
-      isTrue,
-    );
-  });
+  test(
+    "isWithinDeepLinkDedupWindow treats same timestamp as within window",
+    () {
+      expect(
+        isWithinDeepLinkDedupWindow(nowMs: 1000, lastMs: 1000, windowMs: 1500),
+        isTrue,
+      );
+    },
+  );
 
   test("isWithinDeepLinkDedupWindow honors minimal positive window", () {
     expect(
@@ -303,29 +312,33 @@ void main() {
     );
   });
 
-  test("isWithinDeepLinkDedupWindow returns false when window is non-positive",
-      () {
-    expect(
-      isWithinDeepLinkDedupWindow(nowMs: 1001, lastMs: 1000, windowMs: 0),
-      isFalse,
-    );
-    expect(
-      isWithinDeepLinkDedupWindow(nowMs: 999, lastMs: 1000, windowMs: -1),
-      isFalse,
-    );
-  });
+  test(
+    "isWithinDeepLinkDedupWindow returns false when window is non-positive",
+    () {
+      expect(
+        isWithinDeepLinkDedupWindow(nowMs: 1001, lastMs: 1000, windowMs: 0),
+        isFalse,
+      );
+      expect(
+        isWithinDeepLinkDedupWindow(nowMs: 999, lastMs: 1000, windowMs: -1),
+        isFalse,
+      );
+    },
+  );
 
-  test("isWithinDeepLinkDedupWindow returns false when last timestamp invalid",
-      () {
-    expect(
-      isWithinDeepLinkDedupWindow(nowMs: 1000, lastMs: 0, windowMs: 1500),
-      isFalse,
-    );
-    expect(
-      isWithinDeepLinkDedupWindow(nowMs: 1000, lastMs: -10, windowMs: 1500),
-      isFalse,
-    );
-  });
+  test(
+    "isWithinDeepLinkDedupWindow returns false when last timestamp invalid",
+    () {
+      expect(
+        isWithinDeepLinkDedupWindow(nowMs: 1000, lastMs: 0, windowMs: 1500),
+        isFalse,
+      );
+      expect(
+        isWithinDeepLinkDedupWindow(nowMs: 1000, lastMs: -10, windowMs: 1500),
+        isFalse,
+      );
+    },
+  );
 
   test("buildDeepLinkDedupSignature keeps short input unchanged", () {
     expect(
@@ -343,10 +356,14 @@ void main() {
   });
 
   test("buildDeepLinkDedupSignature differs for different long inputs", () {
-    final sigA =
-        buildDeepLinkDedupSignature("/feed?q=${"a" * 5000}", maxChars: 64);
-    final sigB =
-        buildDeepLinkDedupSignature("/feed?q=${"b" * 5000}", maxChars: 64);
+    final sigA = buildDeepLinkDedupSignature(
+      "/feed?q=${"a" * 5000}",
+      maxChars: 64,
+    );
+    final sigB = buildDeepLinkDedupSignature(
+      "/feed?q=${"b" * 5000}",
+      maxChars: 64,
+    );
     expect(sigA, isNot(sigB));
   });
 
@@ -369,17 +386,23 @@ void main() {
     expect(hash1.toRadixString(16).padLeft(8, "0"), "bfa6bf1e");
   });
 
-  test("buildDeepLinkDedupSignature returns empty when maxChars non-positive",
-      () {
-    expect(buildDeepLinkDedupSignature("/feed?x=1", maxChars: 0), "");
-    expect(buildDeepLinkDedupSignature("/feed?x=1", maxChars: -1), "");
-  });
+  test(
+    "buildDeepLinkDedupSignature returns empty when maxChars non-positive",
+    () {
+      expect(buildDeepLinkDedupSignature("/feed?x=1", maxChars: 0), "");
+      expect(buildDeepLinkDedupSignature("/feed?x=1", maxChars: -1), "");
+    },
+  );
 
-  test("buildDeepLinkDedupSignature uses prefix-only mode for tiny maxChars",
-      () {
-    final sig =
-        buildDeepLinkDedupSignature("/feed?q=${"a" * 100}", maxChars: 8);
-    expect(sig.length, 8);
-    expect(sig, "/feed?q=");
-  });
+  test(
+    "buildDeepLinkDedupSignature uses prefix-only mode for tiny maxChars",
+    () {
+      final sig = buildDeepLinkDedupSignature(
+        "/feed?q=${"a" * 100}",
+        maxChars: 8,
+      );
+      expect(sig.length, 8);
+      expect(sig, "/feed?q=");
+    },
+  );
 }

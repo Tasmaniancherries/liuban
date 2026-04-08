@@ -25,8 +25,8 @@ Future<void> runFeedReportFlow(
               child: Text(
                 ApiDevSemantics.feedReportDialogIntro,
                 style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(ctx).colorScheme.onSurfaceVariant,
-                    ),
+                  color: Theme.of(ctx).colorScheme.onSurfaceVariant,
+                ),
               ),
             ),
             const SizedBox(height: 12),
@@ -91,10 +91,9 @@ Future<void> runFeedReportFlow(
   );
   if (code == null || !context.mounted) return;
   try {
-    await AppContainerScope.of(context).feed.reportPost(
-          postId: postId,
-          reason: code,
-        );
+    await AppContainerScope.of(
+      context,
+    ).feed.reportPost(postId: postId, reason: code);
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       liubanSnackBarWithSemanticsHint(
@@ -148,8 +147,8 @@ Future<void> runBlockUserFlow(
               Text(
                 ApiDevSemantics.blockUserApiNote,
                 style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(ctx).colorScheme.onSurfaceVariant,
-                    ),
+                  color: Theme.of(ctx).colorScheme.onSurfaceVariant,
+                ),
               ),
             ],
           ),
@@ -232,16 +231,13 @@ Future<bool> runDeleteOwnPostFlow(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "確定刪除？此操作無法復原。",
-                style: Theme.of(ctx).textTheme.bodyMedium,
-              ),
+              Text("確定刪除？此操作無法復原。", style: Theme.of(ctx).textTheme.bodyMedium),
               const SizedBox(height: 12),
               Text(
                 ApiDevSemantics.deleteOwnPostApiNote,
                 style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(ctx).colorScheme.onSurfaceVariant,
-                    ),
+                  color: Theme.of(ctx).colorScheme.onSurfaceVariant,
+                ),
               ),
             ],
           ),

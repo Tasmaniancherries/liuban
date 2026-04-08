@@ -56,11 +56,13 @@ class _ComposeVerifiedShellState extends State<_ComposeVerifiedShell> {
     if (_syncing) return;
     setState(() => _syncing = true);
     try {
-      final st =
-          await AppContainerScope.of(context).auth.fetchVerificationStatus();
+      final st = await AppContainerScope.of(
+        context,
+      ).auth.fetchVerificationStatus();
       if (!mounted) return;
-      AppSessionScope.of(context)
-          .setPhase(accountPhaseFromVerificationApi(st.phase));
+      AppSessionScope.of(
+        context,
+      ).setPhase(accountPhaseFromVerificationApi(st.phase));
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
           "已同步審核狀態",
@@ -147,12 +149,12 @@ class _ComposeVerifiedShellState extends State<_ComposeVerifiedShell> {
                           Text(
                             "審核中與訪客權限相同，可先到「我的」同步審核狀態。",
                             textAlign: TextAlign.center,
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                    ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
                           ),
                         ],
                       ),
@@ -173,9 +175,9 @@ class _ComposeVerifiedShellState extends State<_ComposeVerifiedShell> {
                         onPressed: _syncing
                             ? null
                             : () => unawaitedDebug(
-                                  "ComposeAccessGate._syncVerification",
-                                  _syncVerification(),
-                                ),
+                                "ComposeAccessGate._syncVerification",
+                                _syncVerification(),
+                              ),
                         icon: _syncing
                             ? const SizedBox(
                                 width: 18,
@@ -204,8 +206,9 @@ class _ComposeVerifiedShellState extends State<_ComposeVerifiedShell> {
                       hint: "開啟「我的」分頁",
                       excludeSemantics: true,
                       child: FilledButton(
-                        onPressed:
-                            _syncing ? null : () => context.go("/profile"),
+                        onPressed: _syncing
+                            ? null
+                            : () => context.go("/profile"),
                         child: const Text("前往我的"),
                       ),
                     ),

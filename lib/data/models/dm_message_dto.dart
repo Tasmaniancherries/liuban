@@ -17,7 +17,8 @@ class DmMessageDto {
   factory DmMessageDto.fromJson(Map<String, dynamic> json) {
     return DmMessageDto(
       id: json["id"]?.toString() ?? "",
-      body: json["body"] as String? ??
+      body:
+          json["body"] as String? ??
           json["text"] as String? ??
           json["content"] as String? ??
           "",
@@ -30,9 +31,12 @@ class DmMessageDto {
       asJsonObjectList(data).map(DmMessageDto.fromJson).toList();
 
   static List<DmMessageDto> mockThread() => const <DmMessageDto>[
-        DmMessageDto(
-            id: "m1", body: "嗨！下週有沒有空？", isMine: false, createdAt: "10:02"),
-        DmMessageDto(
-            id: "m2", body: "可以呀，週六下午？", isMine: true, createdAt: "10:05"),
-      ];
+    DmMessageDto(
+      id: "m1",
+      body: "嗨！下週有沒有空？",
+      isMine: false,
+      createdAt: "10:02",
+    ),
+    DmMessageDto(id: "m2", body: "可以呀，週六下午？", isMine: true, createdAt: "10:05"),
+  ];
 }

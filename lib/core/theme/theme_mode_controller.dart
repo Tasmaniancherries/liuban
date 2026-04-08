@@ -4,8 +4,8 @@ import "package:liuban/core/persistence/app_persistence.dart";
 /// 主題模式（與 [AppPersistence.writeThemeMode] 同步）；測試可傳 `persistence: null` 僅記憶體。
 class ThemeModeController extends ChangeNotifier {
   ThemeModeController({AppPersistence? persistence})
-      : _persistence = persistence,
-        _mode = persistence?.readThemeMode() ?? ThemeMode.system;
+    : _persistence = persistence,
+      _mode = persistence?.readThemeMode() ?? ThemeMode.system;
 
   final AppPersistence? _persistence;
   ThemeMode _mode;

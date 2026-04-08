@@ -15,7 +15,8 @@ class FriendRequestDto {
   factory FriendRequestDto.fromJson(Map<String, dynamic> json) {
     return FriendRequestDto(
       id: json["id"]?.toString() ?? "",
-      fromCustomId: json["from_custom_id"] as String? ??
+      fromCustomId:
+          json["from_custom_id"] as String? ??
           json["requester_custom_id"] as String? ??
           "",
       createdAt: json["created_at"] as String?,
@@ -26,7 +27,10 @@ class FriendRequestDto {
       asJsonObjectList(data).map(FriendRequestDto.fromJson).toList();
 
   static List<FriendRequestDto> mockPending() => const <FriendRequestDto>[
-        FriendRequestDto(
-            id: "mock_r1", fromCustomId: "coffee_hk", createdAt: "2026-03-28"),
-      ];
+    FriendRequestDto(
+      id: "mock_r1",
+      fromCustomId: "coffee_hk",
+      createdAt: "2026-03-28",
+    ),
+  ];
 }

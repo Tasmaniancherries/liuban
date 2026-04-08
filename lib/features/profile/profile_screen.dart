@@ -160,15 +160,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final titleName = !hasToken
             ? "訪客瀏覽"
             : _loadingMe && (_me == null || _me!.customId.isEmpty)
-                ? "載入中⋯"
-                : "@${_me?.customId.isNotEmpty == true ? _me!.customId : "⋯"}";
+            ? "載入中⋯"
+            : "@${_me?.customId.isNotEmpty == true ? _me!.customId : "⋯"}";
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text(
-              "我的",
-              semanticsLabel: "我的與個人檔案",
-            ),
+            title: const Text("我的", semanticsLabel: "我的與個人檔案"),
             actions: [
               Semantics(
                 hint: "開啟設定頁",
@@ -211,9 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         semanticLabel: "設定",
                       ),
                       title: const Text("設定"),
-                      subtitle: const SelectionArea(
-                        child: Text("密碼、客服、關於留伴"),
-                      ),
+                      subtitle: const SelectionArea(child: Text("密碼、客服、關於留伴")),
                       trailing: const Icon(
                         Icons.chevron_right,
                         semanticLabel: "前往詳情",
@@ -238,9 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: SelectionArea(
                         child: Text(
                           ApiDevSemantics.profileMeMockDataBannerVisibleText,
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelMedium
+                          style: Theme.of(context).textTheme.labelMedium
                               ?.copyWith(
                                 color: Theme.of(context).colorScheme.tertiary,
                               ),
@@ -258,8 +251,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             : "?",
                         semanticsLabel:
                             session.phase == AccountPhase.verifiedStudent
-                                ? "已認證，留伴預設頭像"
-                                : "頭像占位",
+                            ? "已認證，留伴預設頭像"
+                            : "頭像占位",
                         style: const TextStyle(fontSize: 24),
                       ),
                     ),
@@ -276,12 +269,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               excludeSemantics: true,
                               child: Text(
                                 titleName,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                             ),
                             if (_me?.displayName != null &&
@@ -289,13 +278,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               const SizedBox(height: 4),
                               Text(
                                 _me!.displayName!,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
+                                style: Theme.of(context).textTheme.bodySmall
                                     ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
                                     ),
                               ),
                             ],
@@ -326,13 +313,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         AccountPhase.pendingVerification
                                     ? "審核通過後顯示學籍標籤"
                                     : "登入並通過審核後顯示",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
+                                style: Theme.of(context).textTheme.bodySmall
                                     ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
                                     ),
                               ),
                           ],
@@ -386,8 +371,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           label: const Text("審核中"),
                           selected:
                               session.phase == AccountPhase.pendingVerification,
-                          onSelected: (_) => session
-                              .setPhase(AccountPhase.pendingVerification),
+                          onSelected: (_) => session.setPhase(
+                            AccountPhase.pendingVerification,
+                          ),
                         ),
                       ),
                       Semantics(
@@ -417,8 +403,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Text(
                         ApiDevSemantics.profilePhasePreviewDisclaimer,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.outline,
-                            ),
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
                       ),
                     ),
                   ),
@@ -440,9 +426,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         title: const Text("同步審核狀態"),
                         subtitle: SelectionArea(
-                          child: Text(
-                            ApiDevSemantics.verificationSyncSubtitle,
-                          ),
+                          child: Text(ApiDevSemantics.verificationSyncSubtitle),
                         ),
                         onTap: () => unawaitedDebug(
                           "ProfileScreen._syncVerificationStatus",
@@ -522,17 +506,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: OutlinedButton(
                       onPressed:
                           !hasToken && session.phase == AccountPhase.guest
-                              ? null
-                              : () {
-                                  AppContainerScope.of(context)
-                                      .sessionTokens
-                                      .clear();
-                                  setState(() {
-                                    _me = null;
-                                    _lastToken = null;
-                                  });
-                                  session.signOut();
-                                },
+                          ? null
+                          : () {
+                              AppContainerScope.of(
+                                context,
+                              ).sessionTokens.clear();
+                              setState(() {
+                                _me = null;
+                                _lastToken = null;
+                              });
+                              session.signOut();
+                            },
                       child: kDebugMode
                           ? const Text("退出登入（預覽）")
                           : const Text("退出登入"),
@@ -547,8 +531,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  static Widget _schoolChip(BuildContext context, String shortName,
-      {required bool alumni}) {
+  static Widget _schoolChip(
+    BuildContext context,
+    String shortName, {
+    required bool alumni,
+  }) {
     final dto = EducationEntryDto(schoolShortName: shortName, alumni: alumni);
     return Semantics(
       container: true,
@@ -559,8 +546,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         label: Text(dto.chipLabel),
         visualDensity: VisualDensity.compact,
         side: BorderSide(
-            color:
-                Theme.of(context).colorScheme.primary.withValues(alpha: 0.35)),
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.35),
+        ),
       ),
     );
   }
@@ -575,8 +562,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         label: Text(e.chipLabel),
         visualDensity: VisualDensity.compact,
         side: BorderSide(
-            color:
-                Theme.of(context).colorScheme.primary.withValues(alpha: 0.35)),
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.35),
+        ),
       ),
     );
   }

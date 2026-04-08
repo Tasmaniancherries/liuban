@@ -401,10 +401,7 @@ String? _liubanAccountPassword(Uri uri) {
 ///
 /// [shareLinkOriginOverride]：僅供測試或特殊對照；一般應為 `null`，改用
 /// `--dart-define=SHARE_LINK_ORIGIN=…`。
-String? shareUriToAppLocation(
-  Uri uri, {
-  String? shareLinkOriginOverride,
-}) {
+String? shareUriToAppLocation(Uri uri, {String? shareLinkOriginOverride}) {
   try {
     if (uri.toString().length > _kMaxShareUriChars) return null;
     if (uri.queryParametersAll.length > _kMaxShareQueryEntries) return null;

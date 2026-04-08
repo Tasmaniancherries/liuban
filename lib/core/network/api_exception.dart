@@ -33,7 +33,8 @@ class LiubanApiException implements Exception {
       serverMsg = data;
     }
 
-    final msg = serverMsg ??
+    final msg =
+        serverMsg ??
         e.message ??
         switch (e.type) {
           DioExceptionType.connectionTimeout => "連線逾時",

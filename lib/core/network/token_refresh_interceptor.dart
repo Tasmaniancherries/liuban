@@ -13,9 +13,9 @@ class TokenRefreshInterceptor extends QueuedInterceptor {
     required AuthSessionTokens tokens,
     required Dio plainDio,
     required Dio sessionDio,
-  })  : _tokens = tokens,
-        _plainDio = plainDio,
-        _sessionDio = sessionDio;
+  }) : _tokens = tokens,
+       _plainDio = plainDio,
+       _sessionDio = sessionDio;
 
   final AuthSessionTokens _tokens;
   final Dio _plainDio;
@@ -45,7 +45,9 @@ class TokenRefreshInterceptor extends QueuedInterceptor {
 
   @override
   Future<void> onError(
-      DioException err, ErrorInterceptorHandler handler) async {
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
     if (err.response?.statusCode != 401) {
       return handler.next(err);
     }

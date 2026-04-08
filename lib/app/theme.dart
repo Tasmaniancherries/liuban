@@ -22,8 +22,9 @@ class LiubanTheme {
         scrolledUnderElevation: 0,
         backgroundColor: scheme.surface,
         foregroundColor: scheme.onSurface,
-        systemOverlayStyle: SystemUiOverlayStyle.dark
-            .copyWith(statusBarColor: Colors.transparent),
+        systemOverlayStyle: SystemUiOverlayStyle.dark.copyWith(
+          statusBarColor: Colors.transparent,
+        ),
       ),
       cardTheme: CardThemeData(
         elevation: 0,
@@ -36,8 +37,9 @@ class LiubanTheme {
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       ),
     );
@@ -60,8 +62,9 @@ class LiubanTheme {
         scrolledUnderElevation: 0,
         backgroundColor: scheme.surface,
         foregroundColor: scheme.onSurface,
-        systemOverlayStyle: SystemUiOverlayStyle.light
-            .copyWith(statusBarColor: Colors.transparent),
+        systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(
+          statusBarColor: Colors.transparent,
+        ),
       ),
       cardTheme: CardThemeData(
         elevation: 0,
@@ -74,8 +77,9 @@ class LiubanTheme {
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       ),
     );

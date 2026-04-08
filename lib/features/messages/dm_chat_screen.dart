@@ -49,9 +49,7 @@ class _DmChatScreenState extends State<DmChatScreen> {
         hint: ApiDevSemantics.discardUnsentMessageDraftHint,
         child: AlertDialog(
           title: const Text("捨棄未送出訊息？"),
-          content: const SelectionArea(
-            child: Text("輸入框內尚有內容，確定離開？"),
-          ),
+          content: const SelectionArea(child: Text("輸入框內尚有內容，確定離開？")),
           actions: [
             Tooltip(
               message: "繼續輸入",
@@ -96,9 +94,9 @@ class _DmChatScreenState extends State<DmChatScreen> {
 
   Future<void> _load() async {
     try {
-      final list = await AppContainerScope.of(context).friends.listDmMessages(
-            peerId: widget.peerId,
-          );
+      final list = await AppContainerScope.of(
+        context,
+      ).friends.listDmMessages(peerId: widget.peerId);
       if (!mounted) return;
       setState(() {
         _items = list;
@@ -159,10 +157,9 @@ class _DmChatScreenState extends State<DmChatScreen> {
     if (t.isEmpty || _sending) return;
     setState(() => _sending = true);
     try {
-      await AppContainerScope.of(context).friends.sendDmMessage(
-            peerId: widget.peerId,
-            text: t,
-          );
+      await AppContainerScope.of(
+        context,
+      ).friends.sendDmMessage(peerId: widget.peerId, text: t);
       if (!mounted) return;
       _input.clear();
       await _load();
@@ -217,10 +214,7 @@ class _DmChatScreenState extends State<DmChatScreen> {
               icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
               onPressed: _sending
                   ? null
-                  : () => unawaitedDebug(
-                        "DmChatScreen._tryPop",
-                        _tryPop(),
-                      ),
+                  : () => unawaitedDebug("DmChatScreen._tryPop", _tryPop()),
             ),
           ),
         ),
@@ -237,8 +231,8 @@ class _DmChatScreenState extends State<DmChatScreen> {
                   child: Text(
                     ApiDevSemantics.dmThread,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
               ),
@@ -255,8 +249,8 @@ class _DmChatScreenState extends State<DmChatScreen> {
                     child: Text(
                       ApiDevSemantics.dmMockThreadBannerVisibleText,
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.tertiary,
-                          ),
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
                     ),
                   ),
                 ),
@@ -275,7 +269,9 @@ class _DmChatScreenState extends State<DmChatScreen> {
                         physics: const AlwaysScrollableScrollPhysics(),
                         controller: _scroll,
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 16),
+                          horizontal: 12,
+                          vertical: 16,
+                        ),
                         itemCount: _items.length,
                         itemBuilder: (context, i) {
                           final m = _items[i];
@@ -284,9 +280,9 @@ class _DmChatScreenState extends State<DmChatScreen> {
                               : Alignment.centerLeft;
                           final bg = m.isMine
                               ? Theme.of(context).colorScheme.primaryContainer
-                              : Theme.of(context)
-                                  .colorScheme
-                                  .surfaceContainerHighest;
+                              : Theme.of(
+                                  context,
+                                ).colorScheme.surfaceContainerHighest;
                           final fg = m.isMine
                               ? Theme.of(context).colorScheme.onPrimaryContainer
                               : Theme.of(context).colorScheme.onSurfaceVariant;
@@ -295,8 +291,8 @@ class _DmChatScreenState extends State<DmChatScreen> {
                               : "對方";
                           final timeSuffix =
                               (m.createdAt != null && m.createdAt!.isNotEmpty)
-                                  ? "，${m.createdAt}"
-                                  : "";
+                              ? "，${m.createdAt}"
+                              : "";
                           final bubbleLabel = m.isMine
                               ? "我：${m.body}$timeSuffix"
                               : "$peerLabel：${m.body}$timeSuffix";
@@ -318,19 +314,24 @@ class _DmChatScreenState extends State<DmChatScreen> {
                                   margin: const EdgeInsets.only(bottom: 10),
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 14, vertical: 10),
+                                      horizontal: 14,
+                                      vertical: 10,
+                                    ),
                                     child: SelectionArea(
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(m.body,
-                                              style: TextStyle(color: fg)),
+                                          Text(
+                                            m.body,
+                                            style: TextStyle(color: fg),
+                                          ),
                                           if (m.createdAt != null &&
                                               m.createdAt!.isNotEmpty)
                                             Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 4),
+                                              padding: const EdgeInsets.only(
+                                                top: 4,
+                                              ),
                                               child: Text(
                                                 m.createdAt!,
                                                 style: Theme.of(context)
@@ -338,7 +339,8 @@ class _DmChatScreenState extends State<DmChatScreen> {
                                                     .labelSmall
                                                     ?.copyWith(
                                                       color: fg.withValues(
-                                                          alpha: 0.7),
+                                                        alpha: 0.7,
+                                                      ),
                                                     ),
                                               ),
                                             ),
@@ -390,10 +392,8 @@ class _DmChatScreenState extends State<DmChatScreen> {
                         tooltip: "傳送",
                         onPressed: _sending
                             ? null
-                            : () => unawaitedDebug(
-                                  "DmChatScreen._send",
-                                  _send(),
-                                ),
+                            : () =>
+                                  unawaitedDebug("DmChatScreen._send", _send()),
                         icon: _sending
                             ? const SizedBox(
                                 width: 22,

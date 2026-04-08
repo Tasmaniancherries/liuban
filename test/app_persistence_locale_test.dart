@@ -13,9 +13,7 @@ void main() {
   });
 
   test("readAppLocalePreference respects stored values", () async {
-    SharedPreferences.setMockInitialValues({
-      "liuban_app_locale": "system",
-    });
+    SharedPreferences.setMockInitialValues({"liuban_app_locale": "system"});
     final prefs = await SharedPreferences.getInstance();
     final p = AppPersistence(prefs, AuthSessionTokens(), "test_guest");
     expect(p.readAppLocalePreference(), AppLocalePreference.system);

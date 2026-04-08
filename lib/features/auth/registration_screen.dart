@@ -57,9 +57,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         hint: ApiDevSemantics.discardUnsavedLocalFormDialogHint,
         child: AlertDialog(
           title: const Text("捨棄註冊資料？"),
-          content: const SelectionArea(
-            child: Text("表單內容與已選圖片將不會儲存，確定離開？"),
-          ),
+          content: const SelectionArea(child: Text("表單內容與已選圖片將不會儲存，確定離開？")),
           actions: [
             Tooltip(
               message: "繼續填寫",
@@ -116,7 +114,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Future<void> _pickVerificationImage() async {
     try {
       final file = await _picker.pickImage(
-          source: ImageSource.gallery, imageQuality: 85);
+        source: ImageSource.gallery,
+        imageQuality: 85,
+      );
       if (file == null) return;
       final bytes = await file.readAsBytes();
       if (!mounted) return;
@@ -136,11 +136,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   String get _defaultMultipartFilename => switch (_docKind) {
-        RegistrationVerificationDocumentKind.offerOrAdmissionProof =>
-          "offer.jpg",
-        RegistrationVerificationDocumentKind.studentIdCard =>
-          "student_id_card.jpg",
-      };
+    RegistrationVerificationDocumentKind.offerOrAdmissionProof => "offer.jpg",
+    RegistrationVerificationDocumentKind.studentIdCard => "student_id_card.jpg",
+  };
 
   String _uploadButtonLabelShort(bool hasFile) {
     if (!hasFile) {
@@ -165,10 +163,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   String _previewSemanticLabel() => switch (_docKind) {
-        RegistrationVerificationDocumentKind.offerOrAdmissionProof =>
-          "錄取證明或 Offer 預覽",
-        RegistrationVerificationDocumentKind.studentIdCard => "學生證預覽",
-      };
+    RegistrationVerificationDocumentKind.offerOrAdmissionProof =>
+      "錄取證明或 Offer 預覽",
+    RegistrationVerificationDocumentKind.studentIdCard => "學生證預覽",
+  };
 
   Future<void> _submit(AppSession session) async {
     if (_submitting) return;
@@ -259,10 +257,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "註冊 · 身分審核",
-            semanticsLabel: "註冊與身分審核",
-          ),
+          title: const Text("註冊 · 身分審核", semanticsLabel: "註冊與身分審核"),
           leading: Semantics(
             hint: "返回上一頁；表單有內容時會先詢問是否捨棄",
             child: IconButton(
@@ -270,10 +265,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
               onPressed: _submitting
                   ? null
-                  : () => unawaitedDebug(
-                        "RegistrationScreen._tryPop",
-                        _tryPop(),
-                      ),
+                  : () =>
+                        unawaitedDebug("RegistrationScreen._tryPop", _tryPop()),
             ),
           ),
         ),
@@ -318,13 +311,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   selected: {_docKind},
                   onSelectionChanged:
                       (Set<RegistrationVerificationDocumentKind> next) {
-                    if (next.isEmpty) return;
-                    setState(() {
-                      _docKind = next.first;
-                      _documentBytes = null;
-                      _documentName = null;
-                    });
-                  },
+                        if (next.isEmpty) return;
+                        setState(() {
+                          _docKind = next.first;
+                          _documentBytes = null;
+                          _documentName = null;
+                        });
+                      },
                 ),
               ),
               const SizedBox(height: 24),
@@ -395,7 +388,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   container: true,
                   label: switch (_docKind) {
                     RegistrationVerificationDocumentKind
-                          .offerOrAdmissionProof =>
+                        .offerOrAdmissionProof =>
                       "請上傳 Offer 或錄取證明圖片，為必填項目",
                     RegistrationVerificationDocumentKind.studentIdCard =>
                       "請上傳學生證照片；須含可辨識之學籍資訊",
@@ -406,15 +399,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     child: Text(
                       switch (_docKind) {
                         RegistrationVerificationDocumentKind
-                              .offerOrAdmissionProof =>
+                            .offerOrAdmissionProof =>
                           "請上傳 Offer 或錄取證明圖片（必填）",
                         RegistrationVerificationDocumentKind.studentIdCard =>
                           "請上傳學生證照片，需清楚可辨識姓名、學校或學號（必填）",
                       },
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ),
                 ),
@@ -424,7 +416,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   child: Semantics(
                     hint: switch (_docKind) {
                       RegistrationVerificationDocumentKind
-                            .offerOrAdmissionProof =>
+                          .offerOrAdmissionProof =>
                         "已選取之 Offer 或證明圖預覽，僅供審核參考",
                       RegistrationVerificationDocumentKind.studentIdCard =>
                         "已選取之學生證預覽，僅供審核參考",
@@ -447,8 +439,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   child: Text(
                     _documentName ?? "已選擇圖片",
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -465,13 +457,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     onPressed: _submitting
                         ? null
                         : () => unawaitedDebug(
-                              "RegistrationScreen._pickVerificationImage",
-                              _pickVerificationImage(),
-                            ),
-                    icon: const Icon(
-                      Icons.upload_file,
-                      semanticLabel: "上傳圖片",
-                    ),
+                            "RegistrationScreen._pickVerificationImage",
+                            _pickVerificationImage(),
+                          ),
+                    icon: const Icon(Icons.upload_file, semanticLabel: "上傳圖片"),
                     label: Text(_uploadButtonLabelShort(hasDoc)),
                   ),
                 ),
@@ -491,9 +480,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     onPressed: _submitting
                         ? null
                         : () => unawaitedDebug(
-                              "RegistrationScreen._submit",
-                              _submit(session),
-                            ),
+                            "RegistrationScreen._submit",
+                            _submit(session),
+                          ),
                     child: _submitting
                         ? const SizedBox(
                             height: 22,
@@ -520,9 +509,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     onPressed: _submitting
                         ? null
                         : () => unawaitedDebug(
-                              "RegistrationScreen._tryPop",
-                              _tryPop(),
-                            ),
+                            "RegistrationScreen._tryPop",
+                            _tryPop(),
+                          ),
                     child: const Text("稍後再說"),
                   ),
                 ),

@@ -19,10 +19,7 @@ void main() {
   });
 
   test("unawaitedDebugFuture ignores successful completion values", () async {
-    unawaitedDebugFuture<int>(
-      "test.success.int",
-      Future<int>.value(42),
-    );
+    unawaitedDebugFuture<int>("test.success.int", Future<int>.value(42));
     await Future<void>.delayed(Duration.zero);
   });
 

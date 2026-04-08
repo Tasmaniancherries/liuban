@@ -45,9 +45,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         hint: ApiDevSemantics.discardUnsavedLocalFormDialogHint,
         child: AlertDialog(
           title: const Text("捨棄輸入？"),
-          content: const SelectionArea(
-            child: Text("密碼欄位已輸入內容，確定離開？"),
-          ),
+          content: const SelectionArea(child: Text("密碼欄位已輸入內容，確定離開？")),
           actions: [
             Tooltip(
               message: "繼續輸入",
@@ -135,10 +133,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     }
     setState(() => _submitting = true);
     try {
-      await AppContainerScope.of(context).auth.changePassword(
-            currentPassword: cur,
-            newPassword: nw,
-          );
+      await AppContainerScope.of(
+        context,
+      ).auth.changePassword(currentPassword: cur, newPassword: nw);
       if (!mounted) return;
       TextInput.finishAutofillContext(shouldSave: true);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -179,10 +176,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "修改密碼",
-            semanticsLabel: "變更帳號密碼",
-          ),
+          title: const Text("修改密碼", semanticsLabel: "變更帳號密碼"),
           leading: Semantics(
             hint: "返回上一頁；密碼欄位有內容時會先詢問是否捨棄",
             child: IconButton(
@@ -191,9 +185,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               onPressed: _submitting
                   ? null
                   : () => unawaitedDebug(
-                        "ChangePasswordScreen._tryPop",
-                        _tryPop(),
-                      ),
+                      "ChangePasswordScreen._tryPop",
+                      _tryPop(),
+                    ),
             ),
           ),
         ),
@@ -212,8 +206,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   child: Text(
                     ApiDevSemantics.authChangePassword,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
               ),
@@ -300,8 +294,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         tooltip: _obscureAgain ? "顯示密碼" : "隱藏密碼",
                         onPressed: _submitting
                             ? null
-                            : () =>
-                                setState(() => _obscureAgain = !_obscureAgain),
+                            : () => setState(
+                                () => _obscureAgain = !_obscureAgain,
+                              ),
                         icon: Icon(
                           _obscureAgain
                               ? Icons.visibility_outlined
@@ -314,10 +309,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   textInputAction: TextInputAction.done,
                   onSubmitted: (_) {
                     if (_submitting) return;
-                    unawaitedDebug(
-                      "ChangePasswordScreen._submit",
-                      _submit(),
-                    );
+                    unawaitedDebug("ChangePasswordScreen._submit", _submit());
                   },
                 ),
               ),
@@ -334,9 +326,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     onPressed: _submitting
                         ? null
                         : () => unawaitedDebug(
-                              "ChangePasswordScreen._submit",
-                              _submit(),
-                            ),
+                            "ChangePasswordScreen._submit",
+                            _submit(),
+                          ),
                     child: _submitting
                         ? const SizedBox(
                             height: 22,

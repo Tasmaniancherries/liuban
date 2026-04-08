@@ -37,9 +37,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
         hint: ApiDevSemantics.discardUnsavedLocalFormDialogHint,
         child: AlertDialog(
           title: const Text("捨棄輸入？"),
-          content: const SelectionArea(
-            child: Text("已輸入對方 ID，確定離開？"),
-          ),
+          content: const SelectionArea(child: Text("已輸入對方 ID，確定離開？")),
           actions: [
             Tooltip(
               message: "繼續輸入",
@@ -101,9 +99,9 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
     }
     setState(() => _submitting = true);
     try {
-      await AppContainerScope.of(context)
-          .friends
-          .sendFriendRequest(targetCustomId: raw);
+      await AppContainerScope.of(
+        context,
+      ).friends.sendFriendRequest(targetCustomId: raw);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
@@ -143,10 +141,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "添加好友",
-            semanticsLabel: "添加好友申請",
-          ),
+          title: const Text("添加好友", semanticsLabel: "添加好友申請"),
           leading: Semantics(
             hint: "返回上一頁；已輸入對方 ID 時會先詢問是否捨棄",
             child: IconButton(
@@ -154,10 +149,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
               icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
               onPressed: _submitting
                   ? null
-                  : () => unawaitedDebug(
-                        "AddFriendScreen._tryPop",
-                        _tryPop(),
-                      ),
+                  : () => unawaitedDebug("AddFriendScreen._tryPop", _tryPop()),
             ),
           ),
         ),
@@ -218,9 +210,9 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                     onPressed: _submitting
                         ? null
                         : () => unawaitedDebug(
-                              "AddFriendScreen._submit",
-                              _submit(),
-                            ),
+                            "AddFriendScreen._submit",
+                            _submit(),
+                          ),
                     child: _submitting
                         ? const SizedBox(
                             height: 22,

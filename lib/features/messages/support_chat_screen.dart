@@ -10,8 +10,11 @@ import "package:liuban/core/ui/liuban_snackbar.dart";
 import "package:liuban/core/ui/scroll_constants.dart";
 
 class ChatMessage {
-  const ChatMessage(
-      {required this.text, required this.fromUser, required this.time});
+  const ChatMessage({
+    required this.text,
+    required this.fromUser,
+    required this.time,
+  });
 
   final String text;
   final bool fromUser;
@@ -57,9 +60,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
         hint: ApiDevSemantics.discardUnsentMessageDraftHint,
         child: AlertDialog(
           title: const Text("捨棄未送出訊息？"),
-          content: const SelectionArea(
-            child: Text("輸入框內尚有內容，確定離開？"),
-          ),
+          content: const SelectionArea(child: Text("輸入框內尚有內容，確定離開？")),
           actions: [
             Tooltip(
               message: "繼續輸入",
@@ -168,10 +169,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "官方客服",
-            semanticsLabel: "官方客服聊天",
-          ),
+          title: const Text("官方客服", semanticsLabel: "官方客服聊天"),
           leading: Semantics(
             hint: "返回上一頁；輸入框有未送出內容時會先詢問",
             child: IconButton(
@@ -179,10 +177,8 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
               icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
               onPressed: _sending
                   ? null
-                  : () => unawaitedDebug(
-                        "SupportChatScreen._tryPop",
-                        _tryPop(),
-                      ),
+                  : () =>
+                        unawaitedDebug("SupportChatScreen._tryPop", _tryPop()),
             ),
           ),
         ),
@@ -199,8 +195,8 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                   child: Text(
                     ApiDevSemantics.supportMessages,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
               ),
@@ -211,21 +207,25 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
                 controller: _scroll,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 16,
+                ),
                 itemCount: _items.length,
                 itemBuilder: (context, i) {
                   final m = _items[i];
-                  final align =
-                      m.fromUser ? Alignment.centerRight : Alignment.centerLeft;
+                  final align = m.fromUser
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft;
                   final bg = m.fromUser
                       ? Theme.of(context).colorScheme.primaryContainer
                       : Theme.of(context).colorScheme.surfaceContainerHighest;
                   final fg = m.fromUser
                       ? Theme.of(context).colorScheme.onPrimaryContainer
                       : Theme.of(context).colorScheme.onSurfaceVariant;
-                  final timeLabel = MaterialLocalizations.of(context)
-                      .formatTimeOfDay(TimeOfDay.fromDateTime(m.time));
+                  final timeLabel = MaterialLocalizations.of(
+                    context,
+                  ).formatTimeOfDay(TimeOfDay.fromDateTime(m.time));
                   final bubbleLabel = m.fromUser
                       ? "我，$timeLabel：${m.text}"
                       : "官方客服，$timeLabel：${m.text}";
@@ -233,7 +233,8 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                     alignment: align,
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
-                          maxWidth: MediaQuery.sizeOf(context).width * 0.78),
+                        maxWidth: MediaQuery.sizeOf(context).width * 0.78,
+                      ),
                       child: Semantics(
                         container: true,
                         label: bubbleLabel,
@@ -245,7 +246,9 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                           margin: const EdgeInsets.only(bottom: 10),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 10),
+                              horizontal: 14,
+                              vertical: 10,
+                            ),
                             child: SelectionArea(
                               child: Text(m.text, style: TextStyle(color: fg)),
                             ),
@@ -294,9 +297,9 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                         onPressed: _sending
                             ? null
                             : () => unawaitedDebug(
-                                  "SupportChatScreen._send",
-                                  _send(),
-                                ),
+                                "SupportChatScreen._send",
+                                _send(),
+                              ),
                         icon: _sending
                             ? const SizedBox(
                                 width: 22,

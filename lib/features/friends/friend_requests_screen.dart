@@ -74,8 +74,9 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen>
 
   Future<_IncomingTabLoad> _loadIncoming() async {
     try {
-      final list =
-          await AppContainerScope.of(context).friends.listIncomingRequests();
+      final list = await AppContainerScope.of(
+        context,
+      ).friends.listIncomingRequests();
       return _IncomingTabLoad(items: list, usedErrorFallback: false);
     } on LiubanApiException catch (e) {
       return _IncomingTabLoad(
@@ -93,8 +94,9 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen>
 
   Future<_OutgoingTabLoad> _loadOutgoing() async {
     try {
-      final list =
-          await AppContainerScope.of(context).friends.listOutgoingRequests();
+      final list = await AppContainerScope.of(
+        context,
+      ).friends.listOutgoingRequests();
       return _OutgoingTabLoad(items: list, usedErrorFallback: false);
     } on LiubanApiException catch (e) {
       return _OutgoingTabLoad(
@@ -152,10 +154,9 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen>
 
   Future<void> _respond(String id, bool accept) async {
     try {
-      await AppContainerScope.of(context).friends.respondToFriendRequest(
-            requestId: id,
-            accept: accept,
-          );
+      await AppContainerScope.of(
+        context,
+      ).friends.respondToFriendRequest(requestId: id, accept: accept);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
@@ -187,10 +188,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "好友申請",
-          semanticsLabel: "好友申請列表",
-        ),
+        title: const Text("好友申請", semanticsLabel: "好友申請列表"),
         leading: Semantics(
           hint: "關閉好友申請並返回上一頁",
           child: IconButton(
@@ -205,19 +203,13 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen>
             Tab(
               child: Semantics(
                 hint: "切換至收到的好友申請列表",
-                child: const Text(
-                  "收到的",
-                  semanticsLabel: "收到的好友申請",
-                ),
+                child: const Text("收到的", semanticsLabel: "收到的好友申請"),
               ),
             ),
             Tab(
               child: Semantics(
                 hint: "切換至已發出的好友申請列表",
-                child: const Text(
-                  "我發出的",
-                  semanticsLabel: "我發出的好友申請",
-                ),
+                child: const Text("我發出的", semanticsLabel: "我發出的好友申請"),
               ),
             ),
           ],
@@ -231,10 +223,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen>
             onRefresh: _refreshAll,
             onRespond: _respond,
           ),
-          _OutgoingPanel(
-            future: _outgoing!,
-            onRefresh: _refreshAll,
-          ),
+          _OutgoingPanel(future: _outgoing!, onRefresh: _refreshAll),
         ],
       ),
     );
@@ -271,9 +260,7 @@ class _IncomingPanel extends StatelessWidget {
                       minHeight: constraints.maxHeight,
                     ),
                     child: const Center(
-                      child: CircularProgressIndicator(
-                        semanticsLabel: "載入中",
-                      ),
+                      child: CircularProgressIndicator(semanticsLabel: "載入中"),
                     ),
                   ),
                 );
@@ -297,10 +284,8 @@ class _IncomingPanel extends StatelessWidget {
                       child: Text(
                         ApiDevSemantics.friendRequestsIncoming,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
-                            ),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ),
                   ),
@@ -317,9 +302,7 @@ class _IncomingPanel extends StatelessWidget {
                         child: Text(
                           ApiDevSemantics
                               .friendRequestsMockDataBannerVisibleText,
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelMedium
+                          style: Theme.of(context).textTheme.labelMedium
                               ?.copyWith(
                                 color: Theme.of(context).colorScheme.tertiary,
                               ),
@@ -351,7 +334,8 @@ class _IncomingPanel extends StatelessWidget {
                       Semantics(
                         container: true,
                         explicitChildNodes: true,
-                        label: "來自 @${r.fromCustomId} 的好友申請，"
+                        label:
+                            "來自 @${r.fromCustomId} 的好友申請，"
                             "${r.createdAt ?? "想加你為好友"}",
                         hint: "請使用拒絕或接受按鈕回覆",
                         child: Card(
@@ -419,10 +403,7 @@ class _IncomingPanel extends StatelessWidget {
 }
 
 class _OutgoingPanel extends StatelessWidget {
-  const _OutgoingPanel({
-    required this.future,
-    required this.onRefresh,
-  });
+  const _OutgoingPanel({required this.future, required this.onRefresh});
 
   final Future<_OutgoingTabLoad> future;
   final Future<void> Function() onRefresh;
@@ -446,9 +427,7 @@ class _OutgoingPanel extends StatelessWidget {
                       minHeight: constraints.maxHeight,
                     ),
                     child: const Center(
-                      child: CircularProgressIndicator(
-                        semanticsLabel: "載入中",
-                      ),
+                      child: CircularProgressIndicator(semanticsLabel: "載入中"),
                     ),
                   ),
                 );
@@ -472,10 +451,8 @@ class _OutgoingPanel extends StatelessWidget {
                       child: Text(
                         ApiDevSemantics.friendRequestsOutgoing,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
-                            ),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ),
                   ),
@@ -492,9 +469,7 @@ class _OutgoingPanel extends StatelessWidget {
                         child: Text(
                           ApiDevSemantics
                               .friendRequestsMockDataBannerVisibleText,
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelMedium
+                          style: Theme.of(context).textTheme.labelMedium
                               ?.copyWith(
                                 color: Theme.of(context).colorScheme.tertiary,
                               ),
@@ -552,9 +527,7 @@ class _OutgoingPanel extends StatelessWidget {
                               hint: "僅顯示伺服器回傳狀態，無法在此變更",
                               excludeSemantics: true,
                               child: Chip(
-                                label: SelectionArea(
-                                  child: Text(r.status),
-                                ),
+                                label: SelectionArea(child: Text(r.status)),
                                 visualDensity: VisualDensity.compact,
                               ),
                             ),

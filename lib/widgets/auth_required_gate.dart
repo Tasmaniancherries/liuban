@@ -8,11 +8,7 @@ import "package:liuban/core/ui/api_dev_semantics.dart";
 ///
 /// 說明與 API 路徑見 [ApiDevSemantics.authRequiredGateApiFootnote]。
 class AuthRequiredGate extends StatelessWidget {
-  const AuthRequiredGate({
-    super.key,
-    required this.child,
-    this.title,
-  });
+  const AuthRequiredGate({super.key, required this.child, this.title});
 
   final Widget child;
   final String? title;
@@ -31,10 +27,7 @@ class AuthRequiredGate extends StatelessWidget {
         if (_hasToken(context)) return child;
         return Scaffold(
           appBar: AppBar(
-            title: Text(
-              title ?? "需要登入",
-              semanticsLabel: title ?? "需要登入以使用此功能",
-            ),
+            title: Text(title ?? "需要登入", semanticsLabel: title ?? "需要登入以使用此功能"),
             leading: Semantics(
               hint: "關閉登入提示並返回上一頁",
               child: IconButton(
@@ -75,23 +68,23 @@ class AuthRequiredGate extends StatelessWidget {
                           Text(
                             "訪客可瀏覽公開廣場與推廣；好友與私聊需帳號。",
                             textAlign: TextAlign.center,
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                    ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
                           ),
                           const SizedBox(height: 12),
                           Text(
                             ApiDevSemantics.authRequiredGateApiFootnote,
                             textAlign: TextAlign.center,
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                    ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
                           ),
                         ],
                       ),

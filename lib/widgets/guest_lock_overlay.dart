@@ -52,28 +52,30 @@ class GuestLockOverlay extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.lock_outline,
-                          semanticLabel: "功能受限",
-                          size: 40,
-                          color: Theme.of(context).colorScheme.primary),
+                      Icon(
+                        Icons.lock_outline,
+                        semanticLabel: "功能受限",
+                        size: 40,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                       const SizedBox(height: 12),
                       SelectionArea(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(title,
-                                style: Theme.of(context).textTheme.titleMedium),
+                            Text(
+                              title,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
                             const SizedBox(height: 8),
                             Text(
                               message,
                               textAlign: TextAlign.center,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
+                              style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                   ),
                             ),
                           ],

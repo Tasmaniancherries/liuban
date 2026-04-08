@@ -14,17 +14,17 @@ class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   static String _themeModeLabel(ThemeMode m) => switch (m) {
-        ThemeMode.system => "跟隨系統",
-        ThemeMode.light => "淺色",
-        ThemeMode.dark => "深色",
-      };
+    ThemeMode.system => "跟隨系統",
+    ThemeMode.light => "淺色",
+    ThemeMode.dark => "深色",
+  };
 
   static String _localeLabel(AppLocalePreference p) => switch (p) {
-        AppLocalePreference.system => "跟隨系統",
-        AppLocalePreference.zhHK => "繁體中文（香港）",
-        AppLocalePreference.zhTW => "繁體中文（台灣）",
-        AppLocalePreference.english => "English",
-      };
+    AppLocalePreference.system => "跟隨系統",
+    AppLocalePreference.zhHK => "繁體中文（香港）",
+    AppLocalePreference.zhTW => "繁體中文（台灣）",
+    AppLocalePreference.english => "English",
+  };
 
   Future<void> _pickThemeMode(BuildContext context) async {
     final ctrl = ThemeModeScope.of(context);
@@ -47,9 +47,7 @@ class SettingsScreen extends StatelessWidget {
                   hint: "選取後套用系統外觀",
                   excludeSemantics: true,
                   child: ListTile(
-                    title: const SelectionArea(
-                      child: Text("跟隨系統"),
-                    ),
+                    title: const SelectionArea(child: Text("跟隨系統")),
                     trailing: ctrl.mode == ThemeMode.system
                         ? const Icon(Icons.check, semanticLabel: "目前選取")
                         : null,
@@ -65,9 +63,7 @@ class SettingsScreen extends StatelessWidget {
                   hint: "選取後固定淺色外觀",
                   excludeSemantics: true,
                   child: ListTile(
-                    title: const SelectionArea(
-                      child: Text("淺色"),
-                    ),
+                    title: const SelectionArea(child: Text("淺色")),
                     trailing: ctrl.mode == ThemeMode.light
                         ? const Icon(Icons.check, semanticLabel: "目前選取")
                         : null,
@@ -83,9 +79,7 @@ class SettingsScreen extends StatelessWidget {
                   hint: "選取後固定深色外觀",
                   excludeSemantics: true,
                   child: ListTile(
-                    title: const SelectionArea(
-                      child: Text("深色"),
-                    ),
+                    title: const SelectionArea(child: Text("深色")),
                     trailing: ctrl.mode == ThemeMode.dark
                         ? const Icon(Icons.check, semanticLabel: "目前選取")
                         : null,
@@ -139,9 +133,7 @@ class SettingsScreen extends StatelessWidget {
                     hint: "選取後套用此介面語言",
                     excludeSemantics: true,
                     child: ListTile(
-                      title: SelectionArea(
-                        child: Text(_localeLabel(opt)),
-                      ),
+                      title: SelectionArea(child: Text(_localeLabel(opt))),
                       trailing: ctrl.preference == opt
                           ? const Icon(Icons.check, semanticLabel: "目前選取")
                           : null,
@@ -187,14 +179,11 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final hasToken =
         AppContainerScope.of(context).sessionTokens.accessToken != null &&
-            AppContainerScope.of(context).sessionTokens.accessToken!.isNotEmpty;
+        AppContainerScope.of(context).sessionTokens.accessToken!.isNotEmpty;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "設定",
-          semanticsLabel: "應用程式設定",
-        ),
+        title: const Text("設定", semanticsLabel: "應用程式設定"),
         leading: Semantics(
           hint: "關閉設定並返回上一頁",
           child: IconButton(
@@ -249,8 +238,9 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 title: const Text("介面語言"),
                 subtitle: SelectionArea(
-                  child:
-                      Text(_localeLabel(AppLocaleScope.of(context).preference)),
+                  child: Text(
+                    _localeLabel(AppLocaleScope.of(context).preference),
+                  ),
                 ),
                 trailing: const Icon(
                   Icons.chevron_right,
@@ -301,9 +291,7 @@ class SettingsScreen extends StatelessWidget {
                     semanticLabel: "已屏蔽用戶",
                   ),
                   title: const Text("已屏蔽用戶"),
-                  subtitle: const SelectionArea(
-                    child: Text("查看或解除屏蔽"),
-                  ),
+                  subtitle: const SelectionArea(child: Text("查看或解除屏蔽")),
                   trailing: const Icon(
                     Icons.chevron_right,
                     semanticLabel: "前往詳情",
@@ -329,9 +317,7 @@ class SettingsScreen extends StatelessWidget {
                   semanticLabel: "忘記密碼",
                 ),
                 title: const Text("忘記密碼"),
-                subtitle: const SelectionArea(
-                  child: Text("郵箱重設或客服"),
-                ),
+                subtitle: const SelectionArea(child: Text("郵箱重設或客服")),
                 trailing: const Icon(
                   Icons.chevron_right,
                   semanticLabel: "前往詳情",
@@ -435,10 +421,7 @@ class SettingsScreen extends StatelessWidget {
               hint: "顯示版本與簡介",
               excludeSemantics: true,
               child: ListTile(
-                leading: const Icon(
-                  Icons.info_outline,
-                  semanticLabel: "關於留伴",
-                ),
+                leading: const Icon(Icons.info_outline, semanticLabel: "關於留伴"),
                 title: const Text("關於留伴"),
                 subtitle: const SelectionArea(
                   child: Text("版本 ${AppConfig.appVersion}"),
@@ -522,8 +505,8 @@ class SettingsScreen extends StatelessWidget {
                 Text(
                   ApiDevSemantics.aboutDialogApiFootnote,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),

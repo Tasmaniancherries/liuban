@@ -14,8 +14,10 @@ Rect? _shareAnchorFromContext(BuildContext context) {
 }
 
 /// 底部選單：複製連結或呼叫系統分享面板。
-Future<void> showShareLinkSheet(BuildContext context,
-    {required String url}) async {
+Future<void> showShareLinkSheet(
+  BuildContext context, {
+  required String url,
+}) async {
   await showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
@@ -97,22 +99,22 @@ Future<void> showShareLinkSheet(BuildContext context,
                           children: [
                             Text(
                               url,
-                              style:
-                                  Theme.of(ctx).textTheme.bodySmall?.copyWith(
-                                        color: Theme.of(ctx)
-                                            .colorScheme
-                                            .onSurfaceVariant,
-                                      ),
+                              style: Theme.of(ctx).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      ctx,
+                                    ).colorScheme.onSurfaceVariant,
+                                  ),
                             ),
                             const SizedBox(height: 8),
                             Text(
                               ApiDevSemantics.shareLinkSheetFootnote,
-                              style:
-                                  Theme.of(ctx).textTheme.labelSmall?.copyWith(
-                                        color: Theme.of(ctx)
-                                            .colorScheme
-                                            .onSurfaceVariant,
-                                      ),
+                              style: Theme.of(ctx).textTheme.labelSmall
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      ctx,
+                                    ).colorScheme.onSurfaceVariant,
+                                  ),
                             ),
                           ],
                         ),
@@ -134,10 +136,8 @@ Future<void> showShareLinkSheet(BuildContext context,
                       semanticLabel: "複製",
                     ),
                     title: const Text("複製連結"),
-                    onTap: () => unawaitedDebug(
-                      "ShareLinkSheet.copyLink",
-                      copyLink(),
-                    ),
+                    onTap: () =>
+                        unawaitedDebug("ShareLinkSheet.copyLink", copyLink()),
                   ),
                 ),
               ),

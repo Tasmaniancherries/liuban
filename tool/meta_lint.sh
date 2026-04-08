@@ -11,5 +11,6 @@ if ! command -v shellcheck >/dev/null 2>&1; then
   exit 1
 fi
 
+# Keep local checks aligned with .github/workflows/meta-lint.yml.
 actionlint
 shellcheck tool/*.sh

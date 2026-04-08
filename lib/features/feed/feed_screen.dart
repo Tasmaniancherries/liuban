@@ -15,18 +15,14 @@ import "package:liuban/features/feed/feed_report_flow.dart";
 import "package:liuban/widgets/guest_lock_overlay.dart";
 import "package:liuban/widgets/phase_badge.dart";
 
-enum FeedStreamKind {
-  public,
-  school,
-  friends,
-}
+enum FeedStreamKind { public, school, friends }
 
 extension on FeedStreamKind {
   String get listHint => switch (this) {
-        FeedStreamKind.public => ApiDevSemantics.feedPublicList,
-        FeedStreamKind.school => ApiDevSemantics.feedSchoolList,
-        FeedStreamKind.friends => ApiDevSemantics.feedFriendsList,
-      };
+    FeedStreamKind.public => ApiDevSemantics.feedPublicList,
+    FeedStreamKind.school => ApiDevSemantics.feedSchoolList,
+    FeedStreamKind.friends => ApiDevSemantics.feedFriendsList,
+  };
 }
 
 class FeedScreen extends StatefulWidget {
@@ -92,9 +88,7 @@ class _FeedScreenState extends State<FeedScreen>
     final tab = _tab;
     if (tab == null) {
       return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(semanticsLabel: "載入中"),
-        ),
+        body: Center(child: CircularProgressIndicator(semanticsLabel: "載入中")),
       );
     }
     final session = AppSessionScope.of(context);
@@ -104,10 +98,7 @@ class _FeedScreenState extends State<FeedScreen>
       builder: (context, _) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text(
-              "留伴 · 廣場",
-              semanticsLabel: "留伴廣場動態",
-            ),
+            title: const Text("留伴 · 廣場", semanticsLabel: "留伴廣場動態"),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 8),
@@ -123,28 +114,19 @@ class _FeedScreenState extends State<FeedScreen>
                 Tab(
                   child: Semantics(
                     hint: "切換至公開廣場動態分頁",
-                    child: const Text(
-                      "公開",
-                      semanticsLabel: "公開廣場動態",
-                    ),
+                    child: const Text("公開", semanticsLabel: "公開廣場動態"),
                   ),
                 ),
                 Tab(
                   child: Semantics(
                     hint: "切換至本校同儕可見動態分頁",
-                    child: const Text(
-                      "本校",
-                      semanticsLabel: "本校可見動態",
-                    ),
+                    child: const Text("本校", semanticsLabel: "本校可見動態"),
                   ),
                 ),
                 Tab(
                   child: Semantics(
                     hint: "切換至雙向好友動態分頁",
-                    child: const Text(
-                      "好友",
-                      semanticsLabel: "好友動態",
-                    ),
+                    child: const Text("好友", semanticsLabel: "好友動態"),
                   ),
                 ),
               ],
@@ -267,10 +249,7 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
     final t = AppContainerScope.of(context).sessionTokens.accessToken;
     if (t != _lastSeenAccessToken) {
       _lastSeenAccessToken = t;
-      unawaitedDebug(
-        "FeedStreamTab._refreshMyUserId",
-        _refreshMyUserId(),
-      );
+      unawaitedDebug("FeedStreamTab._refreshMyUserId", _refreshMyUserId());
     }
   }
 
@@ -278,10 +257,7 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
   void didUpdateWidget(covariant _FeedStreamTab oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.guestLocked != widget.guestLocked) {
-      unawaitedDebug(
-        "FeedStreamTab._refreshMyUserId",
-        _refreshMyUserId(),
-      );
+      unawaitedDebug("FeedStreamTab._refreshMyUserId", _refreshMyUserId());
       _applyLockedOrReload();
     }
   }
@@ -349,10 +325,7 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
       });
       return;
     }
-    unawaitedDebug(
-      "FeedStreamTab._reloadFromStart",
-      _reloadFromStart(),
-    );
+    unawaitedDebug("FeedStreamTab._reloadFromStart", _reloadFromStart());
   }
 
   Future<void> _fetchPage(int page, {required bool replace}) async {
@@ -363,12 +336,18 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
     late List<FeedPostDto> batch;
     try {
       batch = switch (widget.kind) {
-        FeedStreamKind.public =>
-          await container.feed.listPublicFeed(page: page, pageSize: _pageSize),
-        FeedStreamKind.school =>
-          await container.feed.listSchoolFeed(page: page, pageSize: _pageSize),
-        FeedStreamKind.friends =>
-          await container.feed.listFriendsFeed(page: page, pageSize: _pageSize),
+        FeedStreamKind.public => await container.feed.listPublicFeed(
+          page: page,
+          pageSize: _pageSize,
+        ),
+        FeedStreamKind.school => await container.feed.listSchoolFeed(
+          page: page,
+          pageSize: _pageSize,
+        ),
+        FeedStreamKind.friends => await container.feed.listFriendsFeed(
+          page: page,
+          pageSize: _pageSize,
+        ),
       };
       if (replace && page == 1) {
         _usingMock = false;
@@ -523,13 +502,9 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               physics: const AlwaysScrollableScrollPhysics(),
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight,
-                ),
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
                 child: const Center(
-                  child: CircularProgressIndicator(
-                    semanticsLabel: "載入中",
-                  ),
+                  child: CircularProgressIndicator(semanticsLabel: "載入中"),
                 ),
               ),
             ),
@@ -573,8 +548,8 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
                 child: Text(
                   hint,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ),
             ),
@@ -590,8 +565,8 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
                 child: Text(
                   ApiDevSemantics.feedMockDataBannerVisibleText,
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.tertiary,
-                      ),
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
                 ),
               ),
             ),
@@ -634,7 +609,9 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
                         width: 28,
                         height: 28,
                         child: CircularProgressIndicator(
-                            semanticsLabel: "處理中", strokeWidth: 2),
+                          semanticsLabel: "處理中",
+                          strokeWidth: 2,
+                        ),
                       ),
                     )
                   : Tooltip(
@@ -670,8 +647,9 @@ String _feedPostCardSemanticLabel(FeedPostDto p) {
   if (snippet.length > 120) {
     snippet = "${snippet.substring(0, 120)}⋯";
   }
-  final time =
-      (p.createdAt != null && p.createdAt!.isNotEmpty) ? "。${p.createdAt}" : "";
+  final time = (p.createdAt != null && p.createdAt!.isNotEmpty)
+      ? "。${p.createdAt}"
+      : "";
   final hide = p.hideSchool ? "。作者已隱藏學校標籤" : "";
   return "$who${scope.isNotEmpty ? "。$scope" : ""}$hide。$snippet$time";
 }
@@ -718,9 +696,8 @@ class _FeedPostCard extends StatelessWidget {
                 label: _feedPostCardSemanticLabel(p),
                 hint: "開啟完整動態詳情",
                 customSemanticsActions: <CustomSemanticsAction, VoidCallback>{
-                  const CustomSemanticsAction(
-                    label: "分享或複製此動態連結",
-                  ): () => unawaitedDebug(
+                  const CustomSemanticsAction(label: "分享或複製此動態連結"): () =>
+                      unawaitedDebug(
                         "FeedScreen.openFeedPostShareActions",
                         openFeedPostShareActions(context, p.id),
                       ),
@@ -747,17 +724,19 @@ class _FeedPostCard extends StatelessWidget {
                               ),
                               if (audience != null && audience.isNotEmpty)
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.only(right: 4, top: 2),
+                                  padding: const EdgeInsets.only(
+                                    right: 4,
+                                    top: 2,
+                                  ),
                                   child: Text(
                                     audience,
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelSmall
                                         ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.outline,
                                         ),
                                   ),
                                 ),
@@ -775,12 +754,11 @@ class _FeedPostCard extends StatelessWidget {
                             const SizedBox(height: 8),
                             Text(
                               p.createdAt!,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
+                              style: Theme.of(context).textTheme.bodySmall
                                   ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.outline,
                                   ),
                             ),
                           ],
@@ -849,10 +827,7 @@ class _FeedPostCard extends StatelessWidget {
                   itemBuilder: (context) => [
                     const PopupMenuItem<String>(
                       value: "share",
-                      child: Text(
-                        "分享連結",
-                        semanticsLabel: "分享此動態連結",
-                      ),
+                      child: Text("分享連結", semanticsLabel: "分享此動態連結"),
                     ),
                     if (isMine) ...[
                       const PopupMenuItem<String>(
@@ -872,10 +847,7 @@ class _FeedPostCard extends StatelessWidget {
                     if (p.authorId.isNotEmpty && !isMine)
                       const PopupMenuItem<String>(
                         value: "block",
-                        child: Text(
-                          "屏蔽此用戶",
-                          semanticsLabel: "屏蔽動態作者",
-                        ),
+                        child: Text("屏蔽此用戶", semanticsLabel: "屏蔽動態作者"),
                       ),
                   ],
                 ),

@@ -2,17 +2,23 @@ import "package:flutter_test/flutter_test.dart";
 import "package:liuban/core/navigation/share_deep_link.dart";
 
 void main() {
-  test("parseShareLinkOrigin trims trailing slash and adds scheme if missing",
-      () {
-    expect(
-        parseShareLinkOrigin("https://www.liuban.app/").host, "www.liuban.app");
-    expect(parseShareLinkOrigin("https://www.liuban.app////").host,
-        "www.liuban.app");
-    expect(parseShareLinkOrigin("https://liuban.app.").host, "liuban.app");
-    expect(parseShareLinkOrigin("liuban.app...").host, "liuban.app");
-    expect(parseShareLinkOrigin("liuban.app").host, "liuban.app");
-    expect(parseShareLinkOrigin("https://[::1]/").host, "::1");
-  });
+  test(
+    "parseShareLinkOrigin trims trailing slash and adds scheme if missing",
+    () {
+      expect(
+        parseShareLinkOrigin("https://www.liuban.app/").host,
+        "www.liuban.app",
+      );
+      expect(
+        parseShareLinkOrigin("https://www.liuban.app////").host,
+        "www.liuban.app",
+      );
+      expect(parseShareLinkOrigin("https://liuban.app.").host, "liuban.app");
+      expect(parseShareLinkOrigin("liuban.app...").host, "liuban.app");
+      expect(parseShareLinkOrigin("liuban.app").host, "liuban.app");
+      expect(parseShareLinkOrigin("https://[::1]/").host, "::1");
+    },
+  );
 
   test("isLikelyIpv6LiteralHost shared with deep-link authority checks", () {
     expect(isLikelyIpv6LiteralHost("::1"), isTrue);
@@ -77,30 +83,28 @@ void main() {
   });
 
   test("parseShareLinkOrigin accepts bracketed IPv6 origins", () {
-    expect(
-      parseShareLinkOrigin("https://[2001:db8::1]/").host,
-      "2001:db8::1",
-    );
+    expect(parseShareLinkOrigin("https://[2001:db8::1]/").host, "2001:db8::1");
   });
 
-  test("shareUriToAppLocation maps https post path when host matches origin",
-      () {
-    final loc =
-        shareUriToAppLocation(Uri.parse("https://liuban.app/post/hello"));
-    expect(loc, "/post/hello");
-  });
+  test(
+    "shareUriToAppLocation maps https post path when host matches origin",
+    () {
+      final loc = shareUriToAppLocation(
+        Uri.parse("https://liuban.app/post/hello"),
+      );
+      expect(loc, "/post/hello");
+    },
+  );
 
   test("accepts www host when origin is apex", () {
     final loc = shareUriToAppLocation(
-        Uri.parse("https://www.liuban.app/post/abc%2Fdef"));
+      Uri.parse("https://www.liuban.app/post/abc%2Fdef"),
+    );
     expect(loc, "/post/abc%2Fdef");
   });
 
   test("rejects wrong host", () {
-    expect(
-      shareUriToAppLocation(Uri.parse("https://evil.com/post/x")),
-      isNull,
-    );
+    expect(shareUriToAppLocation(Uri.parse("https://evil.com/post/x")), isNull);
   });
 
   test("rejects https deep links with userInfo", () {
@@ -111,17 +115,11 @@ void main() {
   });
 
   test("rejects liuban deep links with userInfo", () {
-    expect(
-      shareUriToAppLocation(Uri.parse("liuban://user@post/abc")),
-      isNull,
-    );
+    expect(shareUriToAppLocation(Uri.parse("liuban://user@post/abc")), isNull);
   });
 
   test("rejects liuban deep links with port", () {
-    expect(
-      shareUriToAppLocation(Uri.parse("liuban://post:8443/abc")),
-      isNull,
-    );
+    expect(shareUriToAppLocation(Uri.parse("liuban://post:8443/abc")), isNull);
   });
 
   test("liuban scheme with post host", () {
@@ -130,8 +128,9 @@ void main() {
   });
 
   test("https promotion path", () {
-    final loc =
-        shareUriToAppLocation(Uri.parse("https://liuban.app/promotion/42"));
+    final loc = shareUriToAppLocation(
+      Uri.parse("https://liuban.app/promotion/42"),
+    );
     expect(loc, "/promotion/42");
   });
 
@@ -181,8 +180,9 @@ void main() {
   });
 
   test("https reset-password without token", () {
-    final loc =
-        shareUriToAppLocation(Uri.parse("https://liuban.app/reset-password"));
+    final loc = shareUriToAppLocation(
+      Uri.parse("https://liuban.app/reset-password"),
+    );
     expect(loc, "/reset-password");
   });
 
@@ -203,7 +203,8 @@ void main() {
 
   test("liuban reset-password host with query", () {
     final loc = shareUriToAppLocation(
-        Uri.parse("liuban://reset-password?token=secret"));
+      Uri.parse("liuban://reset-password?token=secret"),
+    );
     expect(loc, "/reset-password?token=secret");
   });
 
@@ -215,8 +216,9 @@ void main() {
   });
 
   test("https dm peer only", () {
-    final loc =
-        shareUriToAppLocation(Uri.parse("https://liuban.app/dm/peer%2Fx"));
+    final loc = shareUriToAppLocation(
+      Uri.parse("https://liuban.app/dm/peer%2Fx"),
+    );
     expect(loc, "/dm/peer%2Fx");
   });
 
@@ -234,24 +236,32 @@ void main() {
   });
 
   test("https register login settings forgot", () {
-    expect(shareUriToAppLocation(Uri.parse("https://liuban.app/register")),
-        "/register");
-    expect(shareUriToAppLocation(Uri.parse("https://liuban.app/settings")),
-        "/settings");
+    expect(
+      shareUriToAppLocation(Uri.parse("https://liuban.app/register")),
+      "/register",
+    );
+    expect(
+      shareUriToAppLocation(Uri.parse("https://liuban.app/settings")),
+      "/settings",
+    );
     expect(
       shareUriToAppLocation(Uri.parse("https://liuban.app/forgot-password")),
       "/forgot-password",
     );
     expect(
-        shareUriToAppLocation(Uri.parse("https://liuban.app/login")), "/login");
+      shareUriToAppLocation(Uri.parse("https://liuban.app/login")),
+      "/login",
+    );
     expect(
       shareUriToAppLocation(
-          Uri.parse("https://liuban.app/login?redirect=%2Fpost%2Fa")),
+        Uri.parse("https://liuban.app/login?redirect=%2Fpost%2Fa"),
+      ),
       "/login?redirect=%2Fpost%2Fa",
     );
     expect(
       shareUriToAppLocation(
-          Uri.parse("https://liuban.app/login?redirect=https%3A%2F%2Fevil")),
+        Uri.parse("https://liuban.app/login?redirect=https%3A%2F%2Fevil"),
+      ),
       "/login",
     );
   });
@@ -295,7 +305,8 @@ void main() {
   test("repeated query key picks first non-empty value", () {
     final reset = shareUriToAppLocation(
       Uri.parse(
-          "https://liuban.app/reset-password?token=&token=%20%20&token=abc"),
+        "https://liuban.app/reset-password?token=&token=%20%20&token=abc",
+      ),
     );
     final login = shareUriToAppLocation(
       Uri.parse(
@@ -341,52 +352,68 @@ void main() {
   });
 
   test("https unknown single segment", () {
-    expect(shareUriToAppLocation(Uri.parse("https://liuban.app/unknownleaf")),
-        isNull);
+    expect(
+      shareUriToAppLocation(Uri.parse("https://liuban.app/unknownleaf")),
+      isNull,
+    );
   });
 
   test("liuban marketing hosts", () {
     expect(shareUriToAppLocation(Uri.parse("liuban://register")), "/register");
     expect(
-        shareUriToAppLocation(Uri.parse("liuban://login?redirect=%2Fdm%2Fx")),
-        "/login?redirect=%2Fdm%2Fx");
+      shareUriToAppLocation(Uri.parse("liuban://login?redirect=%2Fdm%2Fx")),
+      "/login?redirect=%2Fdm%2Fx",
+    );
   });
 
   test("https friends compose settings paths", () {
-    expect(shareUriToAppLocation(Uri.parse("https://liuban.app/add-friend")),
-        "/add-friend");
     expect(
-        shareUriToAppLocation(Uri.parse("https://liuban.app/friend-requests")),
-        "/friend-requests");
-    expect(shareUriToAppLocation(Uri.parse("https://liuban.app/compose")),
-        "/compose");
+      shareUriToAppLocation(Uri.parse("https://liuban.app/add-friend")),
+      "/add-friend",
+    );
+    expect(
+      shareUriToAppLocation(Uri.parse("https://liuban.app/friend-requests")),
+      "/friend-requests",
+    );
+    expect(
+      shareUriToAppLocation(Uri.parse("https://liuban.app/compose")),
+      "/compose",
+    );
     expect(
       shareUriToAppLocation(
-          Uri.parse("https://liuban.app/compose/edit/abc%2F1")),
+        Uri.parse("https://liuban.app/compose/edit/abc%2F1"),
+      ),
       "/compose/edit/abc%2F1",
     );
     expect(
       shareUriToAppLocation(
-          Uri.parse("https://liuban.app/settings/blocked-users")),
+        Uri.parse("https://liuban.app/settings/blocked-users"),
+      ),
       "/settings/blocked-users",
     );
   });
 
   test("liuban compose host", () {
     expect(shareUriToAppLocation(Uri.parse("liuban://compose")), "/compose");
-    expect(shareUriToAppLocation(Uri.parse("liuban://compose/edit/x")),
-        "/compose/edit/x");
+    expect(
+      shareUriToAppLocation(Uri.parse("liuban://compose/edit/x")),
+      "/compose/edit/x",
+    );
   });
 
   test("https support and account password", () {
-    expect(shareUriToAppLocation(Uri.parse("https://liuban.app/support")),
-        "/support");
+    expect(
+      shareUriToAppLocation(Uri.parse("https://liuban.app/support")),
+      "/support",
+    );
     expect(
       shareUriToAppLocation(Uri.parse("https://liuban.app/account/password")),
       "/account/password",
     );
-    expect(shareUriToAppLocation(Uri.parse("https://liuban.app/account/other")),
-        isNull);
+    expect(
+      shareUriToAppLocation(Uri.parse("https://liuban.app/account/other")),
+      isNull,
+    );
   });
 
   test("liuban support and account password", () {
@@ -399,31 +426,40 @@ void main() {
 
   test("main shell tab paths (https and liuban)", () {
     expect(
-        shareUriToAppLocation(Uri.parse("https://liuban.app/feed")), "/feed");
-    expect(shareUriToAppLocation(Uri.parse("https://liuban.app/promotion")),
-        "/promotion");
+      shareUriToAppLocation(Uri.parse("https://liuban.app/feed")),
+      "/feed",
+    );
+    expect(
+      shareUriToAppLocation(Uri.parse("https://liuban.app/promotion")),
+      "/promotion",
+    );
     expect(
       shareUriToAppLocation(Uri.parse("https://liuban.app/promotion/9")),
       "/promotion/9",
     );
-    expect(shareUriToAppLocation(Uri.parse("https://liuban.app/messages")),
-        "/messages");
-    expect(shareUriToAppLocation(Uri.parse("https://liuban.app/profile")),
-        "/profile");
+    expect(
+      shareUriToAppLocation(Uri.parse("https://liuban.app/messages")),
+      "/messages",
+    );
+    expect(
+      shareUriToAppLocation(Uri.parse("https://liuban.app/profile")),
+      "/profile",
+    );
     expect(shareUriToAppLocation(Uri.parse("liuban://feed")), "/feed");
     expect(
-        shareUriToAppLocation(Uri.parse("liuban://promotion")), "/promotion");
-    expect(shareUriToAppLocation(Uri.parse("liuban://promotion/9")),
-        "/promotion/9");
+      shareUriToAppLocation(Uri.parse("liuban://promotion")),
+      "/promotion",
+    );
+    expect(
+      shareUriToAppLocation(Uri.parse("liuban://promotion/9")),
+      "/promotion/9",
+    );
     expect(shareUriToAppLocation(Uri.parse("liuban://messages")), "/messages");
     expect(shareUriToAppLocation(Uri.parse("liuban://profile")), "/profile");
   });
 
   test("http scheme is treated like https for matching paths", () {
-    expect(
-      shareUriToAppLocation(Uri.parse("http://liuban.app/feed")),
-      "/feed",
-    );
+    expect(shareUriToAppLocation(Uri.parse("http://liuban.app/feed")), "/feed");
     expect(
       shareUriToAppLocation(Uri.parse("http://liuban.app/post/a")),
       "/post/a",
@@ -435,10 +471,7 @@ void main() {
       shareUriToAppLocation(Uri.parse("HTTPS://liuban.app/feed")),
       "/feed",
     );
-    expect(
-      shareUriToAppLocation(Uri.parse("LIUBAN://post/abc")),
-      "/post/abc",
-    );
+    expect(shareUriToAppLocation(Uri.parse("LIUBAN://post/abc")), "/post/abc");
   });
 
   test("fixed path segment matching is case-insensitive", () {
@@ -452,7 +485,8 @@ void main() {
     );
     expect(
       shareUriToAppLocation(
-          Uri.parse("https://liuban.app/Settings/Blocked-Users")),
+        Uri.parse("https://liuban.app/Settings/Blocked-Users"),
+      ),
       "/settings/blocked-users",
     );
   });
@@ -464,13 +498,11 @@ void main() {
     );
     expect(
       shareUriToAppLocation(
-          Uri.parse("https://liuban.app/Login?Redirect=%2Ffeed")),
+        Uri.parse("https://liuban.app/Login?Redirect=%2Ffeed"),
+      ),
       "/login?redirect=%2Ffeed",
     );
-    expect(
-      shareUriToAppLocation(Uri.parse("LIUBAN://Messages")),
-      "/messages",
-    );
+    expect(shareUriToAppLocation(Uri.parse("LIUBAN://Messages")), "/messages");
   });
 
   test("host match is case-insensitive", () {
@@ -495,38 +527,17 @@ void main() {
   });
 
   test("liuban host matching tolerates trailing dot", () {
-    expect(
-      shareUriToAppLocation(Uri.parse("liuban://post./abc")),
-      "/post/abc",
-    );
-    expect(
-      shareUriToAppLocation(Uri.parse("liuban://messages.")),
-      "/messages",
-    );
+    expect(shareUriToAppLocation(Uri.parse("liuban://post./abc")), "/post/abc");
+    expect(shareUriToAppLocation(Uri.parse("liuban://messages.")), "/messages");
   });
 
   test("liuban host with invalid characters is rejected", () {
-    expect(
-      shareUriToAppLocation(Uri.parse("liuban://messages%0A")),
-      isNull,
-    );
-    expect(
-      shareUriToAppLocation(Uri.parse("liuban://bad_host/abc")),
-      isNull,
-    );
-    expect(
-      shareUriToAppLocation(Uri.parse("liuban://-post/abc")),
-      isNull,
-    );
-    expect(
-      shareUriToAppLocation(Uri.parse("liuban://post-/abc")),
-      isNull,
-    );
+    expect(shareUriToAppLocation(Uri.parse("liuban://messages%0A")), isNull);
+    expect(shareUriToAppLocation(Uri.parse("liuban://bad_host/abc")), isNull);
+    expect(shareUriToAppLocation(Uri.parse("liuban://-post/abc")), isNull);
+    expect(shareUriToAppLocation(Uri.parse("liuban://post-/abc")), isNull);
     final longLabel = List.filled(64, "a").join();
-    expect(
-      shareUriToAppLocation(Uri.parse("liuban://$longLabel/abc")),
-      isNull,
-    );
+    expect(shareUriToAppLocation(Uri.parse("liuban://$longLabel/abc")), isNull);
     final tooLongHost = List.filled(254, "a").join();
     expect(
       shareUriToAppLocation(Uri.parse("liuban://$tooLongHost/abc")),
@@ -557,9 +568,7 @@ void main() {
       isNull,
     );
     expect(
-      shareUriToAppLocation(
-        Uri.parse("https://liuban.app:8443/feed"),
-      ),
+      shareUriToAppLocation(Uri.parse("https://liuban.app:8443/feed")),
       isNull,
     );
     expect(
@@ -644,10 +653,7 @@ void main() {
       shareUriToAppLocation(Uri.parse("https://liuban.app/post/%0Aabc")),
       isNull,
     );
-    expect(
-      shareUriToAppLocation(Uri.parse("liuban://post/%09abc")),
-      isNull,
-    );
+    expect(shareUriToAppLocation(Uri.parse("liuban://post/%09abc")), isNull);
   });
 
   test("overly long path param returns null", () {
@@ -673,10 +679,7 @@ void main() {
       shareUriToAppLocation(Uri.parse("https://liuban.app/post/%E0%A4%A")),
       isNull,
     );
-    expect(
-      shareUriToAppLocation(Uri.parse("liuban://post/%E0%A4%A")),
-      isNull,
-    );
+    expect(shareUriToAppLocation(Uri.parse("liuban://post/%E0%A4%A")), isNull);
   });
 
   test("apex incoming url matches when configured origin is www", () {
@@ -736,10 +739,7 @@ void main() {
       shareUriToAppLocation(Uri.parse("https://liuban.app/$longSeg")),
       isNull,
     );
-    expect(
-      shareUriToAppLocation(Uri.parse("liuban://post/$longSeg")),
-      isNull,
-    );
+    expect(shareUriToAppLocation(Uri.parse("liuban://post/$longSeg")), isNull);
   });
 
   test("too long query key is rejected early", () {
@@ -760,15 +760,11 @@ void main() {
 
   test("query key or value with control chars is rejected early", () {
     expect(
-      shareUriToAppLocation(
-        Uri.parse("https://liuban.app/feed?x=%0Aabc"),
-      ),
+      shareUriToAppLocation(Uri.parse("https://liuban.app/feed?x=%0Aabc")),
       isNull,
     );
     expect(
-      shareUriToAppLocation(
-        Uri.parse("https://liuban.app/feed?%0Akey=v"),
-      ),
+      shareUriToAppLocation(Uri.parse("https://liuban.app/feed?%0Akey=v")),
       isNull,
     );
   });
@@ -778,9 +774,6 @@ void main() {
       shareUriToAppLocation(Uri.parse("https://liuban.app/feed%0A")),
       isNull,
     );
-    expect(
-      shareUriToAppLocation(Uri.parse("LIUBAN://messages%09")),
-      isNull,
-    );
+    expect(shareUriToAppLocation(Uri.parse("LIUBAN://messages%09")), isNull);
   });
 }

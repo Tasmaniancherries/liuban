@@ -4,9 +4,15 @@ import "package:liuban/core/locale/liuban_supported_locales.dart";
 
 void main() {
   const hk = Locale.fromSubtags(
-      languageCode: "zh", scriptCode: "Hant", countryCode: "HK");
+    languageCode: "zh",
+    scriptCode: "Hant",
+    countryCode: "HK",
+  );
   const tw = Locale.fromSubtags(
-      languageCode: "zh", scriptCode: "Hant", countryCode: "TW");
+    languageCode: "zh",
+    scriptCode: "Hant",
+    countryCode: "TW",
+  );
 
   test("resolveLiubanLocale null uses first supported", () {
     expect(resolveLiubanLocale(null, kLiubanSupportedLocales), hk);

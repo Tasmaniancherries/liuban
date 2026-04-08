@@ -48,28 +48,19 @@ class _MessagesScreenState extends State<MessagesScreen> {
           child: _MessagesTabPersistenceBinder(
             child: Scaffold(
               appBar: AppBar(
-                title: const Text(
-                  "訊息",
-                  semanticsLabel: "訊息與客服",
-                ),
+                title: const Text("訊息", semanticsLabel: "訊息與客服"),
                 bottom: TabBar(
                   tabs: [
                     Tab(
                       child: Semantics(
                         hint: "切換至官方客服與訪客留言分頁",
-                        child: const Text(
-                          "官方客服",
-                          semanticsLabel: "官方客服對話入口",
-                        ),
+                        child: const Text("官方客服", semanticsLabel: "官方客服對話入口"),
                       ),
                     ),
                     Tab(
                       child: Semantics(
                         hint: "切換至好友私訊收件匣分頁",
-                        child: const Text(
-                          "好友",
-                          semanticsLabel: "好友私信列表",
-                        ),
+                        child: const Text("好友", semanticsLabel: "好友私信列表"),
                       ),
                     ),
                   ],
@@ -228,7 +219,8 @@ class _SupportEntryState extends State<_SupportEntry>
                   const SizedBox(height: 8),
                   Semantics(
                     container: true,
-                    label: "說明。合作、申訴、審核問題皆可留言。商家洽談也可走此通道。"
+                    label:
+                        "說明。合作、申訴、審核問題皆可留言。商家洽談也可走此通道。"
                         " ${ApiDevSemantics.supportMessages}",
                     hint: "客服通道用途說明",
                     excludeSemantics: true,
@@ -239,25 +231,23 @@ class _SupportEntryState extends State<_SupportEntry>
                           Text(
                             "合作、申訴、審核問題皆可留言。商家洽談也可走此通道。",
                             textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
+                            style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                 ),
                           ),
                           const SizedBox(height: 12),
                           Text(
                             ApiDevSemantics.supportMessages,
                             textAlign: TextAlign.center,
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                    ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
                           ),
                         ],
                       ),
@@ -444,13 +434,11 @@ class _FriendsInboxState extends State<_FriendsInbox>
                             child: SelectionArea(
                               child: Text(
                                 ApiDevSemantics.friendsInbox,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
+                                style: Theme.of(context).textTheme.bodySmall
                                     ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
                                     ),
                               ),
                             ),
@@ -470,13 +458,11 @@ class _FriendsInboxState extends State<_FriendsInbox>
                                 child: Text(
                                   ApiDevSemantics
                                       .friendsInboxMockDataBannerVisibleText,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium
+                                  style: Theme.of(context).textTheme.labelMedium
                                       ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .tertiary,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.tertiary,
                                       ),
                                 ),
                               ),
@@ -494,8 +480,9 @@ class _FriendsInboxState extends State<_FriendsInbox>
                                 child: SelectionArea(
                                   child: Text(
                                     "暫無好友會話",
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodyLarge,
                                   ),
                                 ),
                               ),
@@ -544,9 +531,7 @@ class _InboxTile extends StatelessWidget {
                   : "私訊對象頭像",
             ),
           ),
-          title: SelectionArea(
-            child: Text("@${m.peerCustomId}"),
-          ),
+          title: SelectionArea(child: Text("@${m.peerCustomId}")),
           subtitle: SelectionArea(
             child: Text(preview, maxLines: 1, overflow: TextOverflow.ellipsis),
           ),
@@ -589,8 +574,8 @@ class _InboxHeader extends StatelessWidget {
                 child: Text(
                   "雙向好友 · 無粉絲數",
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ),
             ),

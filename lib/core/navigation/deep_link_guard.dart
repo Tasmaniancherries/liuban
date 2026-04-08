@@ -98,8 +98,9 @@ String _buildQueryString(Map<String, List<String>> paramsAll) {
   for (final k in keys) {
     final values = paramsAll[k] ?? const <String>[];
     for (final v in values) {
-      pairs
-          .add("${Uri.encodeQueryComponent(k)}=${Uri.encodeQueryComponent(v)}");
+      pairs.add(
+        "${Uri.encodeQueryComponent(k)}=${Uri.encodeQueryComponent(v)}",
+      );
     }
   }
   return pairs.join("&");
@@ -176,9 +177,9 @@ Map<String, List<String>> _buildRedactedLogQueryParams(Uri uri) {
       );
       if (values.isEmpty) {
         if (loggedPairs < _kMaxLogQueryPairs) {
-          redactedAll.putIfAbsent(logKey, () => <String>[]).add(
-                _isSensitiveQueryKey(k) ? "***" : "",
-              );
+          redactedAll
+              .putIfAbsent(logKey, () => <String>[])
+              .add(_isSensitiveQueryKey(k) ? "***" : "");
           loggedPairs++;
         } else {
           droppedPairs++;
@@ -187,7 +188,9 @@ Map<String, List<String>> _buildRedactedLogQueryParams(Uri uri) {
       }
       for (final v in values) {
         if (loggedPairs < _kMaxLogQueryPairs) {
-          redactedAll.putIfAbsent(logKey, () => <String>[]).add(
+          redactedAll
+              .putIfAbsent(logKey, () => <String>[])
+              .add(
                 _isSensitiveQueryKey(k) ? "***" : _truncateQueryValueForLog(v),
               );
           loggedPairs++;
@@ -262,14 +265,17 @@ String _redactRawQueryForLog(String rawQuery) {
     final logKey = resolvedLogKeysBySourceKey.putIfAbsent(
       decodedKey,
       () => _nextAvailableLogKey(
-          _truncateQueryKeyForLog(decodedKey), existingKeys),
+        _truncateQueryKeyForLog(decodedKey),
+        existingKeys,
+      ),
     );
     existingKeys.add(logKey);
     final value = _isSensitiveQueryKey(decodedKey)
         ? "***"
         : _truncateQueryValueForLog(rawValue);
     out.add(
-        "${Uri.encodeQueryComponent(logKey)}=${Uri.encodeQueryComponent(value)}");
+      "${Uri.encodeQueryComponent(logKey)}=${Uri.encodeQueryComponent(value)}",
+    );
     redactedPairs++;
   }
   var dropped = pairItems.length - redactedPairs;
@@ -340,8 +346,9 @@ bool isAllowedDeepLinkLocation(String loc) {
   if (rawSegments.any((s) => s == "." || s == "..")) return false;
   final nonEmptyRawSegments = rawSegments.where((s) => s.isNotEmpty).toList();
   if (nonEmptyRawSegments.length > _kMaxDeepLinkPathSegments) return false;
-  if (nonEmptyRawSegments
-      .any((s) => s.length > _kMaxDeepLinkPathSegmentChars)) {
+  if (nonEmptyRawSegments.any(
+    (s) => s.length > _kMaxDeepLinkPathSegmentChars,
+  )) {
     return false;
   }
 
@@ -379,8 +386,9 @@ bool isAllowedDeepLinkLocation(String loc) {
   if (_hasControlChars(decodedPath)) return false;
   final decodedSegments = decodedPath.split("/");
   if (decodedSegments.any((s) => s == "." || s == "..")) return false;
-  final nonEmptyDecodedSegments =
-      decodedSegments.where((s) => s.isNotEmpty).toList();
+  final nonEmptyDecodedSegments = decodedSegments
+      .where((s) => s.isNotEmpty)
+      .toList();
   if (nonEmptyDecodedSegments.length > _kMaxDeepLinkPathSegments) return false;
   if (nonEmptyDecodedSegments.any(
     (s) => s.length > _kMaxDeepLinkPathSegmentChars,
@@ -426,8 +434,9 @@ String safeLocationForLog(String loc) {
   try {
     final uri = Uri.parse(raw);
     final redactedAll = _buildRedactedLogQueryParams(uri);
-    final query =
-        redactedAll.isEmpty ? "" : "?${_buildQueryString(redactedAll)}";
+    final query = redactedAll.isEmpty
+        ? ""
+        : "?${_buildQueryString(redactedAll)}";
     final normalizedPath = _normalizeLogPath(uri.path);
     return "${_truncatePathForLog(normalizedPath)}$query";
   } catch (_) {

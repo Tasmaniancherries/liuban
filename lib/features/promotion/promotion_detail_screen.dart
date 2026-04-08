@@ -99,10 +99,7 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "推廣詳情",
-          semanticsLabel: "推廣活動詳情",
-        ),
+        title: const Text("推廣詳情", semanticsLabel: "推廣活動詳情"),
         leading: Semantics(
           hint: "關閉推廣詳情並返回上一頁",
           child: IconButton(
@@ -124,19 +121,16 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
                 hint: busy
                     ? "內容載入完成後可分享連結"
                     : hasItem
-                        ? "開啟複製或系統分享此推廣連結"
-                        : "推廣內容未載入，無法分享連結",
+                    ? "開啟複製或系統分享此推廣連結"
+                    : "推廣內容未載入，無法分享連結",
                 child: IconButton(
                   tooltip: "分享連結",
-                  icon: const Icon(
-                    Icons.share_outlined,
-                    semanticLabel: "分享連結",
-                  ),
+                  icon: const Icon(Icons.share_outlined, semanticLabel: "分享連結"),
                   onPressed: canShare
                       ? () => unawaitedDebug(
-                            "PromotionDetailScreen._shareLink",
-                            _shareLink(),
-                          )
+                          "PromotionDetailScreen._shareLink",
+                          _shareLink(),
+                        )
                       : null,
                 ),
               );
@@ -184,8 +178,9 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
                                 child: SelectionArea(
                                   child: Text(
                                     ApiDevSemantics.promotionDetailEmptyTitle,
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodyLarge,
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -223,14 +218,10 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
               padding: const EdgeInsets.all(20),
               child: Semantics(
                 customSemanticsActions: <CustomSemanticsAction, VoidCallback>{
-                  const CustomSemanticsAction(
-                    label: "分享或複製此推廣連結",
-                  ): () => unawaitedDebug(
+                  const CustomSemanticsAction(label: "分享或複製此推廣連結"): () =>
+                      unawaitedDebug(
                         "PromotionDetailScreen.openPromotionShareActions",
-                        openPromotionShareActions(
-                          context,
-                          widget.promotionId,
-                        ),
+                        openPromotionShareActions(context, widget.promotionId),
                       ),
                 },
                 child: SelectionArea(
@@ -247,13 +238,11 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
                           child: SelectionArea(
                             child: Text(
                               ApiDevSemantics.promotionDetailDevNote,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
+                              style: Theme.of(context).textTheme.bodySmall
                                   ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                   ),
                             ),
                           ),
@@ -270,9 +259,7 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
                           child: Text(
                             ApiDevSemantics
                                 .promotionDetailCacheBannerVisibleText,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium
+                            style: Theme.of(context).textTheme.labelMedium
                                 ?.copyWith(
                                   color: Theme.of(context).colorScheme.tertiary,
                                 ),
@@ -287,9 +274,7 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
                         excludeSemantics: true,
                         child: Text(
                           p.title,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
+                          style: Theme.of(context).textTheme.headlineSmall
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -297,20 +282,20 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
                       Text(
                         "${p.subtitle}　${p.publishedAt}",
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
-                            ),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                       const SizedBox(height: 24),
-                      Text(p.body,
-                          style: Theme.of(context).textTheme.bodyLarge),
+                      Text(
+                        p.body,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
                       const SizedBox(height: 32),
                       Text(
                         "本頁為推廣合作內容；涉商業合作請依規標示「廣告」。洽談請至「訊息 · 官方客服」。",
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.outline,
-                            ),
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
                       ),
                     ],
                   ),

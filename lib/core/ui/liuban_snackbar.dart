@@ -4,10 +4,7 @@ import "package:flutter/material.dart";
 const Duration _kLiubanSnackBarDefaultDuration = Duration(milliseconds: 4000);
 
 Widget _liubanSnackBarLiveContent(Widget child) {
-  return Semantics(
-    liveRegion: true,
-    child: child,
-  );
+  return Semantics(liveRegion: true, child: child);
 }
 
 /// 短暫提示：為內容加上 [Semantics.liveRegion]，方便螢幕閱讀器播報。

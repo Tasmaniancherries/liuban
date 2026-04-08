@@ -18,7 +18,8 @@ class RegistrationResponse {
     return RegistrationResponse(
       accessToken: json["access_token"] as String? ?? json["token"] as String?,
       refreshToken: json["refresh_token"] as String?,
-      accountPhase: json["account_phase"] as String? ??
+      accountPhase:
+          json["account_phase"] as String? ??
           json["phase"] as String? ??
           "pending_verification",
     );

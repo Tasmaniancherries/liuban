@@ -25,8 +25,10 @@ class AppPersistence {
     final prefs = await SharedPreferences.getInstance();
     final access = prefs.getString(_kAccessToken);
     final refresh = prefs.getString(_kRefreshToken);
-    final sessionTokens =
-        AuthSessionTokens(accessToken: access, refreshToken: refresh);
+    final sessionTokens = AuthSessionTokens(
+      accessToken: access,
+      refreshToken: refresh,
+    );
 
     var guest = prefs.getString(_kGuestDevice);
     if (guest == null || guest.isEmpty) {

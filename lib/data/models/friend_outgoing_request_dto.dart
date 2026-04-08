@@ -19,7 +19,8 @@ class FriendOutgoingRequestDto {
   factory FriendOutgoingRequestDto.fromJson(Map<String, dynamic> json) {
     return FriendOutgoingRequestDto(
       id: json["id"]?.toString() ?? "",
-      toCustomId: json["to_custom_id"] as String? ??
+      toCustomId:
+          json["to_custom_id"] as String? ??
           json["target_custom_id"] as String? ??
           "",
       status: json["status"] as String? ?? "pending",

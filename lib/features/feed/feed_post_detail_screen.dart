@@ -27,11 +27,7 @@ class _ResolvedPost {
 /// 廣場單篇：優先自伺服器載入單筆動態（路徑見 `ApiDevSemantics`／docs 契約，`id` 經 [Uri.encodeComponent]）；
 /// 失敗時使用列表頁傳入之 [fallback]。
 class FeedPostDetailScreen extends StatefulWidget {
-  const FeedPostDetailScreen({
-    super.key,
-    required this.postId,
-    this.fallback,
-  });
+  const FeedPostDetailScreen({super.key, required this.postId, this.fallback});
 
   final String postId;
   final FeedPostDto? fallback;
@@ -55,18 +51,12 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
     if (_started) return;
     _started = true;
     _future = _loadAndNotify();
-    unawaitedDebug(
-      "FeedPostDetailScreen._loadMyUserId",
-      _loadMyUserId(),
-    );
+    unawaitedDebug("FeedPostDetailScreen._loadMyUserId", _loadMyUserId());
   }
 
   void _refreshDetail() {
     setState(() => _future = _loadAndNotify());
-    unawaitedDebug(
-      "FeedPostDetailScreen._loadMyUserId",
-      _loadMyUserId(),
-    );
+    unawaitedDebug("FeedPostDetailScreen._loadMyUserId", _loadMyUserId());
   }
 
   Future<void> _onPullRefresh() async {
@@ -128,8 +118,9 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
   Future<_ResolvedPost?> _load() async {
     _pendingGetPostFailureApiMessage = null;
     try {
-      final dto =
-          await AppContainerScope.of(context).feed.getPost(widget.postId);
+      final dto = await AppContainerScope.of(
+        context,
+      ).feed.getPost(widget.postId);
       return _ResolvedPost(post: dto, fromListFallback: false);
     } on LiubanApiException catch (e) {
       if (widget.fallback != null) {
@@ -199,10 +190,7 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "動態詳情",
-          semanticsLabel: "單則廣場動態詳情",
-        ),
+        title: const Text("動態詳情", semanticsLabel: "單則廣場動態詳情"),
         leading: Semantics(
           hint: "關閉動態詳情並返回上一頁",
           child: IconButton(
@@ -222,7 +210,8 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
                 return const SizedBox.shrink();
               }
               final post = snap.data!.post;
-              final isMine = _myUserId != null &&
+              final isMine =
+                  _myUserId != null &&
                   post.authorId.isNotEmpty &&
                   post.authorId == _myUserId;
               final canBlock = post.authorId.isNotEmpty && !isMine;
@@ -238,9 +227,9 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
                     } else if (v == "edit" && isMine) {
                       final enc = Uri.encodeComponent(post.id);
                       final summary = await this.context.push<String>(
-                            "/compose/edit/$enc",
-                            extra: post,
-                          );
+                        "/compose/edit/$enc",
+                        extra: post,
+                      );
                       if (!mounted) return;
                       if (summary != null) {
                         _refreshDetail();
@@ -263,10 +252,7 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
                   itemBuilder: (context) => [
                     const PopupMenuItem<String>(
                       value: "share",
-                      child: Text(
-                        "分享連結",
-                        semanticsLabel: "分享此動態連結",
-                      ),
+                      child: Text("分享連結", semanticsLabel: "分享此動態連結"),
                     ),
                     if (isMine) ...[
                       const PopupMenuItem<String>(
@@ -286,10 +272,7 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
                     if (canBlock)
                       const PopupMenuItem<String>(
                         value: "block",
-                        child: Text(
-                          "屏蔽此用戶",
-                          semanticsLabel: "屏蔽動態作者",
-                        ),
+                        child: Text("屏蔽此用戶", semanticsLabel: "屏蔽動態作者"),
                       ),
                   ],
                 ),
@@ -338,8 +321,9 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
                                   child: Text(
                                     ApiDevSemantics
                                         .feedPostDetailLoadFailedTitle,
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleMedium,
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -379,9 +363,8 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
               padding: const EdgeInsets.all(20),
               child: Semantics(
                 customSemanticsActions: <CustomSemanticsAction, VoidCallback>{
-                  const CustomSemanticsAction(
-                    label: "分享或複製此動態連結",
-                  ): () => unawaitedDebug(
+                  const CustomSemanticsAction(label: "分享或複製此動態連結"): () =>
+                      unawaitedDebug(
                         "FeedPostDetailScreen._onShareLink",
                         _onShareLink(),
                       ),
@@ -400,13 +383,11 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
                             excludeSemantics: true,
                             child: Text(
                               ApiDevSemantics.feedPostDetailFallbackBanner,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
+                              style: Theme.of(context).textTheme.bodySmall
                                   ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                   ),
                             ),
                           ),
@@ -421,24 +402,19 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
                               excludeSemantics: true,
                               child: Text(
                                 authorLabel,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
                           if (audience != null && audience.isNotEmpty)
                             Text(
                               audience,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelSmall
+                              style: Theme.of(context).textTheme.labelSmall
                                   ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.outline,
                                   ),
                             ),
                         ],
@@ -447,24 +423,22 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
                         const SizedBox(height: 8),
                         Text(
                           "作者已隱藏學校標籤",
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelSmall
+                          style: Theme.of(context).textTheme.labelSmall
                               ?.copyWith(
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                         ),
                       ],
                       const SizedBox(height: 16),
-                      Text(p.body,
-                          style: Theme.of(context).textTheme.bodyLarge),
+                      Text(
+                        p.body,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
                       if (p.createdAt != null && p.createdAt!.isNotEmpty) ...[
                         const SizedBox(height: 24),
                         Text(
                           p.createdAt!,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
+                          style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
                                 color: Theme.of(context).colorScheme.outline,
                               ),

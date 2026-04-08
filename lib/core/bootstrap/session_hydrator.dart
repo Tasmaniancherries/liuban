@@ -9,8 +9,11 @@ import "package:liuban/core/session/verification_phase_mapper.dart";
 ///
 /// 亦會在 token 由「空」變為「有」（例如登入成功）時再同步一次。
 class SessionHydrator extends StatefulWidget {
-  const SessionHydrator(
-      {super.key, required this.session, required this.child});
+  const SessionHydrator({
+    super.key,
+    required this.session,
+    required this.child,
+  });
 
   final AppSession session;
   final Widget child;

@@ -3,8 +3,8 @@ import "package:flutter/foundation.dart";
 /// Access / Refresh 雙令牌；[bearer] 等同 [accessToken]，相容舊程式碼。
 class AuthSessionTokens extends ChangeNotifier {
   AuthSessionTokens({String? accessToken, String? refreshToken})
-      : _access = accessToken,
-        _refresh = refreshToken;
+    : _access = accessToken,
+      _refresh = refreshToken;
 
   String? _access;
   String? _refresh;

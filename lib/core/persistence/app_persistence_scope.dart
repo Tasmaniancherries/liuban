@@ -11,8 +11,8 @@ class AppPersistenceScope extends InheritedWidget {
   final AppPersistence persistence;
 
   static AppPersistence of(BuildContext context) {
-    final scope =
-        context.dependOnInheritedWidgetOfExactType<AppPersistenceScope>();
+    final scope = context
+        .dependOnInheritedWidgetOfExactType<AppPersistenceScope>();
     assert(scope != null, "AppPersistenceScope not found above this context");
     return scope!.persistence;
   }

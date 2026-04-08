@@ -5,9 +5,9 @@ import "package:liuban/core/persistence/app_persistence.dart";
 /// 介面語言（與 [AppPersistence.writeAppLocalePreference] 同步）；測試可傳 `persistence: null` 僅記憶體。
 class AppLocaleController extends ChangeNotifier {
   AppLocaleController({AppPersistence? persistence})
-      : _persistence = persistence,
-        _preference = persistence?.readAppLocalePreference() ??
-            AppLocalePreference.system;
+    : _persistence = persistence,
+      _preference =
+          persistence?.readAppLocalePreference() ?? AppLocalePreference.system;
 
   final AppPersistence? _persistence;
   AppLocalePreference _preference;

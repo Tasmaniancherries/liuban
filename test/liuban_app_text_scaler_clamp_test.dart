@@ -4,8 +4,9 @@ import "package:flutter_test/flutter_test.dart";
 import "liuban_test_harness.dart";
 
 void main() {
-  testWidgets("LiubanApp clamps large system text scale to 2.0",
-      (tester) async {
+  testWidgets("LiubanApp clamps large system text scale to 2.0", (
+    tester,
+  ) async {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
     tester.view.physicalSize = const Size(800, 1600);
@@ -17,8 +18,9 @@ void main() {
     expect(out, closeTo(200, 0.01));
   });
 
-  testWidgets("LiubanApp clamps small system text scale to 0.85",
-      (tester) async {
+  testWidgets("LiubanApp clamps small system text scale to 0.85", (
+    tester,
+  ) async {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
     tester.view.physicalSize = const Size(800, 1600);

@@ -11,11 +11,7 @@ import "package:liuban/features/feed/post_models.dart";
 
 /// 發佈動態；若設定 [editingPostId] 則為編輯既有帖文（可帶 [initialPost] 預填）。
 class ComposePostScreen extends StatefulWidget {
-  const ComposePostScreen({
-    super.key,
-    this.editingPostId,
-    this.initialPost,
-  });
+  const ComposePostScreen({super.key, this.editingPostId, this.initialPost});
 
   final String? editingPostId;
   final FeedPostDto? initialPost;
@@ -69,9 +65,9 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
     if (!_isEditing || !mounted) return;
     setState(() => _bootstrapping = true);
     try {
-      final dto = await AppContainerScope.of(context)
-          .feed
-          .getPost(widget.editingPostId!);
+      final dto = await AppContainerScope.of(
+        context,
+      ).feed.getPost(widget.editingPostId!);
       if (!mounted) return;
       setState(() {
         _applyPostToForm(dto);
@@ -138,9 +134,7 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
         child: AlertDialog(
           title: Text(_isEditing ? "捨棄編輯？" : "捨棄草稿？"),
           content: SelectionArea(
-            child: Text(
-              _isEditing ? "尚未儲存的修改將遺失。" : "內容尚未發佈，確定離開？",
-            ),
+            child: Text(_isEditing ? "尚未儲存的修改將遺失。" : "內容尚未發佈，確定離開？"),
           ),
           actions: [
             Tooltip(
@@ -268,11 +262,11 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
   Widget build(BuildContext context) {
     final editing = _isEditing;
     String audienceTooltip(PostAudience a) => switch (a) {
-          PostAudience.publicSquare => "可見範圍：公開廣場",
-          PostAudience.schoolPeers => "可見範圍：本校",
-          PostAudience.friendsOnly => "可見範圍：雙向好友",
-          PostAudience.selfOnly => "可見範圍：僅自己",
-        };
+      PostAudience.publicSquare => "可見範圍：公開廣場",
+      PostAudience.schoolPeers => "可見範圍：本校",
+      PostAudience.friendsOnly => "可見範圍：雙向好友",
+      PostAudience.selfOnly => "可見範圍：僅自己",
+    };
     if (!_formReady || _bootstrapping) {
       return Scaffold(
         appBar: AppBar(
@@ -290,7 +284,8 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
           ),
         ),
         body: const Center(
-            child: CircularProgressIndicator(semanticsLabel: "載入中")),
+          child: CircularProgressIndicator(semanticsLabel: "載入中"),
+        ),
       );
     }
 
@@ -314,9 +309,9 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
               onPressed: _submitting
                   ? null
                   : () => unawaitedDebug(
-                        "ComposePostScreen._confirmDiscardIfNeeded",
-                        _confirmDiscardIfNeeded(),
-                      ),
+                      "ComposePostScreen._confirmDiscardIfNeeded",
+                      _confirmDiscardIfNeeded(),
+                    ),
             ),
           ),
           actions: [
@@ -335,9 +330,9 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
                   onPressed: _submitting
                       ? null
                       : () => unawaitedDebug(
-                            "ComposePostScreen._submit",
-                            _submit(),
-                          ),
+                          "ComposePostScreen._submit",
+                          _submit(),
+                        ),
                   child: _submitting
                       ? const SizedBox(
                           height: 22,
@@ -426,8 +421,8 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
                   child: Text(
                     "已開啟「隱藏學校」：不可選「本校」（僅好友或僅自己等）。",
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
               ),
@@ -442,13 +437,9 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
                 enabled: !_submitting,
                 child: SwitchListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: const SelectionArea(
-                    child: Text("動態上隱藏學校標籤"),
-                  ),
+                  title: const SelectionArea(child: Text("動態上隱藏學校標籤")),
                   subtitle: const SelectionArea(
-                    child: Text(
-                      "讀者看不到你的校名；若開啟，「本校可見」將不可用。",
-                    ),
+                    child: Text("讀者看不到你的校名；若開啟，「本校可見」將不可用。"),
                   ),
                   value: _hideSchool,
                   onChanged: _submitting ? null : _onHideSchoolChanged,

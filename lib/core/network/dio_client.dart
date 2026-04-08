@@ -75,10 +75,7 @@ class DioClient {
     s = s.replaceAllMapped(_kCookieHeaderRe, (m) => "${m[1]}***");
     s = s.replaceAllMapped(_kJsonPasswordRe, (m) => '${m[1]}***${m[2]}');
     s = s.replaceAllMapped(_kJsonTokenRe, (m) => '${m[1]}***${m[2]}');
-    s = s.replaceAllMapped(
-      _kUrlSensitiveQueryRe,
-      (m) => "${m[1]}${m[2]}=***",
-    );
+    s = s.replaceAllMapped(_kUrlSensitiveQueryRe, (m) => "${m[1]}${m[2]}=***");
     s = s.replaceAllMapped(_kFormSensitivePairRe, (m) => "${m[1]}=***");
     if (s.length > _kMaxNetworkLogChars) {
       return "${s.substring(0, _kMaxNetworkLogChars)}…(truncated ${s.length - _kMaxNetworkLogChars} chars)";

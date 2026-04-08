@@ -16,13 +16,15 @@ void main() {
     expect(a, b);
   });
 
-  test("routeDedupKey normalizes repeated query value order and drops fragment",
-      () {
-    final a = routeDedupKey("/feed?x=2&x=1#sec");
-    final b = routeDedupKey("/feed?x=1&x=2");
-    expect(a, b);
-    expect(a.contains("#"), isFalse);
-  });
+  test(
+    "routeDedupKey normalizes repeated query value order and drops fragment",
+    () {
+      final a = routeDedupKey("/feed?x=2&x=1#sec");
+      final b = routeDedupKey("/feed?x=1&x=2");
+      expect(a, b);
+      expect(a.contains("#"), isFalse);
+    },
+  );
 
   test("isAllowedDeepLinkLocation accepts known app routes", () {
     expect(isAllowedDeepLinkLocation("/feed"), isTrue);
@@ -68,17 +70,16 @@ void main() {
     expect(isAllowedDeepLinkLocation("/compose/edit/x/y"), isFalse);
     final longSeg = List.filled(300, "a").join();
     expect(isAllowedDeepLinkLocation("/dm/$longSeg"), isFalse);
-    expect(
-      isAllowedDeepLinkLocation("/dm/a/b/c/d/e/f/g/h"),
-      isFalse,
-    );
+    expect(isAllowedDeepLinkLocation("/dm/a/b/c/d/e/f/g/h"), isFalse);
     expect(isAllowedDeepLinkLocation("/dm%2Fpeer-2"), isFalse);
     expect(isAllowedDeepLinkLocation("/dm%5Cpeer-2"), isFalse);
     final longQueryKey = List.filled(140, "k").join();
     expect(isAllowedDeepLinkLocation("/login?$longQueryKey=x"), isFalse);
     final longQueryValue = List.filled(600, "v").join();
     expect(
-        isAllowedDeepLinkLocation("/login?redirect=$longQueryValue"), isFalse);
+      isAllowedDeepLinkLocation("/login?redirect=$longQueryValue"),
+      isFalse,
+    );
     final tooManyQueryKeys = List.generate(40, (i) => "k$i=v").join("&");
     expect(isAllowedDeepLinkLocation("/login?$tooManyQueryKeys"), isFalse);
     final tooManyQueryValues = List.generate(40, (i) => "x=$i").join("&");
@@ -152,18 +153,18 @@ void main() {
     expect(safe.contains("_1="), isTrue);
   });
 
-  test("safeUriForLog keeps repeated keys and redacts all sensitive values",
-      () {
-    final uri = Uri.parse(
-      "https://liuban.app/login?x=1&x=2&token=a&token=b",
-    );
-    final safe = safeUriForLog(uri);
-    expect(safe.contains("x=1"), isTrue);
-    expect(safe.contains("x=2"), isTrue);
-    expect(safe.contains("token=%2A%2A%2A"), isTrue);
-    expect(safe.contains("token=a"), isFalse);
-    expect(safe.contains("token=b"), isFalse);
-  });
+  test(
+    "safeUriForLog keeps repeated keys and redacts all sensitive values",
+    () {
+      final uri = Uri.parse("https://liuban.app/login?x=1&x=2&token=a&token=b");
+      final safe = safeUriForLog(uri);
+      expect(safe.contains("x=1"), isTrue);
+      expect(safe.contains("x=2"), isTrue);
+      expect(safe.contains("token=%2A%2A%2A"), isTrue);
+      expect(safe.contains("token=a"), isFalse);
+      expect(safe.contains("token=b"), isFalse);
+    },
+  );
 
   test("safeUriForLog sorts repeated query values for deterministic logs", () {
     final uri = Uri.parse("https://liuban.app/feed?x=2&x=1");
@@ -243,18 +244,20 @@ void main() {
     expect(safe, "mailto:foo@bar.com?subject=hi&token=%2A%2A%2A");
   });
 
-  test("safeLocationForLog redacts sensitive query values and drops fragment",
-      () {
-    final safe = safeLocationForLog(
-      "/reset-password?token=abc&password=pwd&state=ok#secret",
-    );
-    expect(safe.contains("token=%2A%2A%2A"), isTrue);
-    expect(safe.contains("password=%2A%2A%2A"), isTrue);
-    expect(safe.contains("state=ok"), isTrue);
-    expect(safe.contains("token=abc"), isFalse);
-    expect(safe.contains("password=pwd"), isFalse);
-    expect(safe.contains("#"), isFalse);
-  });
+  test(
+    "safeLocationForLog redacts sensitive query values and drops fragment",
+    () {
+      final safe = safeLocationForLog(
+        "/reset-password?token=abc&password=pwd&state=ok#secret",
+      );
+      expect(safe.contains("token=%2A%2A%2A"), isTrue);
+      expect(safe.contains("password=%2A%2A%2A"), isTrue);
+      expect(safe.contains("state=ok"), isTrue);
+      expect(safe.contains("token=abc"), isFalse);
+      expect(safe.contains("password=pwd"), isFalse);
+      expect(safe.contains("#"), isFalse);
+    },
+  );
 
   test("safeLocationForLog redacts sensitive keys on parse fallback", () {
     final safe = safeLocationForLog("/login?token=%&state=ok#frag");
@@ -376,14 +379,15 @@ void main() {
   });
 
   test(
-      "safeLocationForLog fallback normalizes query-only location with root path",
-      () {
-    final safe = safeLocationForLog("?state=ok&token=%#frag");
-    expect(safe.contains("/?"), isTrue);
-    expect(safe.contains("state=ok"), isTrue);
-    expect(safe.contains("token=%2A%2A%2A"), isTrue);
-    expect(safe.contains("#"), isFalse);
-  });
+    "safeLocationForLog fallback normalizes query-only location with root path",
+    () {
+      final safe = safeLocationForLog("?state=ok&token=%#frag");
+      expect(safe.contains("/?"), isTrue);
+      expect(safe.contains("state=ok"), isTrue);
+      expect(safe.contains("token=%2A%2A%2A"), isTrue);
+      expect(safe.contains("#"), isFalse);
+    },
+  );
 
   test("safeLocationForLog normalizes missing-leading-slash path", () {
     final safe = safeLocationForLog("feed?state=ok&token=abc");
@@ -400,11 +404,13 @@ void main() {
     expect(safe, "/feed/sub?state=ok");
   });
 
-  test("safeLocationForLog normalizes duplicate slashes and trailing slash",
-      () {
-    final safe = safeLocationForLog("/feed///sub///?state=ok");
-    expect(safe, "/feed/sub?state=ok");
-  });
+  test(
+    "safeLocationForLog normalizes duplicate slashes and trailing slash",
+    () {
+      final safe = safeLocationForLog("/feed///sub///?state=ok");
+      expect(safe, "/feed/sub?state=ok");
+    },
+  );
 
   test("safeLocationForLog fallback normalizes backslashes and slashes", () {
     final safe = safeLocationForLog(r"\feed\\sub///?token=%#frag");
@@ -426,19 +432,23 @@ void main() {
     expect(safe, "/feed?a=%25&b=%25");
   });
 
-  test("safeLocationForLog fallback truncates excessively long raw query input",
-      () {
-    final long = List.filled(6000, "a").join();
-    final safe = safeLocationForLog("/feed?x=$long%#frag");
-    expect(safe.contains("truncated"), isTrue);
-    expect(safe.contains("#"), isFalse);
-  });
+  test(
+    "safeLocationForLog fallback truncates excessively long raw query input",
+    () {
+      final long = List.filled(6000, "a").join();
+      final safe = safeLocationForLog("/feed?x=$long%#frag");
+      expect(safe.contains("truncated"), isTrue);
+      expect(safe.contains("#"), isFalse);
+    },
+  );
 
-  test("safeLocationForLog fallback truncates excessively many raw query pairs",
-      () {
-    final many = List.generate(600, (i) => "k$i=%").join("&");
-    final safe = safeLocationForLog("/feed?$many#frag");
-    expect(safe.contains("truncated"), isTrue);
-    expect(safe.contains("#"), isFalse);
-  });
+  test(
+    "safeLocationForLog fallback truncates excessively many raw query pairs",
+    () {
+      final many = List.generate(600, (i) => "k$i=%").join("&");
+      final safe = safeLocationForLog("/feed?$many#frag");
+      expect(safe.contains("truncated"), isTrue);
+      expect(safe.contains("#"), isFalse);
+    },
+  );
 }
