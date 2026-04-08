@@ -14,6 +14,9 @@ void main() {
     expect(sanitizePostLoginRedirect('//evil.com'), isNull);
     expect(sanitizePostLoginRedirect('/login'), isNull);
     expect(sanitizePostLoginRedirect('/login?x=1'), isNull);
+    expect(sanitizePostLoginRedirect('/LOGIN'), isNull);
     expect(sanitizePostLoginRedirect('relative'), isNull);
+    expect(sanitizePostLoginRedirect(r'/foo\bar'), isNull);
+    expect(sanitizePostLoginRedirect('/${'a' * 800}'), isNull);
   });
 }

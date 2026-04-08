@@ -81,7 +81,7 @@ flutter test --coverage
 flutter test test/unawaited_debug_test.dart
 ```
 
-其他範例：`test/dio_client_test.dart`（記錄脫敏）、`test/dio_session_dio_test.dart`（`createSessionDio`／`createPlainDio` 與 Bearer）、`test/liuban_api_exception_test.dart`（`LiubanApiException.fromDio`）、`test/api_dev_semantics_test.dart`（`GoRouter` 錯誤文案與無障礙標籤組字）、`test/token_refresh_interceptor_test.dart`（401 刷新與 `HttpClientAdapter` 迴路）。
+其他範例：`test/dio_client_test.dart`（記錄脫敏）、`test/dio_session_dio_test.dart`（`createSessionDio`／`createPlainDio` 與 Bearer）、`test/liuban_api_exception_test.dart`（`LiubanApiException.fromDio`）、`test/json_utils_test.dart`（`asJsonMap`／`asJsonObjectList`）、`test/api_dev_semantics_test.dart`（`GoRouter` 錯誤文案與無障礙標籤組字）、`test/token_refresh_interceptor_test.dart`（401 刷新與 `HttpClientAdapter` 迴路）。
 
 ## 專案結構（概要）
 
