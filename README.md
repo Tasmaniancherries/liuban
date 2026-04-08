@@ -60,6 +60,7 @@ make ci-quality   # 與 CI quality job 完全一致（含 lockfile/format/analyz
 ```bash
 make ci-quality
 make ci-smoke
+make meta-lint
 ```
 
 產生覆蓋率報告（`coverage/lcov.info`；可本機用 IDE／[`lcov`](https://github.com/linux-test-project/lcov) 檢視；CI 將此檔上傳為 **artifact**）：

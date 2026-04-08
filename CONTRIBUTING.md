@@ -25,6 +25,7 @@ Run the same checks as CI:
 
 ```bash
 make ci-quality
+make meta-lint
 ```
 
 Optional coverage (matches CI’s `flutter test --coverage`; output is gitignored under `coverage/`):
