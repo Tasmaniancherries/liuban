@@ -87,7 +87,7 @@ flutter test test/unawaited_debug_test.dart
 
 其他（路由／門檻／UI 小件）：`test/router_build_test.dart`（`buildRouter` 首屏與錯誤頁）、`test/auth_required_gate_test.dart`、`test/compose_access_gate_test.dart`、`test/widget_phase_guest_lock_test.dart`（`PhaseBadge`／`GuestLockOverlay`）、`test/scroll_behavior_test.dart`、`test/liuban_snackbar_test.dart`。
 
-其他（登入與主殼）：`test/login_screen_test.dart`（返回／捨棄輸入／空表單驗證）、`test/main_shell_navigation_test.dart`（底部導航各分頁、`router.go('/settings')`）。
+其他（登入與主殼）：`test/login_screen_test.dart`（返回／捨棄輸入／空表單驗證）、`test/main_shell_navigation_test.dart`（底部導航各分頁、`router.go('/settings')`）、`test/router_stack_routes_test.dart`（忘記密碼／註冊／客服／重設密碼等堆疊路由）、`test/pump_liuban_router.dart`（測試用 `pumpLiubanRouter` 輔助）。
 
 ## 專案結構（概要）
 
