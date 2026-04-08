@@ -33,4 +33,28 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
     expectLiubanAppBarTitle('重設密碼');
   });
+
+  testWidgets('/login shows 登入', (tester) async {
+    final router = await pumpLiubanRouter(tester);
+    router.go('/login');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expectLiubanAppBarTitle('登入');
+  });
+
+  testWidgets('/post/:id shows 動態詳情', (tester) async {
+    final router = await pumpLiubanRouter(tester);
+    router.go('/post/${Uri.encodeComponent('p1')}');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expectLiubanAppBarTitle('動態詳情');
+  });
+
+  testWidgets('/promotion/:id shows 推廣詳情', (tester) async {
+    final router = await pumpLiubanRouter(tester);
+    router.go('/promotion/1');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expectLiubanAppBarTitle('推廣詳情');
+  });
 }
