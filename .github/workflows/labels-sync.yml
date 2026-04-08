@@ -1,0 +1,61 @@
+name: Labels sync
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/labels-sync.yml"
+      - ".github/labeler.yml"
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure repository labels exist
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = [
+              {name: "ci", color: "0e8a16", description: "Continuous integration or workflow related"},
+              {name: "docs", color: "1d76db", description: "Documentation changes"},
+              {name: "dependencies", color: "0366d6", description: "Dependency updates"},
+              {name: "android", color: "3DDC84", description: "Android platform changes"},
+              {name: "ios", color: "0A84FF", description: "iOS/macOS platform changes"},
+              {name: "flutter", color: "02569B", description: "Flutter app code changes"},
+            ];
+
+            for (const label of labels) {
+              try {
+                await github.rest.issues.getLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name,
+                });
+                await github.rest.issues.updateLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name,
+                  color: label.color.replace("#", ""),
+                  description: label.description,
+                });
+                core.info(`Updated label: ${label.name}`);
+              } catch (error) {
+                if (error.status === 404) {
+                  await github.rest.issues.createLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: label.name,
+                    color: label.color.replace("#", ""),
+                    description: label.description,
+                  });
+                  core.info(`Created label: ${label.name}`);
+                } else {
+                  throw error;
+                }
+              }
+            }

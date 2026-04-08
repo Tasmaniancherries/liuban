@@ -9,7 +9,7 @@ The repo includes `.editorconfig` and `.gitattributes` (text defaults to LF). Pr
 Report security issues privately; see `SECURITY.md` (also linked from **New issue** via `.github/ISSUE_TEMPLATE/config.yml`). Pull requests against `main` also run GitHub **Dependency review** when Dependency graph is enabled for the repository.
 
 CI on `main` is two-stage: Dart **quality** (format / analyze / tests + coverage artifact) must pass before **Web & Android** smoke builds run, saving time when analysis or tests fail. The compile job also uploads a short-lived **debug APK** artifact for sanity checks (not for store release).
-PRs are auto-labeled by `.github/workflows/pr-labeler.yml` + `.github/labeler.yml` based on changed paths; create matching repository labels (`ci`, `docs`, `dependencies`, `android`, `ios`, `flutter`) once in GitHub settings.
+PRs are auto-labeled by `.github/workflows/pr-labeler.yml` + `.github/labeler.yml` based on changed paths. Labels (`ci`, `docs`, `dependencies`, `android`, `ios`, `flutter`) are auto-created/updated by `.github/workflows/labels-sync.yml` (manual trigger or when label config changes on `main`).
 
 When upgrading Flutter for the whole team, bump **`env.FLUTTER_VERSION`** at the top of `.github/workflows/flutter.yml` (both jobs read it) so CI matches local toolchains.
 
