@@ -83,7 +83,7 @@ flutter test test/unawaited_debug_test.dart
 
 其他範例：`test/dio_client_test.dart`（記錄脫敏）、`test/dio_session_dio_test.dart`（`createSessionDio`／`createPlainDio` 與 Bearer）、`test/auth_session_tokens_test.dart`（`AuthSessionTokens`）、`test/liuban_api_exception_test.dart`（`LiubanApiException.fromDio`）、`test/json_utils_test.dart`（`asJsonMap`／`asJsonObjectList`）、`test/verification_phase_mapper_test.dart`（`accountPhaseFromVerificationApi`）、`test/api_dev_semantics_test.dart`（`GoRouter` 錯誤文案與無障礙標籤組字）、`test/token_refresh_interceptor_test.dart`（401 刷新與 `HttpClientAdapter` 迴路）。
 
-其他（DTO／session／設定）：`test/data_models_dto_test.dart`（各資料模型 `fromJson`／`listFromResponse`）、`test/app_session_test.dart`（`AppSession` 階段與通知）、`test/post_audience_test.dart`（`PostAudience` 與 API 字串）、`test/app_config_test.dart`（`AppConfig` 預設編譯期常數）。
+其他（DTO／session／設定）：`test/data_models_dto_test.dart`（各資料模型 `fromJson`／`listFromResponse`）、`test/app_session_test.dart`（`AppSession` 階段與通知）、`test/post_audience_test.dart`（`PostAudience` 與 API 字串）、`test/app_config_test.dart`（`AppConfig` 預設編譯期常數）、`test/promotion_models_test.dart`（`PromotionItem.fromDto`／`promotionById`）。
 
 ## 專案結構（概要）
 
