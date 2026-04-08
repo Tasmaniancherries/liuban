@@ -22,6 +22,8 @@ linter:
     close_sinks: true
     # void fn() async { ... } hides errors from callers; prefer Future<void>.
     avoid_void_async: true
+    # Use debugPrint / logging integrations instead of stdout print in Flutter apps.
+    avoid_print: true
 
     # Extra rigor beyond flutter_lints defaults (keep CI aligned with local).
     always_declare_return_types: true
