@@ -1,0 +1,91 @@
+import 'package:dio/dio.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:liuban/core/network/api_exception.dart';
+
+RequestOptions _ro({String path = '/t'}) => RequestOptions(path: path);
+
+void main() {
+  group('LiubanApiException.fromDio', () {
+    test('uses message from JSON map', () {
+      final e = DioException(
+        requestOptions: _ro(),
+        response: Response(
+          requestOptions: _ro(),
+          statusCode: 422,
+          data: <String, dynamic>{'message': 'validation failed'},
+        ),
+        type: DioExceptionType.badResponse,
+      );
+      final x = LiubanApiException.fromDio(e);
+      expect(x.message, 'validation failed');
+      expect(x.statusCode, 422);
+      expect(x.code, isNull);
+    });
+
+    test('uses detail when message missing', () {
+      final e = DioException(
+        requestOptions: _ro(),
+        response: Response(
+          requestOptions: _ro(),
+          statusCode: 400,
+          data: <String, dynamic>{'detail': 'bad request'},
+        ),
+        type: DioExceptionType.badResponse,
+      );
+      final x = LiubanApiException.fromDio(e);
+      expect(x.message, 'bad request');
+    });
+
+    test('uses code field from JSON map', () {
+      final e = DioException(
+        requestOptions: _ro(),
+        response: Response(
+          requestOptions: _ro(),
+          statusCode: 400,
+          data: <String, dynamic>{'message': 'oops', 'code': 'E123'},
+        ),
+        type: DioExceptionType.badResponse,
+      );
+      final x = LiubanApiException.fromDio(e);
+      expect(x.code, 'E123');
+      expect(x.message, 'oops');
+    });
+
+    test('uses string body', () {
+      final e = DioException(
+        requestOptions: _ro(),
+        response: Response(
+          requestOptions: _ro(),
+          statusCode: 500,
+          data: 'plain error',
+        ),
+        type: DioExceptionType.badResponse,
+      );
+      final x = LiubanApiException.fromDio(e);
+      expect(x.message, 'plain error');
+    });
+
+    test('connection timeout maps to Chinese copy', () {
+      final e = DioException(
+        requestOptions: _ro(),
+        type: DioExceptionType.connectionTimeout,
+      );
+      final x = LiubanApiException.fromDio(e);
+      expect(x.message, '連線逾時');
+      expect(x.statusCode, isNull);
+    });
+
+    test('cancel maps to Chinese copy', () {
+      final e = DioException(
+        requestOptions: _ro(),
+        type: DioExceptionType.cancel,
+      );
+      expect(LiubanApiException.fromDio(e).message, '已取消');
+    });
+
+    test('toString includes status and code', () {
+      final x = LiubanApiException(message: 'm', statusCode: 403, code: 'C');
+      expect(x.toString(), 'LiubanApiException(403, C): m');
+    });
+  });
+}

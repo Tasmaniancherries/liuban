@@ -62,3 +62,7 @@ linter:
     unnecessary_constructor_name: true
     unnecessary_parenthesis: true
     use_raw_strings: true
+
+    # Small correctness / style nudges (Flutter already enables many via flutter_lints).
+    annotate_overrides: true
+    use_rethrow_when_possible: true

@@ -81,6 +81,8 @@ flutter test --coverage
 flutter test test/unawaited_debug_test.dart
 ```
 
+其他範例：`test/dio_client_test.dart`（記錄脫敏）、`test/liuban_api_exception_test.dart`（`LiubanApiException.fromDio`）、`test/api_dev_semantics_test.dart`（`GoRouter` 錯誤文案與無障礙標籤組字）。
+
 ## 專案結構（概要）
 
 | 路徑 | 說明 |
