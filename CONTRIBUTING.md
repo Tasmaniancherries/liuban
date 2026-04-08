@@ -26,6 +26,12 @@ Run the same checks as CI:
 ./tool/ci_quality.sh
 ```
 
+Equivalent shortcut via `make`:
+
+```bash
+make ci-quality
+```
+
 Optional coverage (matches CI’s `flutter test --coverage`; output is gitignored under `coverage/`):
 
 ```bash
@@ -48,6 +54,12 @@ Combined smoke build command used by CI compile job:
 
 ```bash
 ./tool/ci_smoke_builds.sh
+```
+
+Equivalent shortcut:
+
+```bash
+make ci-smoke
 ```
 
 If you changed dependencies in `pubspec.yaml`, commit `pubspec.lock` in the same PR.

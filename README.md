@@ -55,6 +55,13 @@ flutter build apk --debug
 ./tool/ci_quality.sh   # 與 CI quality job 完全一致（含 lockfile/format/analyze/test+coverage）
 ```
 
+也可用 `make` 快捷（封裝同一組命令）：
+
+```bash
+make ci-quality
+make ci-smoke
+```
+
 產生覆蓋率報告（`coverage/lcov.info`；可本機用 IDE／[`lcov`](https://github.com/linux-test-project/lcov) 檢視；CI 將此檔上傳為 **artifact**）：
 
 ```bash
