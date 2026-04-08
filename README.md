@@ -111,6 +111,7 @@ flutter test test/unawaited_debug_test.dart
 - 依賴更新：`.github/dependabot.yml` 每週檢查 **GitHub Actions** 與 **pub**（`pubspec.yaml`），並以 **groups** 盡量合併為較少筆 PR
 - PR 標籤：`.github/workflows/pr-labeler.yml` 依路徑自動加上 `ci` / `docs` / `dependencies` / `android` / `ios` / `flutter`
 - Label 同步：`.github/workflows/labels-sync.yml` 會自動建立/更新上述 labels（可手動觸發）
+- Meta lint：`.github/workflows/meta-lint.yml` 會檢查 workflow 語法（actionlint）與 `tool/*.sh`（shellcheck）
 - 安全性回報：見 `SECURITY.md`
 - **Artifacts**（在 Actions 單次 run 頁面下載）：`coverage-lcov`（`lcov.info`）、`app-debug-apk`（CI 產生的 debug APK，預設約保留 7 日，非上架包）
 

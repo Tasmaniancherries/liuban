@@ -1,0 +1,33 @@
+name: Meta lint
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/**"
+      - "tool/*.sh"
+      - "Makefile"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/**"
+      - "tool/*.sh"
+      - "Makefile"
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Lint GitHub Actions workflow files
+        uses: rhysd/actionlint@v1
+
+      - name: Lint shell scripts
+        run: shellcheck tool/*.sh
