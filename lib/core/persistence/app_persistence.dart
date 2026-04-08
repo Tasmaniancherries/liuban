@@ -1,9 +1,9 @@
-import "dart:math";
+import 'dart:math';
 
-import "package:flutter/material.dart";
-import "package:liuban/core/locale/app_locale_preference.dart";
-import "package:liuban/core/network/auth_session_tokens.dart";
-import "package:shared_preferences/shared_preferences.dart";
+import 'package:flutter/material.dart';
+import 'package:liuban/core/locale/app_locale_preference.dart';
+import 'package:liuban/core/network/auth_session_tokens.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// 啟動時還原 token、並配置穩定的訪客裝置 ID（供客服與風控）。
 class AppPersistence {
@@ -13,13 +13,13 @@ class AppPersistence {
   final AuthSessionTokens sessionTokens;
   final String guestDeviceId;
 
-  static const _kAccessToken = "liuban_access_token";
-  static const _kRefreshToken = "liuban_refresh_token";
-  static const _kGuestDevice = "liuban_guest_device_id";
-  static const _kThemeMode = "liuban_theme_mode";
-  static const _kAppLocale = "liuban_app_locale";
-  static const _kFeedTabIndex = "liuban_feed_tab_index";
-  static const _kMessagesTabIndex = "liuban_messages_tab_index";
+  static const _kAccessToken = 'liuban_access_token';
+  static const _kRefreshToken = 'liuban_refresh_token';
+  static const _kGuestDevice = 'liuban_guest_device_id';
+  static const _kThemeMode = 'liuban_theme_mode';
+  static const _kAppLocale = 'liuban_app_locale';
+  static const _kFeedTabIndex = 'liuban_feed_tab_index';
+  static const _kMessagesTabIndex = 'liuban_messages_tab_index';
 
   static Future<AppPersistence> initialize() async {
     final prefs = await SharedPreferences.getInstance();
@@ -33,7 +33,7 @@ class AppPersistence {
     var guest = prefs.getString(_kGuestDevice);
     if (guest == null || guest.isEmpty) {
       guest =
-          "g_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(1 << 24)}";
+          'g_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(1 << 24)}';
       await prefs.setString(_kGuestDevice, guest);
     }
 
@@ -58,17 +58,17 @@ class AppPersistence {
   ThemeMode readThemeMode() {
     final s = _prefs.getString(_kThemeMode);
     return switch (s) {
-      "dark" => ThemeMode.dark,
-      "light" => ThemeMode.light,
+      'dark' => ThemeMode.dark,
+      'light' => ThemeMode.light,
       _ => ThemeMode.system,
     };
   }
 
   Future<void> writeThemeMode(ThemeMode mode) async {
     final v = switch (mode) {
-      ThemeMode.dark => "dark",
-      ThemeMode.light => "light",
-      ThemeMode.system => "system",
+      ThemeMode.dark => 'dark',
+      ThemeMode.light => 'light',
+      ThemeMode.system => 'system',
     };
     await _prefs.setString(_kThemeMode, v);
   }

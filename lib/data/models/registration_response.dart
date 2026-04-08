@@ -1,4 +1,4 @@
-import "package:liuban/data/models/json_utils.dart";
+import 'package:liuban/data/models/json_utils.dart';
 
 /// `POST …/auth/register` 之 JSON 回傳（`multipart` 請求見 [AuthApi.registerWithVerificationDocument]）。
 ///
@@ -16,12 +16,12 @@ class RegistrationResponse {
 
   factory RegistrationResponse.fromJson(Map<String, dynamic> json) {
     return RegistrationResponse(
-      accessToken: json["access_token"] as String? ?? json["token"] as String?,
-      refreshToken: json["refresh_token"] as String?,
+      accessToken: json['access_token'] as String? ?? json['token'] as String?,
+      refreshToken: json['refresh_token'] as String?,
       accountPhase:
-          json["account_phase"] as String? ??
-          json["phase"] as String? ??
-          "pending_verification",
+          json['account_phase'] as String? ??
+          json['phase'] as String? ??
+          'pending_verification',
     );
   }
 

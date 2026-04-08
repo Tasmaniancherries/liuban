@@ -1,10 +1,10 @@
-import "package:dio/dio.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/data/models/dm_message_dto.dart";
-import "package:liuban/data/models/friend_inbox_item_dto.dart";
-import "package:liuban/data/models/blocked_user_dto.dart";
-import "package:liuban/data/models/friend_outgoing_request_dto.dart";
-import "package:liuban/data/models/friend_request_dto.dart";
+import 'package:dio/dio.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/data/models/blocked_user_dto.dart';
+import 'package:liuban/data/models/dm_message_dto.dart';
+import 'package:liuban/data/models/friend_inbox_item_dto.dart';
+import 'package:liuban/data/models/friend_outgoing_request_dto.dart';
+import 'package:liuban/data/models/friend_request_dto.dart';
 
 /// 雙向好友與私訊（JSON REST，與全站一致）。
 ///
@@ -27,16 +27,16 @@ class FriendsApi {
   final String apiPrefix;
 
   String _path(String relative) {
-    if (relative.startsWith("/")) {
-      return "$apiPrefix$relative";
+    if (relative.startsWith('/')) {
+      return '$apiPrefix$relative';
     }
-    return "$apiPrefix/$relative";
+    return '$apiPrefix/$relative';
   }
 
   /// 與好友的最後預覽列表（或會話列表）。
   Future<List<FriendInboxItemDto>> listInbox() async {
     try {
-      final res = await _dio.get<dynamic>(_path("/friends/inbox"));
+      final res = await _dio.get<dynamic>(_path('/friends/inbox'));
       return FriendInboxItemDto.listFromResponse(res.data);
     } on DioException catch (e) {
       throw LiubanApiException.fromDio(e);
@@ -47,8 +47,8 @@ class FriendsApi {
   Future<void> sendFriendRequest({required String targetCustomId}) async {
     try {
       await _dio.post<dynamic>(
-        _path("/friends/requests"),
-        data: <String, dynamic>{"target_custom_id": targetCustomId},
+        _path('/friends/requests'),
+        data: <String, dynamic>{'target_custom_id': targetCustomId},
       );
     } on DioException catch (e) {
       throw LiubanApiException.fromDio(e);
@@ -57,7 +57,7 @@ class FriendsApi {
 
   Future<List<FriendRequestDto>> listIncomingRequests() async {
     try {
-      final res = await _dio.get<dynamic>(_path("/friends/requests/incoming"));
+      final res = await _dio.get<dynamic>(_path('/friends/requests/incoming'));
       return FriendRequestDto.listFromResponse(res.data);
     } on DioException catch (e) {
       throw LiubanApiException.fromDio(e);
@@ -72,8 +72,8 @@ class FriendsApi {
     try {
       final enc = Uri.encodeComponent(requestId);
       await _dio.post<dynamic>(
-        _path("/friends/requests/$enc/respond"),
-        data: <String, dynamic>{"accept": accept},
+        _path('/friends/requests/$enc/respond'),
+        data: <String, dynamic>{'accept': accept},
       );
     } on DioException catch (e) {
       throw LiubanApiException.fromDio(e);
@@ -82,7 +82,7 @@ class FriendsApi {
 
   Future<List<FriendOutgoingRequestDto>> listOutgoingRequests() async {
     try {
-      final res = await _dio.get<dynamic>(_path("/friends/requests/outgoing"));
+      final res = await _dio.get<dynamic>(_path('/friends/requests/outgoing'));
       return FriendOutgoingRequestDto.listFromResponse(res.data);
     } on DioException catch (e) {
       throw LiubanApiException.fromDio(e);
@@ -90,7 +90,7 @@ class FriendsApi {
   }
 
   String _dmMessagesPath(String peerId) =>
-      _path("/friends/dm/${Uri.encodeComponent(peerId)}/messages");
+      _path('/friends/dm/${Uri.encodeComponent(peerId)}/messages');
 
   Future<List<DmMessageDto>> listDmMessages({required String peerId}) async {
     try {
@@ -108,7 +108,7 @@ class FriendsApi {
     try {
       await _dio.post<dynamic>(
         _dmMessagesPath(peerId),
-        data: <String, dynamic>{"text": text},
+        data: <String, dynamic>{'text': text},
       );
     } on DioException catch (e) {
       throw LiubanApiException.fromDio(e);
@@ -119,8 +119,8 @@ class FriendsApi {
   Future<void> blockUser({required String userId}) async {
     try {
       await _dio.post<dynamic>(
-        _path("/friends/blocks"),
-        data: <String, dynamic>{"user_id": userId},
+        _path('/friends/blocks'),
+        data: <String, dynamic>{'user_id': userId},
       );
     } on DioException catch (e) {
       throw LiubanApiException.fromDio(e);
@@ -129,7 +129,7 @@ class FriendsApi {
 
   Future<List<BlockedUserDto>> listBlockedUsers() async {
     try {
-      final res = await _dio.get<dynamic>(_path("/friends/blocks"));
+      final res = await _dio.get<dynamic>(_path('/friends/blocks'));
       try {
         return BlockedUserDto.listFromResponse(res.data);
       } on FormatException {
@@ -143,8 +143,8 @@ class FriendsApi {
   Future<void> unblockUser({required String userId}) async {
     try {
       await _dio.post<dynamic>(
-        _path("/friends/blocks/remove"),
-        data: <String, dynamic>{"user_id": userId},
+        _path('/friends/blocks/remove'),
+        data: <String, dynamic>{'user_id': userId},
       );
     } on DioException catch (e) {
       throw LiubanApiException.fromDio(e);

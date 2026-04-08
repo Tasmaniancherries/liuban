@@ -1,4 +1,4 @@
-import "package:flutter/foundation.dart";
+import 'package:flutter/foundation.dart';
 
 /// 與 PRD 對齊：訪客／審核中／正式用戶（僅正式用戶可用本校、好友、發帖等）。
 enum AccountPhase {

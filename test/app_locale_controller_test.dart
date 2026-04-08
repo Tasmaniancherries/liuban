@@ -1,9 +1,9 @@
-import "package:flutter_test/flutter_test.dart";
-import "package:liuban/core/locale/app_locale_controller.dart";
-import "package:liuban/core/locale/app_locale_preference.dart";
+import 'package:flutter_test/flutter_test.dart';
+import 'package:liuban/core/locale/app_locale_controller.dart';
+import 'package:liuban/core/locale/app_locale_preference.dart';
 
 void main() {
-  test("AppLocaleController without persistence updates preference", () async {
+  test('AppLocaleController without persistence updates preference', () async {
     final c = AppLocaleController();
     expect(c.preference, AppLocalePreference.system);
     expect(c.resolvedLocale, isNull);

@@ -1,12 +1,12 @@
-import "dart:typed_data";
+import 'dart:typed_data';
 
-import "package:dio/dio.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/data/models/json_utils.dart";
-import "package:liuban/data/models/registration_response.dart";
-import "package:liuban/data/models/token_pair_dto.dart";
-import "package:liuban/data/models/user_profile_dto.dart";
-import "package:liuban/data/models/verification_state_dto.dart";
+import 'package:dio/dio.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/data/models/json_utils.dart';
+import 'package:liuban/data/models/registration_response.dart';
+import 'package:liuban/data/models/token_pair_dto.dart';
+import 'package:liuban/data/models/user_profile_dto.dart';
+import 'package:liuban/data/models/verification_state_dto.dart';
 
 /// 註冊時上傳的審核檔案類型（對應 [AuthApi.registerWithVerificationDocument] 的 multipart 與後端審核）。
 enum RegistrationVerificationDocumentKind {
@@ -44,10 +44,10 @@ class AuthApi {
   final String apiPrefix;
 
   String _path(String relative) {
-    if (relative.startsWith("/")) {
-      return "$apiPrefix$relative";
+    if (relative.startsWith('/')) {
+      return '$apiPrefix$relative';
     }
-    return "$apiPrefix/$relative";
+    return '$apiPrefix/$relative';
   }
 
   /// 註冊並上傳審核用圖片（`multipart/form-data`），見 [documentBytes]／[documentFilename]。
@@ -62,7 +62,7 @@ class AuthApi {
     required String schoolName,
     required String studentId,
     required Uint8List documentBytes,
-    String documentFilename = "offer.jpg",
+    String documentFilename = 'offer.jpg',
     RegistrationVerificationDocumentKind verificationDocumentKind =
         RegistrationVerificationDocumentKind.offerOrAdmissionProof,
   }) async {
@@ -72,26 +72,26 @@ class AuthApi {
         filename: documentFilename,
       );
       final kindStr = switch (verificationDocumentKind) {
-        RegistrationVerificationDocumentKind.offerOrAdmissionProof => "offer",
-        RegistrationVerificationDocumentKind.studentIdCard => "student_id_card",
+        RegistrationVerificationDocumentKind.offerOrAdmissionProof => 'offer',
+        RegistrationVerificationDocumentKind.studentIdCard => 'student_id_card',
       };
       final map = <String, dynamic>{
-        "custom_id": customId,
-        "school_name": schoolName,
-        "student_id": studentId,
-        "verification_document_kind": kindStr,
+        'custom_id': customId,
+        'school_name': schoolName,
+        'student_id': studentId,
+        'verification_document_kind': kindStr,
       };
       switch (verificationDocumentKind) {
         case RegistrationVerificationDocumentKind.offerOrAdmissionProof:
-          map["offer"] = file;
+          map['offer'] = file;
         case RegistrationVerificationDocumentKind.studentIdCard:
-          map["student_id_card"] = file;
+          map['student_id_card'] = file;
       }
       final form = FormData.fromMap(map);
-      final res = await _dio.post<dynamic>(_path("/auth/register"), data: form);
+      final res = await _dio.post<dynamic>(_path('/auth/register'), data: form);
       final data = res.data;
       if (data == null || (data is Map && data.isEmpty)) {
-        return const RegistrationResponse(accountPhase: "pending_verification");
+        return const RegistrationResponse(accountPhase: 'pending_verification');
       }
       return RegistrationResponse.fromResponse(data);
     } on DioException catch (e) {
@@ -101,7 +101,7 @@ class AuthApi {
 
   Future<VerificationStateDto> fetchVerificationStatus() async {
     try {
-      final res = await _dio.get<dynamic>(_path("/auth/me/verification"));
+      final res = await _dio.get<dynamic>(_path('/auth/me/verification'));
       return VerificationStateDto.fromResponse(res.data);
     } on DioException catch (e) {
       throw LiubanApiException.fromDio(e);
@@ -110,7 +110,7 @@ class AuthApi {
 
   Future<UserProfileDto> fetchMe() async {
     try {
-      final res = await _dio.get<dynamic>(_path("/auth/me"));
+      final res = await _dio.get<dynamic>(_path('/auth/me'));
       return UserProfileDto.fromResponse(res.data);
     } on DioException catch (e) {
       throw LiubanApiException.fromDio(e);
@@ -124,8 +124,8 @@ class AuthApi {
   }) async {
     try {
       final res = await _dio.post<dynamic>(
-        _path("/auth/login"),
-        data: <String, dynamic>{"account": account, "password": password},
+        _path('/auth/login'),
+        data: <String, dynamic>{'account': account, 'password': password},
       );
       return TokenPairDto.fromJson(asJsonMap(res.data));
     } on DioException catch (e) {
@@ -141,10 +141,10 @@ class AuthApi {
   }) async {
     try {
       await _dio.post<dynamic>(
-        _path("/auth/password"),
+        _path('/auth/password'),
         data: <String, dynamic>{
-          "current_password": currentPassword,
-          "new_password": newPassword,
+          'current_password': currentPassword,
+          'new_password': newPassword,
         },
       );
     } on DioException catch (e) {
@@ -156,8 +156,8 @@ class AuthApi {
   Future<void> requestPasswordResetEmail({required String email}) async {
     try {
       await _dio.post<dynamic>(
-        _path("/auth/password/reset/request"),
-        data: <String, dynamic>{"email": email.trim()},
+        _path('/auth/password/reset/request'),
+        data: <String, dynamic>{'email': email.trim()},
       );
     } on DioException catch (e) {
       throw LiubanApiException.fromDio(e);
@@ -171,8 +171,8 @@ class AuthApi {
   }) async {
     try {
       await _dio.post<dynamic>(
-        _path("/auth/password/reset/complete"),
-        data: <String, dynamic>{"token": token, "new_password": newPassword},
+        _path('/auth/password/reset/complete'),
+        data: <String, dynamic>{'token': token, 'new_password': newPassword},
       );
     } on DioException catch (e) {
       throw LiubanApiException.fromDio(e);

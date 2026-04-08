@@ -1,5 +1,5 @@
-import "package:liuban/data/models/education_entry_dto.dart";
-import "package:liuban/data/models/json_utils.dart";
+import 'package:liuban/data/models/education_entry_dto.dart';
+import 'package:liuban/data/models/json_utils.dart';
 
 /// `GET …/auth/me` 當前用戶公開資料。
 ///
@@ -18,16 +18,16 @@ class UserProfileDto {
   final List<EducationEntryDto> educations;
 
   factory UserProfileDto.fromJson(Map<String, dynamic> json) {
-    final eduRaw = json["educations"] ?? json["schools"] ?? json["degrees"];
+    final eduRaw = json['educations'] ?? json['schools'] ?? json['degrees'];
     return UserProfileDto(
-      userId: json["id"]?.toString() ?? json["user_id"]?.toString() ?? "",
+      userId: json['id']?.toString() ?? json['user_id']?.toString() ?? '',
       customId:
-          json["custom_id"] as String? ??
-          json["username"] as String? ??
-          json["login"] as String? ??
-          "",
+          json['custom_id'] as String? ??
+          json['username'] as String? ??
+          json['login'] as String? ??
+          '',
       displayName:
-          json["display_name"] as String? ?? json["nickname"] as String?,
+          json['display_name'] as String? ?? json['nickname'] as String?,
       educations: eduRaw != null
           ? EducationEntryDto.listFromJson(eduRaw)
           : const [],
@@ -38,11 +38,11 @@ class UserProfileDto {
       UserProfileDto.fromJson(asJsonMap(data));
 
   static UserProfileDto previewFallback() => const UserProfileDto(
-    userId: "local",
-    customId: "demo_id",
+    userId: 'local',
+    customId: 'demo_id',
     educations: <EducationEntryDto>[
-      EducationEntryDto(schoolShortName: "港大", alumni: true),
-      EducationEntryDto(schoolShortName: "中大", alumni: false),
+      EducationEntryDto(schoolShortName: '港大', alumni: true),
+      EducationEntryDto(schoolShortName: '中大', alumni: false),
     ],
   );
 }

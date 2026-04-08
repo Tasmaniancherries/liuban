@@ -1,13 +1,13 @@
-import "package:flutter/material.dart";
-import "package:flutter/semantics.dart";
-import "package:go_router/go_router.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
-import "package:liuban/features/promotion/promotion_models.dart";
-import "package:liuban/features/promotion/promotion_share.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
+import 'package:go_router/go_router.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
+import 'package:liuban/features/promotion/promotion_models.dart';
+import 'package:liuban/features/promotion/promotion_share.dart';
 
 class _PromotionDetailLoad {
   const _PromotionDetailLoad({
@@ -99,12 +99,12 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("推廣詳情", semanticsLabel: "推廣活動詳情"),
+        title: const Text('推廣詳情', semanticsLabel: '推廣活動詳情'),
         leading: Semantics(
-          hint: "關閉推廣詳情並返回上一頁",
+          hint: '關閉推廣詳情並返回上一頁',
           child: IconButton(
-            tooltip: "返回",
-            icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
+            tooltip: '返回',
+            icon: const Icon(Icons.arrow_back, semanticLabel: '返回'),
             onPressed: () => context.pop(),
           ),
         ),
@@ -119,16 +119,16 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
               final canShare = loaded && hasItem;
               return Semantics(
                 hint: busy
-                    ? "內容載入完成後可分享連結"
+                    ? '內容載入完成後可分享連結'
                     : hasItem
-                    ? "開啟複製或系統分享此推廣連結"
-                    : "推廣內容未載入，無法分享連結",
+                    ? '開啟複製或系統分享此推廣連結'
+                    : '推廣內容未載入，無法分享連結',
                 child: IconButton(
-                  tooltip: "分享連結",
-                  icon: const Icon(Icons.share_outlined, semanticLabel: "分享連結"),
+                  tooltip: '分享連結',
+                  icon: const Icon(Icons.share_outlined, semanticLabel: '分享連結'),
                   onPressed: canShare
                       ? () => unawaitedDebug(
-                          "PromotionDetailScreen._shareLink",
+                          'PromotionDetailScreen._shareLink',
                           _shareLink(),
                         )
                       : null,
@@ -143,7 +143,7 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
         builder: (context, snap) {
           if (snap.connectionState != ConnectionState.done) {
             return const Center(
-              child: CircularProgressIndicator(semanticsLabel: "載入中"),
+              child: CircularProgressIndicator(semanticsLabel: '載入中'),
             );
           }
           final data = snap.data!;
@@ -187,15 +187,15 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
                               ),
                               const SizedBox(height: 12),
                               Tooltip(
-                                message: "返回上一頁",
+                                message: '返回上一頁',
                                 child: Semantics(
                                   button: true,
-                                  label: "返回上一頁",
-                                  hint: "離開此頁並回到推廣列表或來源畫面",
+                                  label: '返回上一頁',
+                                  hint: '離開此頁並回到推廣列表或來源畫面',
                                   excludeSemantics: true,
                                   child: FilledButton(
                                     onPressed: () => context.pop(),
-                                    child: const Text("返回"),
+                                    child: const Text('返回'),
                                   ),
                                 ),
                               ),
@@ -218,9 +218,9 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
               padding: const EdgeInsets.all(20),
               child: Semantics(
                 customSemanticsActions: <CustomSemanticsAction, VoidCallback>{
-                  const CustomSemanticsAction(label: "分享或複製此推廣連結"): () =>
+                  const CustomSemanticsAction(label: '分享或複製此推廣連結'): () =>
                       unawaitedDebug(
-                        "PromotionDetailScreen.openPromotionShareActions",
+                        'PromotionDetailScreen.openPromotionShareActions',
                         openPromotionShareActions(context, widget.promotionId),
                       ),
                 },
@@ -233,7 +233,7 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
                         child: Semantics(
                           header: true,
                           label: ApiDevSemantics.promotionDetailDevNote,
-                          hint: "開發與 API 說明",
+                          hint: '開發與 API 說明',
                           excludeSemantics: true,
                           child: SelectionArea(
                             child: Text(
@@ -270,7 +270,7 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
                       Semantics(
                         header: true,
                         label: p.title,
-                        hint: "推廣文章標題",
+                        hint: '推廣文章標題',
                         excludeSemantics: true,
                         child: Text(
                           p.title,
@@ -280,7 +280,7 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        "${p.subtitle}　${p.publishedAt}",
+                        '${p.subtitle}　${p.publishedAt}',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
@@ -292,7 +292,7 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
                       ),
                       const SizedBox(height: 32),
                       Text(
-                        "本頁為推廣合作內容；涉商業合作請依規標示「廣告」。洽談請至「訊息 · 官方客服」。",
+                        '本頁為推廣合作內容；涉商業合作請依規標示「廣告」。洽談請至「訊息 · 官方客服」。',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.outline,
                         ),

@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 
 /// 與 Material [SnackBar] 預設顯示時間一致（`packages/flutter/.../snack_bar.dart` 之 `_snackBarDisplayDuration`）。
 const Duration _kLiubanSnackBarDefaultDuration = Duration(milliseconds: 4000);

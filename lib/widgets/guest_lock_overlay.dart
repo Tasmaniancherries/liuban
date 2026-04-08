@@ -1,5 +1,5 @@
-import "package:flutter/material.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
+import 'package:flutter/material.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
 
 /// 訪客／審核中時遮住子內容，展示說明（符合 PRD：本校／好友須正式用戶）。
 class GuestLockOverlay extends StatelessWidget {
@@ -30,8 +30,8 @@ class GuestLockOverlay extends StatelessWidget {
 
     final hasAuthShortcuts = onGoToLogin != null || onGoToRegister != null;
     final lockHint = hasAuthShortcuts
-        ? "底層內容已鎖定，可使用下方按鈕前往登入或註冊，通過身分審核後可使用完整功能 ${ApiDevSemantics.docsTrail}"
-        : "底層內容已鎖定，完成登入或身分審核後可使用完整功能 ${ApiDevSemantics.docsTrail}";
+        ? '底層內容已鎖定，可使用下方按鈕前往登入或註冊，通過身分審核後可使用完整功能 ${ApiDevSemantics.docsTrail}'
+        : '底層內容已鎖定，完成登入或身分審核後可使用完整功能 ${ApiDevSemantics.docsTrail}';
 
     return Stack(
       fit: StackFit.expand,
@@ -42,7 +42,7 @@ class GuestLockOverlay extends StatelessWidget {
             constraints: const BoxConstraints(maxWidth: 320),
             child: Semantics(
               container: true,
-              label: "$title。$message",
+              label: '$title。$message',
               hint: lockHint,
               excludeSemantics: true,
               child: Card(
@@ -54,7 +54,7 @@ class GuestLockOverlay extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.lock_outline,
-                        semanticLabel: "功能受限",
+                        semanticLabel: '功能受限',
                         size: 40,
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -85,30 +85,30 @@ class GuestLockOverlay extends StatelessWidget {
                         const SizedBox(height: 20),
                         if (onGoToLogin != null)
                           Tooltip(
-                            message: "前往登入",
+                            message: '前往登入',
                             child: Semantics(
                               button: true,
-                              label: "前往登入",
-                              hint: "開啟登入頁",
+                              label: '前往登入',
+                              hint: '開啟登入頁',
                               excludeSemantics: true,
                               child: FilledButton(
                                 onPressed: onGoToLogin,
-                                child: const Text("前往登入"),
+                                child: const Text('前往登入'),
                               ),
                             ),
                           ),
                         if (onGoToRegister != null) ...[
                           if (onGoToLogin != null) const SizedBox(height: 8),
                           Tooltip(
-                            message: "前往註冊並提交身分審核",
+                            message: '前往註冊並提交身分審核',
                             child: Semantics(
                               button: true,
-                              label: "前往註冊並提交身分審核",
-                              hint: "開啟註冊表單；可上傳 Offer、錄取證明或學生證",
+                              label: '前往註冊並提交身分審核',
+                              hint: '開啟註冊表單；可上傳 Offer、錄取證明或學生證',
                               excludeSemantics: true,
                               child: OutlinedButton(
                                 onPressed: onGoToRegister,
-                                child: const Text("還沒有帳號？註冊"),
+                                child: const Text('還沒有帳號？註冊'),
                               ),
                             ),
                           ),

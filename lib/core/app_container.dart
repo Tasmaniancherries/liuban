@@ -1,12 +1,12 @@
-import "package:dio/dio.dart";
-import "package:liuban/core/config/app_config.dart";
-import "package:liuban/core/network/auth_session_tokens.dart";
-import "package:liuban/core/network/dio_client.dart";
-import "package:liuban/data/api/auth_api.dart";
-import "package:liuban/data/api/feed_api.dart";
-import "package:liuban/data/api/friends_api.dart";
-import "package:liuban/data/api/promotion_api.dart";
-import "package:liuban/data/api/support_api.dart";
+import 'package:dio/dio.dart';
+import 'package:liuban/core/config/app_config.dart';
+import 'package:liuban/core/network/auth_session_tokens.dart';
+import 'package:liuban/core/network/dio_client.dart';
+import 'package:liuban/data/api/auth_api.dart';
+import 'package:liuban/data/api/feed_api.dart';
+import 'package:liuban/data/api/friends_api.dart';
+import 'package:liuban/data/api/promotion_api.dart';
+import 'package:liuban/data/api/support_api.dart';
 
 /// 集中放置 [Dio]、token 与各域 API，供 UI 透過 [AppContainerScope] 取得。
 class AppContainer {

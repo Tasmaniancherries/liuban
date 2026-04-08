@@ -1,12 +1,12 @@
-import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
-import "package:liuban/core/ui/scroll_constants.dart";
-import "package:liuban/data/models/dm_message_dto.dart";
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
+import 'package:liuban/core/ui/scroll_constants.dart';
+import 'package:liuban/data/models/dm_message_dto.dart';
 
 /// 與單一好友的私聊（HTTP；之後可換 WebSocket 推播）。
 class DmChatScreen extends StatefulWidget {
@@ -45,35 +45,35 @@ class _DmChatScreenState extends State<DmChatScreen> {
       context: context,
       builder: (ctx) => Semantics(
         container: true,
-        label: "捨棄未送出訊息確認",
+        label: '捨棄未送出訊息確認',
         hint: ApiDevSemantics.discardUnsentMessageDraftHint,
         child: AlertDialog(
-          title: const Text("捨棄未送出訊息？"),
-          content: const SelectionArea(child: Text("輸入框內尚有內容，確定離開？")),
+          title: const Text('捨棄未送出訊息？'),
+          content: const SelectionArea(child: Text('輸入框內尚有內容，確定離開？')),
           actions: [
             Tooltip(
-              message: "繼續輸入",
+              message: '繼續輸入',
               child: Semantics(
                 button: true,
-                label: "繼續輸入",
-                hint: "關閉對話框並保留輸入框內容",
+                label: '繼續輸入',
+                hint: '關閉對話框並保留輸入框內容',
                 excludeSemantics: true,
                 child: TextButton(
                   onPressed: () => Navigator.of(ctx).pop(false),
-                  child: const Text("取消"),
+                  child: const Text('取消'),
                 ),
               ),
             ),
             Tooltip(
-              message: "捨棄未送出訊息",
+              message: '捨棄未送出訊息',
               child: Semantics(
                 button: true,
-                label: "捨棄未送出訊息",
-                hint: "離開並清除未送出的文字",
+                label: '捨棄未送出訊息',
+                hint: '離開並清除未送出的文字',
                 excludeSemantics: true,
                 child: TextButton(
                   onPressed: () => Navigator.of(ctx).pop(true),
-                  child: const Text("捨棄"),
+                  child: const Text('捨棄'),
                 ),
               ),
             ),
@@ -189,7 +189,7 @@ class _DmChatScreenState extends State<DmChatScreen> {
     super.initState();
     _input.addListener(_onInputChanged);
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => unawaitedDebug("DmChatScreen._load", _load()),
+      (_) => unawaitedDebug('DmChatScreen._load', _load()),
     );
   }
 
@@ -204,17 +204,17 @@ class _DmChatScreenState extends State<DmChatScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            "@${widget.peerCustomId}",
-            semanticsLabel: "與 ${widget.peerCustomId} 的私訊",
+            '@${widget.peerCustomId}',
+            semanticsLabel: '與 ${widget.peerCustomId} 的私訊',
           ),
           leading: Semantics(
-            hint: "返回上一頁；輸入框有未送出內容時會先詢問",
+            hint: '返回上一頁；輸入框有未送出內容時會先詢問',
             child: IconButton(
-              tooltip: "返回",
-              icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
+              tooltip: '返回',
+              icon: const Icon(Icons.arrow_back, semanticLabel: '返回'),
               onPressed: _sending
                   ? null
-                  : () => unawaitedDebug("DmChatScreen._tryPop", _tryPop()),
+                  : () => unawaitedDebug('DmChatScreen._tryPop', _tryPop()),
             ),
           ),
         ),
@@ -225,7 +225,7 @@ class _DmChatScreenState extends State<DmChatScreen> {
               child: Semantics(
                 header: true,
                 label: ApiDevSemantics.dmThread,
-                hint: "開發與 API 說明，下方為聊天訊息",
+                hint: '開發與 API 說明，下方為聊天訊息',
                 excludeSemantics: true,
                 child: SelectionArea(
                   child: Text(
@@ -258,7 +258,7 @@ class _DmChatScreenState extends State<DmChatScreen> {
             Expanded(
               child: _loading
                   ? const Center(
-                      child: CircularProgressIndicator(semanticsLabel: "載入中"),
+                      child: CircularProgressIndicator(semanticsLabel: '載入中'),
                     )
                   : RefreshIndicator(
                       onRefresh: _load,
@@ -287,15 +287,15 @@ class _DmChatScreenState extends State<DmChatScreen> {
                               ? Theme.of(context).colorScheme.onPrimaryContainer
                               : Theme.of(context).colorScheme.onSurfaceVariant;
                           final peerLabel = widget.peerCustomId.isNotEmpty
-                              ? "@${widget.peerCustomId}"
-                              : "對方";
+                              ? '@${widget.peerCustomId}'
+                              : '對方';
                           final timeSuffix =
                               (m.createdAt != null && m.createdAt!.isNotEmpty)
-                              ? "，${m.createdAt}"
-                              : "";
+                              ? '，${m.createdAt}'
+                              : '';
                           final bubbleLabel = m.isMine
-                              ? "我：${m.body}$timeSuffix"
-                              : "$peerLabel：${m.body}$timeSuffix";
+                              ? '我：${m.body}$timeSuffix'
+                              : '$peerLabel：${m.body}$timeSuffix';
                           return Align(
                             alignment: align,
                             child: ConstrainedBox(
@@ -306,7 +306,7 @@ class _DmChatScreenState extends State<DmChatScreen> {
                               child: Semantics(
                                 container: true,
                                 label: bubbleLabel,
-                                hint: "聊天訊息氣泡",
+                                hint: '聊天訊息氣泡',
                                 excludeSemantics: true,
                                 child: Card(
                                   color: bg,
@@ -365,8 +365,8 @@ class _DmChatScreenState extends State<DmChatScreen> {
                   children: [
                     Expanded(
                       child: Semantics(
-                        label: "訊息輸入",
-                        hint: "送出鍵或傳送按鈕可送出",
+                        label: '訊息輸入',
+                        hint: '送出鍵或傳送按鈕可送出',
                         textField: true,
                         child: TextField(
                           controller: _input,
@@ -374,36 +374,36 @@ class _DmChatScreenState extends State<DmChatScreen> {
                           maxLines: 4,
                           enabled: !_sending,
                           decoration: const InputDecoration(
-                            hintText: "輸入訊息⋯",
+                            hintText: '輸入訊息⋯',
                             border: OutlineInputBorder(),
                           ),
                           textInputAction: TextInputAction.send,
                           onSubmitted: (_) {
                             if (_sending) return;
-                            unawaitedDebug("DmChatScreen._send", _send());
+                            unawaitedDebug('DmChatScreen._send', _send());
                           },
                         ),
                       ),
                     ),
                     const SizedBox(width: 8),
                     Semantics(
-                      hint: _sending ? "訊息送出中" : "送出輸入框內文字給對方",
+                      hint: _sending ? '訊息送出中' : '送出輸入框內文字給對方',
                       child: IconButton.filled(
-                        tooltip: "傳送",
+                        tooltip: '傳送',
                         onPressed: _sending
                             ? null
                             : () =>
-                                  unawaitedDebug("DmChatScreen._send", _send()),
+                                  unawaitedDebug('DmChatScreen._send', _send()),
                         icon: _sending
                             ? const SizedBox(
                                 width: 22,
                                 height: 22,
                                 child: CircularProgressIndicator(
-                                  semanticsLabel: "處理中",
+                                  semanticsLabel: '處理中',
                                   strokeWidth: 2,
                                 ),
                               )
-                            : const Icon(Icons.send, semanticLabel: "傳送"),
+                            : const Icon(Icons.send, semanticLabel: '傳送'),
                       ),
                     ),
                   ],

@@ -1,41 +1,41 @@
-import "dart:async";
-import "dart:convert";
+import 'dart:async';
+import 'dart:convert';
 
-import "package:app_links/app_links.dart";
-import "package:flutter/foundation.dart";
-import "package:flutter/material.dart";
-import "package:flutter_localizations/flutter_localizations.dart";
-import "package:go_router/go_router.dart";
-import "package:liuban/app/router.dart";
-import "package:liuban/app/theme.dart";
-import "package:liuban/core/locale/app_locale_scope.dart";
-import "package:liuban/core/locale/liuban_supported_locales.dart";
-import "package:liuban/core/network/auth_session_tokens.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:liuban/core/navigation/share_deep_link.dart";
-import "package:liuban/core/navigation/deep_link_guard.dart";
-import "package:liuban/core/session/app_session.dart";
-import "package:liuban/core/theme/theme_mode_scope.dart";
-import "package:liuban/core/ui/app_scroll_behavior.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
+import 'package:app_links/app_links.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_router/go_router.dart';
+import 'package:liuban/app/router.dart';
+import 'package:liuban/app/theme.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/locale/app_locale_scope.dart';
+import 'package:liuban/core/locale/liuban_supported_locales.dart';
+import 'package:liuban/core/navigation/deep_link_guard.dart';
+import 'package:liuban/core/navigation/share_deep_link.dart';
+import 'package:liuban/core/network/auth_session_tokens.dart';
+import 'package:liuban/core/session/app_session.dart';
+import 'package:liuban/core/theme/theme_mode_scope.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/app_scroll_behavior.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
 
 @visibleForTesting
 bool looksLikeSchemeRelativeAuthority(String authority) {
   final lower = authority.toLowerCase();
-  return authority.contains(".") ||
-      authority.contains(":") ||
-      authority.contains("@") ||
-      lower == "localhost";
+  return authority.contains('.') ||
+      authority.contains(':') ||
+      authority.contains('@') ||
+      lower == 'localhost';
 }
 
 @visibleForTesting
 bool isValidComparableAuthorityHost(String host) {
   var normalized = host.trim().toLowerCase();
-  while (normalized.endsWith(".")) {
+  while (normalized.endsWith('.')) {
     normalized = normalized.substring(0, normalized.length - 1);
   }
-  if (normalized.startsWith("[") && normalized.endsWith("]")) {
+  if (normalized.startsWith('[') && normalized.endsWith(']')) {
     normalized = normalized.substring(1, normalized.length - 1);
   }
   if (normalized.isEmpty || normalized.length > 253) return false;
@@ -43,61 +43,61 @@ bool isValidComparableAuthorityHost(String host) {
   for (final unit in normalized.codeUnits) {
     if (unit <= 0x1F || unit == 0x7F) return false;
   }
-  if (normalized.contains("%") || normalized.contains(RegExp(r"\s"))) {
+  if (normalized.contains('%') || normalized.contains(RegExp(r'\s'))) {
     return false;
   }
-  if (!RegExp(r"^[a-z0-9.-]+$").hasMatch(normalized)) return false;
-  final labels = normalized.split(".");
+  if (!RegExp(r'^[a-z0-9.-]+$').hasMatch(normalized)) return false;
+  final labels = normalized.split('.');
   if (labels.any((l) => l.isEmpty)) return false;
   for (final l in labels) {
     if (l.length > 63) return false;
-    if (l.startsWith("-") || l.endsWith("-")) return false;
+    if (l.startsWith('-') || l.endsWith('-')) return false;
   }
   return true;
 }
 
 String _ensureComparableAppPath(String normalized) {
-  if (normalized.isEmpty) return "/";
-  if (normalized.startsWith("/")) return normalized;
-  if (normalized.startsWith("?")) return "/$normalized";
-  if (normalized.startsWith("#")) return "/";
-  return "/$normalized";
+  if (normalized.isEmpty) return '/';
+  if (normalized.startsWith('/')) return normalized;
+  if (normalized.startsWith('?')) return '/$normalized';
+  if (normalized.startsWith('#')) return '/';
+  return '/$normalized';
 }
 
 @visibleForTesting
 String normalizeAppLocationForDeepLinkCompare(String locOrUri) {
   final raw = locOrUri.trim();
-  if (raw.isEmpty) return "/";
-  if (raw.startsWith("?")) return routeDedupKey("/$raw");
-  if (raw.startsWith("#")) return "/";
-  if (raw.startsWith("//")) {
-    final slashAfterAuthority = raw.indexOf("/", 2);
+  if (raw.isEmpty) return '/';
+  if (raw.startsWith('?')) return routeDedupKey('/$raw');
+  if (raw.startsWith('#')) return '/';
+  if (raw.startsWith('//')) {
+    final slashAfterAuthority = raw.indexOf('/', 2);
     final authority = slashAfterAuthority >= 0
         ? raw.substring(2, slashAfterAuthority)
         : raw.substring(2);
     final looksLikeAuthority = looksLikeSchemeRelativeAuthority(authority);
     if (looksLikeAuthority) {
       try {
-        final parsed = Uri.parse("https:$raw");
+        final parsed = Uri.parse('https:$raw');
         if (!isValidComparableAuthorityHost(parsed.host)) {
           return _ensureComparableAppPath(routeDedupKey(raw));
         }
-        final path = parsed.path.isEmpty ? "/" : parsed.path;
-        final query = parsed.hasQuery ? "?${parsed.query}" : "";
-        return _ensureComparableAppPath(routeDedupKey("$path$query"));
+        final path = parsed.path.isEmpty ? '/' : parsed.path;
+        final query = parsed.hasQuery ? '?${parsed.query}' : '';
+        return _ensureComparableAppPath(routeDedupKey('$path$query'));
       } catch (_) {
         return _ensureComparableAppPath(routeDedupKey(raw));
       }
     }
     return _ensureComparableAppPath(routeDedupKey(raw));
   }
-  if (raw.startsWith("/")) return routeDedupKey(raw);
+  if (raw.startsWith('/')) return routeDedupKey(raw);
   try {
     final uri = Uri.parse(raw);
     if (uri.hasScheme || uri.hasAuthority) {
-      final path = uri.path.isEmpty ? "/" : uri.path;
-      final query = uri.hasQuery ? "?${uri.query}" : "";
-      return _ensureComparableAppPath(routeDedupKey("$path$query"));
+      final path = uri.path.isEmpty ? '/' : uri.path;
+      final query = uri.hasQuery ? '?${uri.query}' : '';
+      return _ensureComparableAppPath(routeDedupKey('$path$query'));
     }
     return _ensureComparableAppPath(routeDedupKey(raw));
   } catch (_) {
@@ -129,18 +129,18 @@ bool isWithinDeepLinkDedupWindow({
 @visibleForTesting
 String buildDeepLinkDedupSignature(String uriText, {int maxChars = 1024}) {
   final normalized = routeDedupKey(uriText);
-  if (maxChars <= 0) return "";
+  if (maxChars <= 0) return '';
   if (normalized.length <= maxChars) return normalized;
   if (maxChars <= 16) return normalized.substring(0, maxChars);
   const digestChars = 8;
   const fixedOverhead = 4; // ... + #
   final digest = stableFnv1a32(
     normalized,
-  ).toRadixString(16).padLeft(digestChars, "0");
+  ).toRadixString(16).padLeft(digestChars, '0');
   final budget = maxChars - fixedOverhead - digestChars;
   final head = budget ~/ 2;
   final tail = budget - head;
-  return "${normalized.substring(0, head)}...${normalized.substring(normalized.length - tail)}#$digest";
+  return '${normalized.substring(0, head)}...${normalized.substring(normalized.length - tail)}#$digest';
 }
 
 @visibleForTesting
@@ -173,8 +173,8 @@ class _LiubanAppState extends State<LiubanApp> {
   static const int _maxIncomingDeepLinkUriChars = 8192;
   static const int _maxIncomingDeepLinkLocationChars = 4096;
   static const int _maxDeepLinkDedupSignatureChars = 1024;
-  static const String _deepLinkSourceInitial = "initial";
-  static const String _deepLinkSourceStream = "stream";
+  static const String _deepLinkSourceInitial = 'initial';
+  static const String _deepLinkSourceStream = 'stream';
 
   late final GoRouter _router = buildRouter(
     widget.session,
@@ -199,22 +199,22 @@ class _LiubanAppState extends State<LiubanApp> {
 
   String _truncateForLog(String s, {int maxChars = 800}) {
     if (s.length <= maxChars) return s;
-    return "${s.substring(0, maxChars)}…(truncated ${s.length - maxChars} chars)";
+    return '${s.substring(0, maxChars)}…(truncated ${s.length - maxChars} chars)';
   }
 
   String _sanitizeForLog(String s) {
     final b = StringBuffer();
     for (final unit in s.codeUnits) {
       if (unit == 0x0A) {
-        b.write(r"\n");
+        b.write(r'\n');
         continue;
       }
       if (unit == 0x0D) {
-        b.write(r"\r");
+        b.write(r'\r');
         continue;
       }
       if (unit == 0x09) {
-        b.write(r"\t");
+        b.write(r'\t');
         continue;
       }
       if (unit <= 0x1F || unit == 0x7F) {
@@ -230,10 +230,10 @@ class _LiubanAppState extends State<LiubanApp> {
     if (!kDebugMode) return;
     try {
       final truncated = _truncateForLog(messageBuilder());
-      debugPrint("LiubanApp: ${_sanitizeForLog(truncated)}");
+      debugPrint('LiubanApp: ${_sanitizeForLog(truncated)}');
     } catch (e, st) {
-      final fallback = _truncateForLog("debug log builder failed: $e\n$st");
-      debugPrint("LiubanApp: ${_sanitizeForLog(fallback)}");
+      final fallback = _truncateForLog('debug log builder failed: $e\n$st');
+      debugPrint('LiubanApp: ${_sanitizeForLog(fallback)}');
     }
   }
 
@@ -319,7 +319,7 @@ class _LiubanAppState extends State<LiubanApp> {
       }
       _debugDeepLinkLazy(
         () =>
-            "[$source] router.go failed for ${safeLocationForLog(loc)}\n$e\n$st",
+            '[$source] router.go failed for ${safeLocationForLog(loc)}\n$e\n$st',
       );
       _notifyDeepLinkRejected(ApiDevSemantics.deepLinkUserMessageOpenFailed);
       return false;
@@ -335,7 +335,7 @@ class _LiubanAppState extends State<LiubanApp> {
     if (uriText.length > _maxIncomingDeepLinkUriChars) {
       _debugDeepLinkLazy(
         () =>
-            "[$source] ignore oversized deep link uri (${uriText.length} chars)",
+            '[$source] ignore oversized deep link uri (${uriText.length} chars)',
       );
       _notifyDeepLinkRejected(ApiDevSemantics.deepLinkUserMessageLinkTooLong);
       return;
@@ -348,14 +348,14 @@ class _LiubanAppState extends State<LiubanApp> {
     _pruneDeepLinkDedupState(nowMs);
     if (_isDuplicateDeepLink(deepLinkSig, nowMs)) {
       _debugDeepLinkLazy(
-        () => "[$source] ignore duplicate deep link uri: ${safeUriForLog(uri)}",
+        () => '[$source] ignore duplicate deep link uri: ${safeUriForLog(uri)}',
       );
       return;
     }
     final loc = shareUriToAppLocation(uri);
     if (loc == null) {
       _debugDeepLinkLazy(
-        () => "[$source] ignore unmapped deep link: ${safeUriForLog(uri)}",
+        () => '[$source] ignore unmapped deep link: ${safeUriForLog(uri)}',
       );
       _notifyDeepLinkRejected(ApiDevSemantics.deepLinkUserMessageUnrecognized);
       return;
@@ -363,7 +363,7 @@ class _LiubanAppState extends State<LiubanApp> {
     if (loc.length > _maxIncomingDeepLinkLocationChars) {
       _debugDeepLinkLazy(
         () =>
-            "[$source] ignore oversized deep link location (${loc.length} chars)",
+            '[$source] ignore oversized deep link location (${loc.length} chars)',
       );
       _notifyDeepLinkRejected(ApiDevSemantics.deepLinkUserMessageLinkTooLong);
       return;
@@ -373,7 +373,7 @@ class _LiubanAppState extends State<LiubanApp> {
     if (!isAllowedDeepLinkLocation(loc)) {
       _debugDeepLinkLazy(
         () =>
-            "[$source] ignore disallowed deep link location: ${getSafeLocForLog()}",
+            '[$source] ignore disallowed deep link location: ${getSafeLocForLog()}',
       );
       _notifyDeepLinkRejected(
         ApiDevSemantics.deepLinkUserMessageDisallowedInApp,
@@ -385,20 +385,20 @@ class _LiubanAppState extends State<LiubanApp> {
     if (_isAlreadyAtLocation(locDedupKey)) {
       _debugDeepLinkLazy(
         () =>
-            "[$source] ignore deep link to current location: ${getSafeLocForLog()}",
+            '[$source] ignore deep link to current location: ${getSafeLocForLog()}',
       );
       return;
     }
     if (_isDuplicateRouteLocation(locDedupKey, nowMs)) {
       _debugDeepLinkLazy(
         () =>
-            "[$source] ignore duplicate deep link location: ${getSafeLocForLog()}",
+            '[$source] ignore duplicate deep link location: ${getSafeLocForLog()}',
       );
       return;
     }
     if (postFrame) {
       _debugDeepLinkLazy(
-        () => "[$source] deep link route (post-frame) -> ${getSafeLocForLog()}",
+        () => '[$source] deep link route (post-frame) -> ${getSafeLocForLog()}',
       );
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
@@ -412,7 +412,7 @@ class _LiubanAppState extends State<LiubanApp> {
       return;
     }
     _debugDeepLinkLazy(
-      () => "[$source] deep link route -> ${getSafeLocForLog()}",
+      () => '[$source] deep link route -> ${getSafeLocForLog()}',
     );
     _safeGo(
       loc,
@@ -428,11 +428,11 @@ class _LiubanAppState extends State<LiubanApp> {
     _appLinkSub = _appLinks.uriLinkStream.listen(
       _onIncomingLink,
       onError: (Object e, StackTrace st) {
-        _debugDeepLinkLazy(() => "uriLinkStream error: $e\n$st");
+        _debugDeepLinkLazy(() => 'uriLinkStream error: $e\n$st');
       },
     );
     unawaitedDebug(
-      "LiubanApp._consumeInitialAppLink",
+      'LiubanApp._consumeInitialAppLink',
       _consumeInitialAppLink(),
     );
   }
@@ -443,7 +443,7 @@ class _LiubanAppState extends State<LiubanApp> {
       if (uri == null || !mounted) return;
       _goFromDeepLink(uri, postFrame: true, source: _deepLinkSourceInitial);
     } catch (e, st) {
-      _debugDeepLinkLazy(() => "initial app link failed: $e\n$st");
+      _debugDeepLinkLazy(() => 'initial app link failed: $e\n$st');
     }
   }
 
@@ -453,7 +453,7 @@ class _LiubanAppState extends State<LiubanApp> {
       _goFromDeepLink(uri, postFrame: false, source: _deepLinkSourceStream);
     } catch (e, st) {
       _debugDeepLinkLazy(
-        () => "incoming link failed: ${safeUriForLog(uri)}\n$e\n$st",
+        () => 'incoming link failed: ${safeUriForLog(uri)}\n$e\n$st',
       );
     }
   }
@@ -475,9 +475,9 @@ class _LiubanAppState extends State<LiubanApp> {
           listenable: localeCtrl,
           builder: (context, _) {
             return MaterialApp.router(
-              restorationScopeId: "liuban",
+              restorationScopeId: 'liuban',
               scrollBehavior: const LiubanScrollBehavior(),
-              title: "留伴",
+              title: '留伴',
               theme: LiubanTheme.light(),
               darkTheme: LiubanTheme.dark(),
               themeMode: themeCtrl.mode,

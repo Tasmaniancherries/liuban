@@ -1,13 +1,13 @@
-import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
-import "package:liuban/core/ui/scroll_constants.dart";
-import "package:liuban/data/models/feed_post_dto.dart";
-import "package:liuban/features/feed/post_models.dart";
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
+import 'package:liuban/core/ui/scroll_constants.dart';
+import 'package:liuban/data/models/feed_post_dto.dart';
+import 'package:liuban/features/feed/post_models.dart';
 
 /// 發佈動態；若設定 [editingPostId] 則為編輯既有帖文（可帶 [initialPost] 預填）。
 class ComposePostScreen extends StatefulWidget {
@@ -29,7 +29,7 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
   bool _bootstrapping = false;
 
   /// 用於判斷是否需「捨棄草稿」確認（載入／建立表單後擷取一次）。
-  String _baselineBody = "";
+  String _baselineBody = '';
   bool _baselineHideSchool = false;
   PostAudience _baselineAudience = PostAudience.publicSquare;
 
@@ -50,7 +50,7 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
       } else {
         WidgetsBinding.instance.addPostFrameCallback(
           (_) => unawaitedDebug(
-            "ComposePostScreen._loadEditDraft",
+            'ComposePostScreen._loadEditDraft',
             _loadEditDraft(),
           ),
         );
@@ -129,37 +129,37 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
       context: context,
       builder: (ctx) => Semantics(
         container: true,
-        label: _isEditing ? "捨棄編輯確認" : "捨棄草稿確認",
+        label: _isEditing ? '捨棄編輯確認' : '捨棄草稿確認',
         hint: ApiDevSemantics.discardComposeUnpublishedHint,
         child: AlertDialog(
-          title: Text(_isEditing ? "捨棄編輯？" : "捨棄草稿？"),
+          title: Text(_isEditing ? '捨棄編輯？' : '捨棄草稿？'),
           content: SelectionArea(
-            child: Text(_isEditing ? "尚未儲存的修改將遺失。" : "內容尚未發佈，確定離開？"),
+            child: Text(_isEditing ? '尚未儲存的修改將遺失。' : '內容尚未發佈，確定離開？'),
           ),
           actions: [
             Tooltip(
-              message: "繼續編輯",
+              message: '繼續編輯',
               child: Semantics(
                 button: true,
-                label: "繼續編輯",
-                hint: "關閉對話框並保留目前內容",
+                label: '繼續編輯',
+                hint: '關閉對話框並保留目前內容',
                 excludeSemantics: true,
                 child: TextButton(
                   onPressed: () => Navigator.of(ctx).pop(false),
-                  child: const Text("取消"),
+                  child: const Text('取消'),
                 ),
               ),
             ),
             Tooltip(
-              message: _isEditing ? "捨棄修改並關閉" : "捨棄草稿並關閉",
+              message: _isEditing ? '捨棄修改並關閉' : '捨棄草稿並關閉',
               child: Semantics(
                 button: true,
-                label: _isEditing ? "捨棄修改並關閉" : "捨棄草稿並關閉",
-                hint: _isEditing ? "關閉並捨棄未儲存的修改" : "關閉並捨棄草稿",
+                label: _isEditing ? '捨棄修改並關閉' : '捨棄草稿並關閉',
+                hint: _isEditing ? '關閉並捨棄未儲存的修改' : '關閉並捨棄草稿',
                 excludeSemantics: true,
                 child: TextButton(
                   onPressed: () => Navigator.of(ctx).pop(true),
-                  child: const Text("捨棄"),
+                  child: const Text('捨棄'),
                 ),
               ),
             ),
@@ -262,29 +262,29 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
   Widget build(BuildContext context) {
     final editing = _isEditing;
     String audienceTooltip(PostAudience a) => switch (a) {
-      PostAudience.publicSquare => "可見範圍：公開廣場",
-      PostAudience.schoolPeers => "可見範圍：本校",
-      PostAudience.friendsOnly => "可見範圍：雙向好友",
-      PostAudience.selfOnly => "可見範圍：僅自己",
+      PostAudience.publicSquare => '可見範圍：公開廣場',
+      PostAudience.schoolPeers => '可見範圍：本校',
+      PostAudience.friendsOnly => '可見範圍：雙向好友',
+      PostAudience.selfOnly => '可見範圍：僅自己',
     };
     if (!_formReady || _bootstrapping) {
       return Scaffold(
         appBar: AppBar(
           title: Text(
-            editing ? "編輯動態" : "發佈動態",
-            semanticsLabel: editing ? "編輯廣場動態" : "發佈廣場動態",
+            editing ? '編輯動態' : '發佈動態',
+            semanticsLabel: editing ? '編輯廣場動態' : '發佈廣場動態',
           ),
           leading: Semantics(
-            hint: "離開撰寫頁",
+            hint: '離開撰寫頁',
             child: IconButton(
-              tooltip: "返回",
-              icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
+              tooltip: '返回',
+              icon: const Icon(Icons.arrow_back, semanticLabel: '返回'),
               onPressed: () => context.pop(),
             ),
           ),
         ),
         body: const Center(
-          child: CircularProgressIndicator(semanticsLabel: "載入中"),
+          child: CircularProgressIndicator(semanticsLabel: '載入中'),
         ),
       );
     }
@@ -298,29 +298,29 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            editing ? "編輯動態" : "發佈動態",
-            semanticsLabel: editing ? "編輯廣場動態" : "發佈廣場動態",
+            editing ? '編輯動態' : '發佈動態',
+            semanticsLabel: editing ? '編輯廣場動態' : '發佈廣場動態',
           ),
           leading: Semantics(
-            hint: "返回；若有未儲存變更將先詢問",
+            hint: '返回；若有未儲存變更將先詢問',
             child: IconButton(
-              tooltip: "返回",
-              icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
+              tooltip: '返回',
+              icon: const Icon(Icons.arrow_back, semanticLabel: '返回'),
               onPressed: _submitting
                   ? null
                   : () => unawaitedDebug(
-                      "ComposePostScreen._confirmDiscardIfNeeded",
+                      'ComposePostScreen._confirmDiscardIfNeeded',
                       _confirmDiscardIfNeeded(),
                     ),
             ),
           ),
           actions: [
             Tooltip(
-              message: editing ? "儲存動態" : "發佈動態",
+              message: editing ? '儲存動態' : '發佈動態',
               child: Semantics(
                 button: true,
                 enabled: !_submitting,
-                label: editing ? "儲存動態" : "發佈動態",
+                label: editing ? '儲存動態' : '發佈動態',
                 hint: ApiDevSemantics.composePostSubmitHint(
                   editing: editing,
                   submitting: _submitting,
@@ -330,7 +330,7 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
                   onPressed: _submitting
                       ? null
                       : () => unawaitedDebug(
-                          "ComposePostScreen._submit",
+                          'ComposePostScreen._submit',
                           _submit(),
                         ),
                   child: _submitting
@@ -338,11 +338,11 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
                           height: 22,
                           width: 22,
                           child: CircularProgressIndicator(
-                            semanticsLabel: "處理中",
+                            semanticsLabel: '處理中',
                             strokeWidth: 2,
                           ),
                         )
-                      : Text(editing ? "儲存" : "發佈"),
+                      : Text(editing ? '儲存' : '發佈'),
                 ),
               ),
             ),
@@ -354,8 +354,8 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
           padding: const EdgeInsets.all(20),
           children: [
             Semantics(
-              label: "動態內容",
-              hint: editing ? "編輯此則動態正文；完成後可儲存" : "撰寫動態正文；發佈至下方所選可見範圍",
+              label: '動態內容',
+              hint: editing ? '編輯此則動態正文；完成後可儲存' : '撰寫動態正文；發佈至下方所選可見範圍',
               textField: true,
               child: TextField(
                 controller: _body,
@@ -363,8 +363,8 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
                 enabled: !_submitting,
                 decoration: const InputDecoration(
                   alignLabelWithHint: true,
-                  labelText: "動態內容",
-                  hintText: "分享在港生活、選課、租房⋯⋯",
+                  labelText: '動態內容',
+                  hintText: '分享在港生活、選課、租房⋯⋯',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -372,12 +372,12 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
             const SizedBox(height: 24),
             Semantics(
               header: true,
-              label: "誰可以看",
-              hint: "下方可選擇此則動態的可見對象",
+              label: '誰可以看',
+              hint: '下方可選擇此則動態的可見對象',
               excludeSemantics: true,
               child: SelectionArea(
                 child: Text(
-                  "誰可以看",
+                  '誰可以看',
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
@@ -391,16 +391,16 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
                   final blocked = _hideSchool && a == PostAudience.schoolPeers;
                   final chipEnabled = !_submitting && !blocked;
                   final chipLabel = blocked
-                      ? "${audienceTooltip(a)}，因已隱藏學校目前不可選"
-                      : "${audienceTooltip(a)}，${a.shortLabel}";
+                      ? '${audienceTooltip(a)}，因已隱藏學校目前不可選'
+                      : '${audienceTooltip(a)}，${a.shortLabel}';
                   return Semantics(
                     button: true,
                     enabled: chipEnabled,
                     selected: _audience == a,
                     label: chipLabel,
                     hint: blocked
-                        ? "已隱藏學校，同儕可見範圍暫不可用"
-                        : (!_submitting ? "選取後設定此則動態的可見對象" : "送出中，暫時無法變更可見範圍"),
+                        ? '已隱藏學校，同儕可見範圍暫不可用'
+                        : (!_submitting ? '選取後設定此則動態的可見對象' : '送出中，暫時無法變更可見範圍'),
                     excludeSemantics: true,
                     child: ChoiceChip(
                       tooltip: audienceTooltip(a),
@@ -416,10 +416,10 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
               const SizedBox(height: 4),
               Semantics(
                 liveRegion: true,
-                hint: "隱藏學校時「本校可見」選項不可用",
+                hint: '隱藏學校時「本校可見」選項不可用',
                 child: SelectionArea(
                   child: Text(
-                    "已開啟「隱藏學校」：不可選「本校」（僅好友或僅自己等）。",
+                    '已開啟「隱藏學校」：不可選「本校」（僅好友或僅自己等）。',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -429,17 +429,17 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
             ],
             const SizedBox(height: 20),
             Tooltip(
-              message: "切換是否在動態中顯示學校",
+              message: '切換是否在動態中顯示學校',
               child: Semantics(
-                label: "動態上隱藏學校標籤",
+                label: '動態上隱藏學校標籤',
                 hint:
                     "讀者看不到你的校名；若開啟，「本校可見」將不可用。目前${_hideSchool ? "已隱藏學校標籤" : "會顯示學校標籤"}",
                 enabled: !_submitting,
                 child: SwitchListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: const SelectionArea(child: Text("動態上隱藏學校標籤")),
+                  title: const SelectionArea(child: Text('動態上隱藏學校標籤')),
                   subtitle: const SelectionArea(
-                    child: Text("讀者看不到你的校名；若開啟，「本校可見」將不可用。"),
+                    child: Text('讀者看不到你的校名；若開啟，「本校可見」將不可用。'),
                   ),
                   value: _hideSchool,
                   onChanged: _submitting ? null : _onHideSchoolChanged,

@@ -1,9 +1,9 @@
-import "package:flutter/material.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:liuban/core/network/auth_session_tokens.dart";
-import "package:liuban/core/session/app_session.dart";
-import "package:liuban/core/session/verification_phase_mapper.dart";
+import 'package:flutter/material.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/network/auth_session_tokens.dart';
+import 'package:liuban/core/session/app_session.dart';
+import 'package:liuban/core/session/verification_phase_mapper.dart';
 
 /// 若本地已有 access token，向後端拉審核狀態並同步 [AppSession]（失敗則不覆寫）。
 ///
@@ -38,7 +38,7 @@ class _SessionHydratorState extends State<SessionHydrator> {
     _tokens = container.sessionTokens;
     _lastAccess = _tokens!.accessToken;
     _tokens!.addListener(_onTokensChanged);
-    unawaitedDebug("SessionHydrator._hydrate", _hydrate());
+    unawaitedDebug('SessionHydrator._hydrate', _hydrate());
   }
 
   void _onTokensChanged() {
@@ -52,7 +52,7 @@ class _SessionHydratorState extends State<SessionHydrator> {
       widget.session.signOut();
     }
     if (wasEmpty && nowHas) {
-      unawaitedDebug("SessionHydrator._hydrate", _hydrate());
+      unawaitedDebug('SessionHydrator._hydrate', _hydrate());
     }
   }
 

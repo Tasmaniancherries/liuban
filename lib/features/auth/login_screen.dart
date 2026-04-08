@@ -1,17 +1,17 @@
-import "package:flutter/material.dart";
-import "package:flutter/services.dart";
-import "package:go_router/go_router.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/core/session/app_session.dart";
-import "package:liuban/core/session/app_session_scope.dart";
-import "package:liuban/core/session/verification_phase_mapper.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
-import "package:liuban/core/ui/scroll_constants.dart";
-import "package:liuban/core/navigation/post_login_redirect.dart";
-import "package:liuban/core/text/account_input_normalize.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/navigation/post_login_redirect.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/session/app_session.dart';
+import 'package:liuban/core/session/app_session_scope.dart';
+import 'package:liuban/core/session/verification_phase_mapper.dart';
+import 'package:liuban/core/text/account_input_normalize.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
+import 'package:liuban/core/ui/scroll_constants.dart';
 
 /// 帳密登入；頂部無障礙說明見 [ApiDevSemantics.loginBanner]。
 class LoginScreen extends StatefulWidget {
@@ -47,35 +47,35 @@ class _LoginScreenState extends State<LoginScreen> {
       context: context,
       builder: (ctx) => Semantics(
         container: true,
-        label: "捨棄輸入確認",
+        label: '捨棄輸入確認',
         hint: ApiDevSemantics.discardUnsavedLocalFormDialogHint,
         child: AlertDialog(
-          title: const Text("捨棄輸入？"),
-          content: const SelectionArea(child: Text("帳號或密碼已輸入，確定離開？")),
+          title: const Text('捨棄輸入？'),
+          content: const SelectionArea(child: Text('帳號或密碼已輸入，確定離開？')),
           actions: [
             Tooltip(
-              message: "繼續輸入",
+              message: '繼續輸入',
               child: Semantics(
                 button: true,
-                label: "繼續輸入",
-                hint: "關閉對話框並保留帳號密碼",
+                label: '繼續輸入',
+                hint: '關閉對話框並保留帳號密碼',
                 excludeSemantics: true,
                 child: TextButton(
                   onPressed: () => Navigator.of(ctx).pop(false),
-                  child: const Text("取消"),
+                  child: const Text('取消'),
                 ),
               ),
             ),
             Tooltip(
-              message: "捨棄並離開",
+              message: '捨棄並離開',
               child: Semantics(
                 button: true,
-                label: "捨棄並離開",
-                hint: "離開並清除已輸入的帳號密碼",
+                label: '捨棄並離開',
+                hint: '離開並清除已輸入的帳號密碼',
                 excludeSemantics: true,
                 child: TextButton(
                   onPressed: () => Navigator.of(ctx).pop(true),
-                  child: const Text("捨棄"),
+                  child: const Text('捨棄'),
                 ),
               ),
             ),
@@ -109,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (account.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          "請輸入帳號與密碼",
+          '請輸入帳號與密碼',
           semanticsHint: ApiDevSemantics.loginValidationEmptyFieldsSnackHint,
         ),
       );
@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
       TextInput.finishAutofillContext(shouldSave: true);
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          "登入成功",
+          '登入成功',
           semanticsHint: ApiDevSemantics.loginSuccessSnackHint,
         ),
       );
@@ -178,15 +178,15 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("登入", semanticsLabel: "登入留伴帳號"),
+          title: const Text('登入', semanticsLabel: '登入留伴帳號'),
           leading: Semantics(
-            hint: "返回上一頁；帳密欄位有內容時會先詢問是否捨棄",
+            hint: '返回上一頁；帳密欄位有內容時會先詢問是否捨棄',
             child: IconButton(
-              tooltip: "返回",
-              icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
+              tooltip: '返回',
+              icon: const Icon(Icons.arrow_back, semanticLabel: '返回'),
               onPressed: _loading
                   ? null
-                  : () => unawaitedDebug("LoginScreen._tryPop", _tryPop()),
+                  : () => unawaitedDebug('LoginScreen._tryPop', _tryPop()),
             ),
           ),
         ),
@@ -198,27 +198,27 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Semantics(
                 header: true,
-                label: "使用註冊時的自訂 ID（或學校郵箱）與密碼登入。成功後會自動帶上與刷新 Token。",
-                hint: "下方為帳號密碼欄位與登入動作",
+                label: '使用註冊時的自訂 ID（或學校郵箱）與密碼登入。成功後會自動帶上與刷新 Token。',
+                hint: '下方為帳號密碼欄位與登入動作',
                 excludeSemantics: true,
                 child: SelectionArea(
                   child: Text(
-                    "使用註冊時的自訂 ID（或學校郵箱）與密碼登入。成功後會自動帶上與刷新 Token。",
+                    '使用註冊時的自訂 ID（或學校郵箱）與密碼登入。成功後會自動帶上與刷新 Token。',
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
               ),
               const SizedBox(height: 24),
               Semantics(
-                label: "帳號",
-                hint: "輸入註冊時的自訂 ID 或學校郵箱",
+                label: '帳號',
+                hint: '輸入註冊時的自訂 ID 或學校郵箱',
                 textField: true,
                 child: TextField(
                   controller: _account,
                   enabled: !_loading,
                   decoration: const InputDecoration(
-                    labelText: "帳號",
-                    hintText: "自訂 ID 或郵箱",
+                    labelText: '帳號',
+                    hintText: '自訂 ID 或郵箱',
                     border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.emailAddress,
@@ -231,8 +231,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 12),
               Semantics(
-                label: "密碼",
-                hint: "輸入登入密碼後可按登入或鍵盤完成送出",
+                label: '密碼',
+                hint: '輸入登入密碼後可按登入或鍵盤完成送出',
                 textField: true,
                 child: TextField(
                   controller: _password,
@@ -240,12 +240,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscureText: _obscure,
                   autofillHints: const [AutofillHints.password],
                   decoration: InputDecoration(
-                    labelText: "密碼",
+                    labelText: '密碼',
                     border: const OutlineInputBorder(),
                     suffixIcon: Semantics(
-                      hint: _obscure ? "暫時顯示已輸入的密碼" : "隱藏密碼欄位內容",
+                      hint: _obscure ? '暫時顯示已輸入的密碼' : '隱藏密碼欄位內容',
                       child: IconButton(
-                        tooltip: _obscure ? "顯示密碼" : "隱藏密碼",
+                        tooltip: _obscure ? '顯示密碼' : '隱藏密碼',
                         onPressed: _loading
                             ? null
                             : () => setState(() => _obscure = !_obscure),
@@ -253,7 +253,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           _obscure
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
-                          semanticLabel: _obscure ? "顯示密碼" : "隱藏密碼",
+                          semanticLabel: _obscure ? '顯示密碼' : '隱藏密碼',
                         ),
                       ),
                     ),
@@ -261,114 +261,114 @@ class _LoginScreenState extends State<LoginScreen> {
                   textInputAction: TextInputAction.done,
                   onSubmitted: (_) {
                     if (_loading) return;
-                    unawaitedDebug("LoginScreen._submit", _submit());
+                    unawaitedDebug('LoginScreen._submit', _submit());
                   },
                 ),
               ),
               Align(
                 alignment: Alignment.centerRight,
                 child: Tooltip(
-                  message: "忘記密碼",
+                  message: '忘記密碼',
                   child: Semantics(
                     button: true,
                     enabled: !_loading,
-                    label: "忘記密碼",
-                    hint: "開啟郵箱重設與客服說明",
+                    label: '忘記密碼',
+                    hint: '開啟郵箱重設與客服說明',
                     excludeSemantics: true,
                     child: TextButton(
                       onPressed: _loading
                           ? null
                           : () => unawaitedDebugFuture(
-                              "LoginScreen.pushForgotPassword",
-                              context.push("/forgot-password"),
+                              'LoginScreen.pushForgotPassword',
+                              context.push('/forgot-password'),
                             ),
-                      child: const Text("忘記密碼？"),
+                      child: const Text('忘記密碼？'),
                     ),
                   ),
                 ),
               ),
               const SizedBox(height: 16),
               Tooltip(
-                message: "登入",
+                message: '登入',
                 child: Semantics(
                   button: true,
                   enabled: !_loading,
-                  label: "登入",
+                  label: '登入',
                   hint: ApiDevSemantics.loginSubmitHint(loading: _loading),
                   excludeSemantics: true,
                   child: FilledButton(
                     onPressed: _loading
                         ? null
                         : () =>
-                              unawaitedDebug("LoginScreen._submit", _submit()),
+                              unawaitedDebug('LoginScreen._submit', _submit()),
                     child: _loading
                         ? const SizedBox(
                             height: 22,
                             width: 22,
                             child: CircularProgressIndicator(
-                              semanticsLabel: "處理中",
+                              semanticsLabel: '處理中',
                               strokeWidth: 2,
                             ),
                           )
-                        : const Text("登入"),
+                        : const Text('登入'),
                   ),
                 ),
               ),
               const SizedBox(height: 12),
               Tooltip(
-                message: "返回上一頁",
+                message: '返回上一頁',
                 child: Semantics(
                   button: true,
                   enabled: !_loading,
-                  label: "返回上一頁",
-                  hint: "關閉登入並回到上一頁",
+                  label: '返回上一頁',
+                  hint: '關閉登入並回到上一頁',
                   excludeSemantics: true,
                   child: TextButton(
                     onPressed: _loading
                         ? null
                         : () =>
-                              unawaitedDebug("LoginScreen._tryPop", _tryPop()),
-                    child: const Text("返回"),
+                              unawaitedDebug('LoginScreen._tryPop', _tryPop()),
+                    child: const Text('返回'),
                   ),
                 ),
               ),
               const SizedBox(height: 8),
               Tooltip(
-                message: "前往註冊並提交身分審核",
+                message: '前往註冊並提交身分審核',
                 child: Semantics(
                   button: true,
                   enabled: !_loading,
-                  label: "前往註冊並提交身分審核",
-                  hint: "開啟註冊表單；可上傳 Offer、錄取證明或學生證",
+                  label: '前往註冊並提交身分審核',
+                  hint: '開啟註冊表單；可上傳 Offer、錄取證明或學生證',
                   excludeSemantics: true,
                   child: TextButton(
                     onPressed: _loading
                         ? null
                         : () => unawaitedDebugFuture(
-                            "LoginScreen.pushRegister",
-                            context.push("/register"),
+                            'LoginScreen.pushRegister',
+                            context.push('/register'),
                           ),
-                    child: const Text("還沒有帳號？註冊"),
+                    child: const Text('還沒有帳號？註冊'),
                   ),
                 ),
               ),
               const SizedBox(height: 8),
               Tooltip(
-                message: "使用郵件連結重設密碼",
+                message: '使用郵件連結重設密碼',
                 child: Semantics(
                   button: true,
                   enabled: !_loading,
-                  label: "使用郵件連結重設密碼",
-                  hint: "開啟輸入重設憑證頁面",
+                  label: '使用郵件連結重設密碼',
+                  hint: '開啟輸入重設憑證頁面',
                   excludeSemantics: true,
                   child: TextButton(
                     onPressed: _loading
                         ? null
                         : () => unawaitedDebugFuture(
-                            "LoginScreen.pushResetPassword",
-                            context.push("/reset-password"),
+                            'LoginScreen.pushResetPassword',
+                            context.push('/reset-password'),
                           ),
-                    child: const Text("已有郵件重設連結？"),
+                    child: const Text('已有郵件重設連結？'),
                   ),
                 ),
               ),

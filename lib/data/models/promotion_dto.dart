@@ -1,4 +1,4 @@
-import "package:liuban/data/models/json_utils.dart";
+import 'package:liuban/data/models/json_utils.dart';
 
 class PromotionDto {
   const PromotionDto({
@@ -17,12 +17,12 @@ class PromotionDto {
 
   factory PromotionDto.fromJson(Map<String, dynamic> json) {
     return PromotionDto(
-      id: json["id"]?.toString() ?? "",
-      title: json["title"] as String? ?? "",
-      subtitle: json["subtitle"] as String? ?? json["source"] as String? ?? "",
+      id: json['id']?.toString() ?? '',
+      title: json['title'] as String? ?? '',
+      subtitle: json['subtitle'] as String? ?? json['source'] as String? ?? '',
       publishedAt:
-          json["published_at"] as String? ?? json["date"] as String? ?? "",
-      body: json["body"] as String? ?? json["content"] as String? ?? "",
+          json['published_at'] as String? ?? json['date'] as String? ?? '',
+      body: json['body'] as String? ?? json['content'] as String? ?? '',
     );
   }
 

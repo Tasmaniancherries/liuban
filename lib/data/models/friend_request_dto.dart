@@ -1,4 +1,4 @@
-import "package:liuban/data/models/json_utils.dart";
+import 'package:liuban/data/models/json_utils.dart';
 
 /// 待處理的好友申請（對方想加我）。
 class FriendRequestDto {
@@ -14,12 +14,12 @@ class FriendRequestDto {
 
   factory FriendRequestDto.fromJson(Map<String, dynamic> json) {
     return FriendRequestDto(
-      id: json["id"]?.toString() ?? "",
+      id: json['id']?.toString() ?? '',
       fromCustomId:
-          json["from_custom_id"] as String? ??
-          json["requester_custom_id"] as String? ??
-          "",
-      createdAt: json["created_at"] as String?,
+          json['from_custom_id'] as String? ??
+          json['requester_custom_id'] as String? ??
+          '',
+      createdAt: json['created_at'] as String?,
     );
   }
 
@@ -28,9 +28,9 @@ class FriendRequestDto {
 
   static List<FriendRequestDto> mockPending() => const <FriendRequestDto>[
     FriendRequestDto(
-      id: "mock_r1",
-      fromCustomId: "coffee_hk",
-      createdAt: "2026-03-28",
+      id: 'mock_r1',
+      fromCustomId: 'coffee_hk',
+      createdAt: '2026-03-28',
     ),
   ];
 }

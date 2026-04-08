@@ -1,11 +1,11 @@
-import "dart:async" show unawaited;
+import 'dart:async' show unawaited;
 
-import "package:flutter/material.dart";
-import "package:flutter/services.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
-import "package:share_plus/share_plus.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
+import 'package:share_plus/share_plus.dart';
 
 Rect? _shareAnchorFromContext(BuildContext context) {
   final box = context.findRenderObject();
@@ -21,7 +21,7 @@ Future<void> showShareLinkSheet(
   await showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
-    routeSettings: const RouteSettings(name: "share_link_sheet"),
+    routeSettings: const RouteSettings(name: 'share_link_sheet'),
     builder: (ctx) {
       Future<void> copyLink() async {
         try {
@@ -42,7 +42,7 @@ Future<void> showShareLinkSheet(
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             liubanSnackBarWithSemanticsHint(
-              "已複製連結",
+              '已複製連結',
               semanticsHint: ApiDevSemantics.shareLinkCopiedSnackHint,
             ),
           );
@@ -57,7 +57,7 @@ Future<void> showShareLinkSheet(
           await SharePlus.instance.share(
             ShareParams(
               uri: Uri.parse(url),
-              subject: "留伴",
+              subject: '留伴',
               sharePositionOrigin: origin,
             ),
           );
@@ -76,8 +76,8 @@ Future<void> showShareLinkSheet(
 
       return Semantics(
         container: true,
-        label: "分享連結選項",
-        hint: "可複製連結或使用系統分享面板。${ApiDevSemantics.shareLinkSheetFootnote}",
+        label: '分享連結選項',
+        hint: '可複製連結或使用系統分享面板。${ApiDevSemantics.shareLinkSheetFootnote}',
         child: SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -86,8 +86,8 @@ Future<void> showShareLinkSheet(
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
                 child: Semantics(
-                  label: "分享連結預覽，可選取複製。$url",
-                  hint: "完整網址，可拖曳選取後手動複製",
+                  label: '分享連結預覽，可選取複製。$url',
+                  hint: '完整網址，可拖曳選取後手動複製',
                   excludeSemantics: true,
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxHeight: 120),
@@ -124,38 +124,38 @@ Future<void> showShareLinkSheet(
                 ),
               ),
               Tooltip(
-                message: "複製到剪貼簿",
+                message: '複製到剪貼簿',
                 child: Semantics(
                   button: true,
-                  label: "複製連結",
-                  hint: "複製到剪貼簿",
+                  label: '複製連結',
+                  hint: '複製到剪貼簿',
                   excludeSemantics: true,
                   child: ListTile(
                     leading: const Icon(
                       Icons.copy_outlined,
-                      semanticLabel: "複製",
+                      semanticLabel: '複製',
                     ),
-                    title: const Text("複製連結"),
+                    title: const Text('複製連結'),
                     onTap: () =>
-                        unawaitedDebug("ShareLinkSheet.copyLink", copyLink()),
+                        unawaitedDebug('ShareLinkSheet.copyLink', copyLink()),
                   ),
                 ),
               ),
               Tooltip(
-                message: "透過其他 App 分享連結",
+                message: '透過其他 App 分享連結',
                 child: Semantics(
                   button: true,
-                  label: "分享至其他 App",
-                  hint: "透過系統分享連結",
+                  label: '分享至其他 App',
+                  hint: '透過系統分享連結',
                   excludeSemantics: true,
                   child: ListTile(
                     leading: const Icon(
                       Icons.ios_share_outlined,
-                      semanticLabel: "系統分享",
+                      semanticLabel: '系統分享',
                     ),
-                    title: const Text("分享至…"),
+                    title: const Text('分享至…'),
                     onTap: () => unawaitedDebug(
-                      "ShareLinkSheet.systemShare",
+                      'ShareLinkSheet.systemShare',
                       systemShare(),
                     ),
                   ),

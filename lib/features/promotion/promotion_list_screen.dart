@@ -1,14 +1,14 @@
-import "package:flutter/material.dart";
-import "package:flutter/semantics.dart";
-import "package:go_router/go_router.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
-import "package:liuban/core/ui/scroll_constants.dart";
-import "package:liuban/features/promotion/promotion_models.dart";
-import "package:liuban/features/promotion/promotion_share.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
+import 'package:go_router/go_router.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
+import 'package:liuban/core/ui/scroll_constants.dart';
+import 'package:liuban/features/promotion/promotion_models.dart';
+import 'package:liuban/features/promotion/promotion_share.dart';
 
 class _PromotionListLoad {
   const _PromotionListLoad({
@@ -90,7 +90,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
     _future ??= _loadAndNotify();
 
     return Scaffold(
-      appBar: AppBar(title: const Text("推廣", semanticsLabel: "推廣與活動列表")),
+      appBar: AppBar(title: const Text('推廣', semanticsLabel: '推廣與活動列表')),
       body: RefreshIndicator(
         onRefresh: _onRefresh,
         child: LayoutBuilder(
@@ -108,7 +108,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                         minHeight: constraints.maxHeight,
                       ),
                       child: const Center(
-                        child: CircularProgressIndicator(semanticsLabel: "載入中"),
+                        child: CircularProgressIndicator(semanticsLabel: '載入中'),
                       ),
                     ),
                   );
@@ -128,7 +128,7 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                       child: Semantics(
                         header: true,
                         label: ApiDevSemantics.promotionListBanner,
-                        hint: "下方為推廣列表，點擊進詳情；長按可分享連結",
+                        hint: '下方為推廣列表，點擊進詳情；長按可分享連結',
                         excludeSemantics: true,
                         child: SelectionArea(
                           child: Text(
@@ -171,18 +171,18 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                     for (var i = 0; i < items.length; i++) ...[
                       if (i != 0) const Divider(height: 1),
                       Tooltip(
-                        message: "點擊看詳情；長按分享連結",
+                        message: '點擊看詳情；長按分享連結',
                         child: Semantics(
                           button: true,
                           label:
-                              "${items[i].title}。${items[i].subtitle} · ${items[i].publishedAt}",
-                          hint: "點擊看詳情；長按分享連結",
+                              '${items[i].title}。${items[i].subtitle} · ${items[i].publishedAt}',
+                          hint: '點擊看詳情；長按分享連結',
                           customSemanticsActions:
                               <CustomSemanticsAction, VoidCallback>{
                                 const CustomSemanticsAction(
-                                  label: "分享或複製此推廣連結",
+                                  label: '分享或複製此推廣連結',
                                 ): () => unawaitedDebug(
-                                  "PromotionListScreen.openPromotionShareActions",
+                                  'PromotionListScreen.openPromotionShareActions',
                                   openPromotionShareActions(
                                     context,
                                     items[i].id,
@@ -200,21 +200,21 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                             ),
                             subtitle: SelectionArea(
                               child: Text(
-                                "${items[i].subtitle} · ${items[i].publishedAt}",
+                                '${items[i].subtitle} · ${items[i].publishedAt}',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             trailing: const Icon(
                               Icons.chevron_right,
-                              semanticLabel: "前往詳情",
+                              semanticLabel: '前往詳情',
                             ),
                             onTap: () => unawaitedDebugFuture(
-                              "PromotionListScreen.openDetail",
-                              context.push("/promotion/${items[i].id}"),
+                              'PromotionListScreen.openDetail',
+                              context.push('/promotion/${items[i].id}'),
                             ),
                             onLongPress: () => unawaitedDebug(
-                              "PromotionListScreen.openPromotionShareActions",
+                              'PromotionListScreen.openPromotionShareActions',
                               openPromotionShareActions(context, items[i].id),
                             ),
                           ),

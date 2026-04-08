@@ -1,10 +1,10 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 
 /// 與 [MaterialApp.supportedLocales] 一致；單一來源避免與解析邏輯漂移。
 const List<Locale> kLiubanSupportedLocales = [
-  Locale.fromSubtags(languageCode: "zh", scriptCode: "Hant", countryCode: "HK"),
-  Locale.fromSubtags(languageCode: "zh", scriptCode: "Hant", countryCode: "TW"),
-  Locale("en"),
+  Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'HK'),
+  Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'TW'),
+  Locale('en'),
 ];
 
 /// 裝置語言解析：簡體或無 script 的 `zh` 對到新馬／留學生常用之繁體（優先清單首項香港）。
@@ -31,9 +31,9 @@ Locale resolveLiubanLocale(Locale? locale, Iterable<Locale> supported) {
       return s;
     }
   }
-  if (locale.languageCode == "zh") {
+  if (locale.languageCode == 'zh') {
     for (final s in list) {
-      if (s.scriptCode == "Hant") return s;
+      if (s.scriptCode == 'Hant') return s;
     }
   }
   return list.first;

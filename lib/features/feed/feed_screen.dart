@@ -1,19 +1,19 @@
-import "package:flutter/material.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:flutter/semantics.dart";
-import "package:go_router/go_router.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/core/persistence/app_persistence_scope.dart";
-import "package:liuban/core/session/app_session_scope.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
-import "package:liuban/core/ui/scroll_constants.dart";
-import "package:liuban/data/models/feed_post_dto.dart";
-import "package:liuban/features/feed/feed_post_share.dart";
-import "package:liuban/features/feed/feed_report_flow.dart";
-import "package:liuban/widgets/guest_lock_overlay.dart";
-import "package:liuban/widgets/phase_badge.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
+import 'package:go_router/go_router.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/persistence/app_persistence_scope.dart';
+import 'package:liuban/core/session/app_session_scope.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
+import 'package:liuban/core/ui/scroll_constants.dart';
+import 'package:liuban/data/models/feed_post_dto.dart';
+import 'package:liuban/features/feed/feed_post_share.dart';
+import 'package:liuban/features/feed/feed_report_flow.dart';
+import 'package:liuban/widgets/guest_lock_overlay.dart';
+import 'package:liuban/widgets/phase_badge.dart';
 
 enum FeedStreamKind { public, school, friends }
 
@@ -55,7 +55,7 @@ class _FeedScreenState extends State<FeedScreen>
     final persistence = AppPersistenceScope.maybeOf(context);
     if (persistence == null) return;
     unawaitedDebug(
-      "FeedScreen.writeFeedTabIndex",
+      'FeedScreen.writeFeedTabIndex',
       persistence.writeFeedTabIndex(tab.index),
     );
   }
@@ -71,13 +71,13 @@ class _FeedScreenState extends State<FeedScreen>
   }
 
   Future<void> _onComposeFabPressed() async {
-    final result = await context.push<String>("/compose");
+    final result = await context.push<String>('/compose');
     if (!mounted) return;
     if (result == null) return;
     setState(() => _feedRefreshTick++);
     ScaffoldMessenger.of(context).showSnackBar(
       liubanSnackBarWithSemanticsHint(
-        "已發佈：$result",
+        '已發佈：$result',
         semanticsHint: ApiDevSemantics.feedComposeNewPostSuccessSnackHint,
       ),
     );
@@ -88,7 +88,7 @@ class _FeedScreenState extends State<FeedScreen>
     final tab = _tab;
     if (tab == null) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator(semanticsLabel: "載入中")),
+        body: Center(child: CircularProgressIndicator(semanticsLabel: '載入中')),
       );
     }
     final session = AppSessionScope.of(context);
@@ -98,12 +98,12 @@ class _FeedScreenState extends State<FeedScreen>
       builder: (context, _) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text("留伴 · 廣場", semanticsLabel: "留伴廣場動態"),
+            title: const Text('留伴 · 廣場', semanticsLabel: '留伴廣場動態'),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: Semantics(
-                  hint: "帳戶審核階段標籤，僅顯示",
+                  hint: '帳戶審核階段標籤，僅顯示',
                   child: const PhaseBadge(),
                 ),
               ),
@@ -113,20 +113,20 @@ class _FeedScreenState extends State<FeedScreen>
               tabs: [
                 Tab(
                   child: Semantics(
-                    hint: "切換至公開廣場動態分頁",
-                    child: const Text("公開", semanticsLabel: "公開廣場動態"),
+                    hint: '切換至公開廣場動態分頁',
+                    child: const Text('公開', semanticsLabel: '公開廣場動態'),
                   ),
                 ),
                 Tab(
                   child: Semantics(
-                    hint: "切換至本校同儕可見動態分頁",
-                    child: const Text("本校", semanticsLabel: "本校可見動態"),
+                    hint: '切換至本校同儕可見動態分頁',
+                    child: const Text('本校', semanticsLabel: '本校可見動態'),
                   ),
                 ),
                 Tab(
                   child: Semantics(
-                    hint: "切換至雙向好友動態分頁",
-                    child: const Text("好友", semanticsLabel: "好友動態"),
+                    hint: '切換至雙向好友動態分頁',
+                    child: const Text('好友', semanticsLabel: '好友動態'),
                   ),
                 ),
               ],
@@ -142,15 +142,15 @@ class _FeedScreenState extends State<FeedScreen>
               ),
               GuestLockOverlay(
                 locked: session.isGuestLike,
-                title: "本校動態",
-                message: "登入並通過身分審核後，可瀏覽與發佈本校可見內容。",
+                title: '本校動態',
+                message: '登入並通過身分審核後，可瀏覽與發佈本校可見內容。',
                 onGoToLogin: () => unawaitedDebugFuture(
-                  "FeedScreen.guestLockGoToLogin",
-                  context.push("/login"),
+                  'FeedScreen.guestLockGoToLogin',
+                  context.push('/login'),
                 ),
                 onGoToRegister: () => unawaitedDebugFuture(
-                  "FeedScreen.guestLockGoToRegister",
-                  context.push("/register"),
+                  'FeedScreen.guestLockGoToRegister',
+                  context.push('/register'),
                 ),
                 child: _FeedStreamTab(
                   kind: FeedStreamKind.school,
@@ -160,15 +160,15 @@ class _FeedScreenState extends State<FeedScreen>
               ),
               GuestLockOverlay(
                 locked: session.isGuestLike,
-                title: "好友動態",
-                message: "通過審核並互相添加好友後，可在此查看好友動態。",
+                title: '好友動態',
+                message: '通過審核並互相添加好友後，可在此查看好友動態。',
                 onGoToLogin: () => unawaitedDebugFuture(
-                  "FeedScreen.guestLockGoToLogin",
-                  context.push("/login"),
+                  'FeedScreen.guestLockGoToLogin',
+                  context.push('/login'),
                 ),
                 onGoToRegister: () => unawaitedDebugFuture(
-                  "FeedScreen.guestLockGoToRegister",
-                  context.push("/register"),
+                  'FeedScreen.guestLockGoToRegister',
+                  context.push('/register'),
                 ),
                 child: _FeedStreamTab(
                   kind: FeedStreamKind.friends,
@@ -181,17 +181,17 @@ class _FeedScreenState extends State<FeedScreen>
           floatingActionButton: session.canUseSchoolAndFriends
               ? Semantics(
                   button: true,
-                  label: "撰寫並發佈動態",
-                  hint: "開啟撰寫動態頁面。${ApiDevSemantics.feedComposeFabHint}",
+                  label: '撰寫並發佈動態',
+                  hint: '開啟撰寫動態頁面。${ApiDevSemantics.feedComposeFabHint}',
                   excludeSemantics: true,
                   child: FloatingActionButton.extended(
-                    tooltip: "撰寫並發佈動態",
+                    tooltip: '撰寫並發佈動態',
                     onPressed: () => unawaitedDebug(
-                      "FeedScreen._onComposeFabPressed",
+                      'FeedScreen._onComposeFabPressed',
                       _onComposeFabPressed(),
                     ),
-                    icon: const Icon(Icons.edit, semanticLabel: "撰寫並發佈動態"),
-                    label: const Text("發佈"),
+                    icon: const Icon(Icons.edit, semanticLabel: '撰寫並發佈動態'),
+                    label: const Text('發佈'),
                   ),
                 )
               : null,
@@ -249,7 +249,7 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
     final t = AppContainerScope.of(context).sessionTokens.accessToken;
     if (t != _lastSeenAccessToken) {
       _lastSeenAccessToken = t;
-      unawaitedDebug("FeedStreamTab._refreshMyUserId", _refreshMyUserId());
+      unawaitedDebug('FeedStreamTab._refreshMyUserId', _refreshMyUserId());
     }
   }
 
@@ -257,7 +257,7 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
   void didUpdateWidget(covariant _FeedStreamTab oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.guestLocked != widget.guestLocked) {
-      unawaitedDebug("FeedStreamTab._refreshMyUserId", _refreshMyUserId());
+      unawaitedDebug('FeedStreamTab._refreshMyUserId', _refreshMyUserId());
       _applyLockedOrReload();
     }
   }
@@ -325,7 +325,7 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
       });
       return;
     }
-    unawaitedDebug("FeedStreamTab._reloadFromStart", _reloadFromStart());
+    unawaitedDebug('FeedStreamTab._reloadFromStart', _reloadFromStart());
   }
 
   Future<void> _fetchPage(int page, {required bool replace}) async {
@@ -475,7 +475,7 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
             _applyLockedOrReload();
           } else {
             unawaitedDebug(
-              "FeedStreamTab._reloadFromStart",
+              'FeedStreamTab._reloadFromStart',
               _reloadFromStart(),
             );
           }
@@ -487,7 +487,7 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
       return _buildListView(
         context,
         posts: const <FeedPostDto>[],
-        hint: "解鎖後才會向伺服器請求此列表。",
+        hint: '解鎖後才會向伺服器請求此列表。',
         showLoadMore: false,
         usingMock: false,
       );
@@ -504,7 +504,7 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: constraints.maxHeight),
                 child: const Center(
-                  child: CircularProgressIndicator(semanticsLabel: "載入中"),
+                  child: CircularProgressIndicator(semanticsLabel: '載入中'),
                 ),
               ),
             ),
@@ -542,7 +542,7 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
             child: Semantics(
               header: true,
               label: hint,
-              hint: "資料來源與列表說明，下方為動態貼文",
+              hint: '資料來源與列表說明，下方為動態貼文',
               excludeSemantics: true,
               child: SelectionArea(
                 child: Text(
@@ -577,12 +577,12 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
               child: Center(
                 child: Semantics(
                   container: true,
-                  label: "暫無動態",
-                  hint: "下拉頁面可重新整理列表",
+                  label: '暫無動態',
+                  hint: '下拉頁面可重新整理列表',
                   excludeSemantics: true,
                   child: SelectionArea(
                     child: Text(
-                      "暫無動態",
+                      '暫無動態',
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
@@ -609,24 +609,24 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
                         width: 28,
                         height: 28,
                         child: CircularProgressIndicator(
-                          semanticsLabel: "處理中",
+                          semanticsLabel: '處理中',
                           strokeWidth: 2,
                         ),
                       ),
                     )
                   : Tooltip(
-                      message: "載入更多動態",
+                      message: '載入更多動態',
                       child: Semantics(
                         button: true,
-                        label: "載入更多動態",
-                        hint: "向伺服器載入下一頁貼文",
+                        label: '載入更多動態',
+                        hint: '向伺服器載入下一頁貼文',
                         excludeSemantics: true,
                         child: TextButton(
                           onPressed: () => unawaitedDebug(
-                            "FeedStreamTab._onLoadMore",
+                            'FeedStreamTab._onLoadMore',
                             _onLoadMore(),
                           ),
-                          child: const Text("載入更多"),
+                          child: const Text('載入更多'),
                         ),
                       ),
                     ),
@@ -639,18 +639,18 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
 }
 
 String _feedPostCardSemanticLabel(FeedPostDto p) {
-  final who = p.authorDisplay.isEmpty ? "匿名" : p.authorDisplay;
+  final who = p.authorDisplay.isEmpty ? '匿名' : p.authorDisplay;
   final scope = (p.audience != null && p.audience!.isNotEmpty)
-      ? "可見範圍 ${p.audience}"
-      : "";
-  var snippet = p.body.replaceAll(RegExp(r"\s+"), " ").trim();
+      ? '可見範圍 ${p.audience}'
+      : '';
+  var snippet = p.body.replaceAll(RegExp(r'\s+'), ' ').trim();
   if (snippet.length > 120) {
-    snippet = "${snippet.substring(0, 120)}⋯";
+    snippet = '${snippet.substring(0, 120)}⋯';
   }
   final time = (p.createdAt != null && p.createdAt!.isNotEmpty)
-      ? "。${p.createdAt}"
-      : "";
-  final hide = p.hideSchool ? "。作者已隱藏學校標籤" : "";
+      ? '。${p.createdAt}'
+      : '';
+  final hide = p.hideSchool ? '。作者已隱藏學校標籤' : '';
   return "$who${scope.isNotEmpty ? "。$scope" : ""}$hide。$snippet$time";
 }
 
@@ -678,15 +678,15 @@ class _FeedPostCard extends StatelessWidget {
     void openDetail() {
       final enc = Uri.encodeComponent(p.id);
       unawaitedDebugFuture(
-        "FeedScreen._FeedPostCard.openDetail",
-        context.push("/post/$enc", extra: p),
+        'FeedScreen._FeedPostCard.openDetail',
+        context.push('/post/$enc', extra: p),
       );
     }
 
     return Card(
       clipBehavior: Clip.antiAlias,
       child: Tooltip(
-        message: "查看動態詳情",
+        message: '查看動態詳情',
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -694,11 +694,11 @@ class _FeedPostCard extends StatelessWidget {
               child: Semantics(
                 button: true,
                 label: _feedPostCardSemanticLabel(p),
-                hint: "開啟完整動態詳情",
+                hint: '開啟完整動態詳情',
                 customSemanticsActions: <CustomSemanticsAction, VoidCallback>{
-                  const CustomSemanticsAction(label: "分享或複製此動態連結"): () =>
+                  const CustomSemanticsAction(label: '分享或複製此動態連結'): () =>
                       unawaitedDebug(
-                        "FeedScreen.openFeedPostShareActions",
+                        'FeedScreen.openFeedPostShareActions',
                         openFeedPostShareActions(context, p.id),
                       ),
                 },
@@ -717,7 +717,7 @@ class _FeedPostCard extends StatelessWidget {
                               Expanded(
                                 child: Text(
                                   p.authorDisplay.isEmpty
-                                      ? "匿名"
+                                      ? '匿名'
                                       : p.authorDisplay,
                                   style: Theme.of(context).textTheme.labelLarge,
                                 ),
@@ -772,9 +772,9 @@ class _FeedPostCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 8, right: 4),
               child: Semantics(
-                hint: "開啟選單：分享、編輯或刪除（本人）、檢舉與屏蔽等",
+                hint: '開啟選單：分享、編輯或刪除（本人）、檢舉與屏蔽等',
                 child: PopupMenuButton<String>(
-                  tooltip: "更多",
+                  tooltip: '更多',
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(
                     minWidth: 40,
@@ -783,16 +783,16 @@ class _FeedPostCard extends StatelessWidget {
                   icon: Icon(
                     Icons.more_vert,
                     size: 22,
-                    semanticLabel: "更多選項",
+                    semanticLabel: '更多選項',
                     color: Theme.of(context).colorScheme.outline,
                   ),
                   onSelected: (v) async {
-                    if (v == "share") {
+                    if (v == 'share') {
                       await openFeedPostShareActions(context, p.id);
-                    } else if (v == "edit" && isMine) {
+                    } else if (v == 'edit' && isMine) {
                       final enc = Uri.encodeComponent(p.id);
                       final summary = await context.push<String>(
-                        "/compose/edit/$enc",
+                        '/compose/edit/$enc',
                         extra: p,
                       );
                       if (!context.mounted) return;
@@ -808,7 +808,7 @@ class _FeedPostCard extends StatelessWidget {
                           );
                         }
                       }
-                    } else if (v == "delete" && isMine) {
+                    } else if (v == 'delete' && isMine) {
                       final ok = await runDeleteOwnPostFlow(
                         context,
                         postId: p.id,
@@ -816,9 +816,9 @@ class _FeedPostCard extends StatelessWidget {
                       if (ok && context.mounted) {
                         onPostRemoved?.call(p.id);
                       }
-                    } else if (v == "report" && !isMine) {
+                    } else if (v == 'report' && !isMine) {
                       await runFeedReportFlow(context, postId: p.id);
-                    } else if (v == "block" &&
+                    } else if (v == 'block' &&
                         !isMine &&
                         p.authorId.isNotEmpty) {
                       await runBlockUserFlow(context, userId: p.authorId);
@@ -826,28 +826,28 @@ class _FeedPostCard extends StatelessWidget {
                   },
                   itemBuilder: (context) => [
                     const PopupMenuItem<String>(
-                      value: "share",
-                      child: Text("分享連結", semanticsLabel: "分享此動態連結"),
+                      value: 'share',
+                      child: Text('分享連結', semanticsLabel: '分享此動態連結'),
                     ),
                     if (isMine) ...[
                       const PopupMenuItem<String>(
-                        value: "edit",
-                        child: Text("編輯", semanticsLabel: "編輯此動態"),
+                        value: 'edit',
+                        child: Text('編輯', semanticsLabel: '編輯此動態'),
                       ),
                       const PopupMenuItem<String>(
-                        value: "delete",
-                        child: Text("刪除", semanticsLabel: "刪除此動態"),
+                        value: 'delete',
+                        child: Text('刪除', semanticsLabel: '刪除此動態'),
                       ),
                     ],
                     if (!isMine)
                       const PopupMenuItem<String>(
-                        value: "report",
-                        child: Text("檢舉", semanticsLabel: "檢舉此動態"),
+                        value: 'report',
+                        child: Text('檢舉', semanticsLabel: '檢舉此動態'),
                       ),
                     if (p.authorId.isNotEmpty && !isMine)
                       const PopupMenuItem<String>(
-                        value: "block",
-                        child: Text("屏蔽此用戶", semanticsLabel: "屏蔽動態作者"),
+                        value: 'block',
+                        child: Text('屏蔽此用戶', semanticsLabel: '屏蔽動態作者'),
                       ),
                   ],
                 ),

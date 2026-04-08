@@ -1,5 +1,5 @@
-import "package:flutter/material.dart";
-import "package:liuban/core/persistence/app_persistence.dart";
+import 'package:flutter/material.dart';
+import 'package:liuban/core/persistence/app_persistence.dart';
 
 /// 主題模式（與 [AppPersistence.writeThemeMode] 同步）；測試可傳 `persistence: null` 僅記憶體。
 class ThemeModeController extends ChangeNotifier {

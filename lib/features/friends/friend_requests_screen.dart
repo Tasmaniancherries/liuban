@@ -1,13 +1,13 @@
-import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
-import "package:liuban/core/ui/scroll_constants.dart";
-import "package:liuban/data/models/friend_outgoing_request_dto.dart";
-import "package:liuban/data/models/friend_request_dto.dart";
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
+import 'package:liuban/core/ui/scroll_constants.dart';
+import 'package:liuban/data/models/friend_outgoing_request_dto.dart';
+import 'package:liuban/data/models/friend_request_dto.dart';
 
 class _IncomingTabLoad {
   const _IncomingTabLoad({
@@ -61,7 +61,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen>
     _incoming = _loadIncoming();
     _outgoing = _loadOutgoing();
     unawaitedDebug(
-      "FriendRequestsScreen._notifyIfAnyFriendRequestsFallback",
+      'FriendRequestsScreen._notifyIfAnyFriendRequestsFallback',
       _notifyIfAnyFriendRequestsFallback(),
     );
   }
@@ -160,7 +160,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen>
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          accept ? "已接受" : "已拒絕",
+          accept ? '已接受' : '已拒絕',
           semanticsHint: ApiDevSemantics.friendRequestRespondSuccessSnackHint,
         ),
       );
@@ -188,12 +188,12 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("好友申請", semanticsLabel: "好友申請列表"),
+        title: const Text('好友申請', semanticsLabel: '好友申請列表'),
         leading: Semantics(
-          hint: "關閉好友申請並返回上一頁",
+          hint: '關閉好友申請並返回上一頁',
           child: IconButton(
-            tooltip: "返回",
-            icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
+            tooltip: '返回',
+            icon: const Icon(Icons.arrow_back, semanticLabel: '返回'),
             onPressed: () => context.pop(),
           ),
         ),
@@ -202,14 +202,14 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen>
           tabs: [
             Tab(
               child: Semantics(
-                hint: "切換至收到的好友申請列表",
-                child: const Text("收到的", semanticsLabel: "收到的好友申請"),
+                hint: '切換至收到的好友申請列表',
+                child: const Text('收到的', semanticsLabel: '收到的好友申請'),
               ),
             ),
             Tab(
               child: Semantics(
-                hint: "切換至已發出的好友申請列表",
-                child: const Text("我發出的", semanticsLabel: "我發出的好友申請"),
+                hint: '切換至已發出的好友申請列表',
+                child: const Text('我發出的', semanticsLabel: '我發出的好友申請'),
               ),
             ),
           ],
@@ -260,7 +260,7 @@ class _IncomingPanel extends StatelessWidget {
                       minHeight: constraints.maxHeight,
                     ),
                     child: const Center(
-                      child: CircularProgressIndicator(semanticsLabel: "載入中"),
+                      child: CircularProgressIndicator(semanticsLabel: '載入中'),
                     ),
                   ),
                 );
@@ -278,7 +278,7 @@ class _IncomingPanel extends StatelessWidget {
                   Semantics(
                     header: true,
                     label: ApiDevSemantics.friendRequestsIncoming,
-                    hint: "下方為收到的好友申請列表",
+                    hint: '下方為收到的好友申請列表',
                     excludeSemantics: true,
                     child: SelectionArea(
                       child: Text(
@@ -317,12 +317,12 @@ class _IncomingPanel extends StatelessWidget {
                       child: Center(
                         child: Semantics(
                           container: true,
-                          label: "暫無待處理申請",
-                          hint: "下拉可重新整理",
+                          label: '暫無待處理申請',
+                          hint: '下拉可重新整理',
                           excludeSemantics: true,
                           child: SelectionArea(
                             child: Text(
-                              "暫無待處理申請",
+                              '暫無待處理申請',
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
@@ -335,55 +335,55 @@ class _IncomingPanel extends StatelessWidget {
                         container: true,
                         explicitChildNodes: true,
                         label:
-                            "來自 @${r.fromCustomId} 的好友申請，"
+                            '來自 @${r.fromCustomId} 的好友申請，'
                             "${r.createdAt ?? "想加你為好友"}",
-                        hint: "請使用拒絕或接受按鈕回覆",
+                        hint: '請使用拒絕或接受按鈕回覆',
                         child: Card(
                           child: ListTile(
                             leading: CircleAvatar(
                               child: Text(
                                 r.fromCustomId.isNotEmpty
                                     ? r.fromCustomId[0].toUpperCase()
-                                    : "?",
+                                    : '?',
                                 semanticsLabel: r.fromCustomId.isNotEmpty
-                                    ? "@${r.fromCustomId} 的大頭貼"
-                                    : "申請者頭像",
+                                    ? '@${r.fromCustomId} 的大頭貼'
+                                    : '申請者頭像',
                               ),
                             ),
                             title: SelectionArea(
-                              child: Text("@${r.fromCustomId}"),
+                              child: Text('@${r.fromCustomId}'),
                             ),
                             subtitle: SelectionArea(
-                              child: Text(r.createdAt ?? "想加你為好友"),
+                              child: Text(r.createdAt ?? '想加你為好友'),
                             ),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Semantics(
-                                  hint: "拒絕此好友申請並從列表移除",
+                                  hint: '拒絕此好友申請並從列表移除',
                                   child: IconButton(
-                                    tooltip: "拒絕",
+                                    tooltip: '拒絕',
                                     onPressed: () => unawaitedDebug(
-                                      "FriendRequestsScreen._respond.decline",
+                                      'FriendRequestsScreen._respond.decline',
                                       onRespond(r.id, false),
                                     ),
                                     icon: const Icon(
                                       Icons.close,
-                                      semanticLabel: "拒絕",
+                                      semanticLabel: '拒絕',
                                     ),
                                   ),
                                 ),
                                 Semantics(
-                                  hint: "接受並與對方成為雙向好友",
+                                  hint: '接受並與對方成為雙向好友',
                                   child: IconButton.filledTonal(
-                                    tooltip: "接受",
+                                    tooltip: '接受',
                                     onPressed: () => unawaitedDebug(
-                                      "FriendRequestsScreen._respond.accept",
+                                      'FriendRequestsScreen._respond.accept',
                                       onRespond(r.id, true),
                                     ),
                                     icon: const Icon(
                                       Icons.check,
-                                      semanticLabel: "接受",
+                                      semanticLabel: '接受',
                                     ),
                                   ),
                                 ),
@@ -427,7 +427,7 @@ class _OutgoingPanel extends StatelessWidget {
                       minHeight: constraints.maxHeight,
                     ),
                     child: const Center(
-                      child: CircularProgressIndicator(semanticsLabel: "載入中"),
+                      child: CircularProgressIndicator(semanticsLabel: '載入中'),
                     ),
                   ),
                 );
@@ -445,7 +445,7 @@ class _OutgoingPanel extends StatelessWidget {
                   Semantics(
                     header: true,
                     label: ApiDevSemantics.friendRequestsOutgoing,
-                    hint: "下方為已發出的好友申請列表",
+                    hint: '下方為已發出的好友申請列表',
                     excludeSemantics: true,
                     child: SelectionArea(
                       child: Text(
@@ -484,12 +484,12 @@ class _OutgoingPanel extends StatelessWidget {
                       child: Center(
                         child: Semantics(
                           container: true,
-                          label: "暫無發出中的申請",
-                          hint: "下拉可重新整理",
+                          label: '暫無發出中的申請',
+                          hint: '下拉可重新整理',
                           excludeSemantics: true,
                           child: SelectionArea(
                             child: Text(
-                              "暫無發出中的申請",
+                              '暫無發出中的申請',
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
@@ -501,30 +501,30 @@ class _OutgoingPanel extends StatelessWidget {
                       Semantics(
                         container: true,
                         explicitChildNodes: true,
-                        label: "已向 @${r.toCustomId} 發出好友申請，狀態 ${r.status}",
-                        hint: "狀態由伺服器回傳；下拉列表可重新整理",
+                        label: '已向 @${r.toCustomId} 發出好友申請，狀態 ${r.status}',
+                        hint: '狀態由伺服器回傳；下拉列表可重新整理',
                         child: Card(
                           child: ListTile(
                             leading: CircleAvatar(
                               child: Text(
                                 r.toCustomId.isNotEmpty
                                     ? r.toCustomId[0].toUpperCase()
-                                    : "?",
+                                    : '?',
                                 semanticsLabel: r.toCustomId.isNotEmpty
-                                    ? "@${r.toCustomId} 的大頭貼"
-                                    : "對象頭像",
+                                    ? '@${r.toCustomId} 的大頭貼'
+                                    : '對象頭像',
                               ),
                             ),
                             title: SelectionArea(
-                              child: Text("@${r.toCustomId}"),
+                              child: Text('@${r.toCustomId}'),
                             ),
                             subtitle: SelectionArea(
-                              child: Text(r.createdAt ?? ""),
+                              child: Text(r.createdAt ?? ''),
                             ),
                             trailing: Semantics(
                               container: true,
-                              label: "申請狀態，${r.status}",
-                              hint: "僅顯示伺服器回傳狀態，無法在此變更",
+                              label: '申請狀態，${r.status}',
+                              hint: '僅顯示伺服器回傳狀態，無法在此變更',
                               excludeSemantics: true,
                               child: Chip(
                                 label: SelectionArea(child: Text(r.status)),

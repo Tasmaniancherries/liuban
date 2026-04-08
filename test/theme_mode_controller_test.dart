@@ -1,9 +1,9 @@
-import "package:flutter/material.dart";
-import "package:flutter_test/flutter_test.dart";
-import "package:liuban/core/theme/theme_mode_controller.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:liuban/core/theme/theme_mode_controller.dart';
 
 void main() {
-  test("ThemeModeController without persistence updates mode", () async {
+  test('ThemeModeController without persistence updates mode', () async {
     final c = ThemeModeController();
     expect(c.mode, ThemeMode.system);
     var notifications = 0;

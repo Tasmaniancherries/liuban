@@ -1,17 +1,17 @@
-import "package:flutter/foundation.dart";
-import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/core/session/app_session.dart";
-import "package:liuban/core/session/app_session_scope.dart";
-import "package:liuban/core/session/verification_phase_mapper.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
-import "package:liuban/core/ui/scroll_constants.dart";
-import "package:liuban/data/models/education_entry_dto.dart";
-import "package:liuban/data/models/user_profile_dto.dart";
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/session/app_session.dart';
+import 'package:liuban/core/session/app_session_scope.dart';
+import 'package:liuban/core/session/verification_phase_mapper.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
+import 'package:liuban/core/ui/scroll_constants.dart';
+import 'package:liuban/data/models/education_entry_dto.dart';
+import 'package:liuban/data/models/user_profile_dto.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -49,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return true;
     } on LiubanApiException catch (e, st) {
       if (kDebugMode) {
-        debugPrint("ProfileScreen: fetchMe failed: $e\n$st");
+        debugPrint('ProfileScreen: fetchMe failed: $e\n$st');
       }
       if (mounted) {
         setState(() {
@@ -69,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return false;
     } catch (e, st) {
       if (kDebugMode) {
-        debugPrint("ProfileScreen: fetchMe failed: $e\n$st");
+        debugPrint('ProfileScreen: fetchMe failed: $e\n$st');
       }
       if (mounted) {
         setState(() {
@@ -103,7 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (profileOk) {
         ScaffoldMessenger.of(context).showSnackBar(
           liubanSnackBarWithSemanticsHint(
-            "已同步",
+            '已同步',
             semanticsHint: ApiDevSemantics.verificationSyncSuccessSnackHint,
           ),
         );
@@ -144,7 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     if (token != _lastToken) {
       _lastToken = token;
-      unawaitedDebugFuture("ProfileScreen._loadMe", _loadMe());
+      unawaitedDebugFuture('ProfileScreen._loadMe', _loadMe());
     }
   }
 
@@ -158,26 +158,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
       animation: session,
       builder: (context, _) {
         final titleName = !hasToken
-            ? "訪客瀏覽"
+            ? '訪客瀏覽'
             : _loadingMe && (_me == null || _me!.customId.isEmpty)
-            ? "載入中⋯"
+            ? '載入中⋯'
             : "@${_me?.customId.isNotEmpty == true ? _me!.customId : "⋯"}";
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text("我的", semanticsLabel: "我的與個人檔案"),
+            title: const Text('我的', semanticsLabel: '我的與個人檔案'),
             actions: [
               Semantics(
-                hint: "開啟設定頁",
+                hint: '開啟設定頁',
                 child: IconButton(
-                  tooltip: "設定",
+                  tooltip: '設定',
                   onPressed: () => unawaitedDebugFuture(
-                    "ProfileScreen.appBar.pushSettings",
-                    context.push("/settings"),
+                    'ProfileScreen.appBar.pushSettings',
+                    context.push('/settings'),
                   ),
                   icon: const Icon(
                     Icons.settings_outlined,
-                    semanticLabel: "設定",
+                    semanticLabel: '設定',
                   ),
                 ),
               ),
@@ -195,27 +195,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: const EdgeInsets.all(20),
               children: [
                 Tooltip(
-                  message: "前往設定",
+                  message: '前往設定',
                   child: Semantics(
                     button: true,
-                    label: "前往設定",
-                    hint: "開啟設定頁（密碼、客服、關於）",
+                    label: '前往設定',
+                    hint: '開啟設定頁（密碼、客服、關於）',
                     excludeSemantics: true,
                     child: ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: const Icon(
                         Icons.settings_outlined,
-                        semanticLabel: "設定",
+                        semanticLabel: '設定',
                       ),
-                      title: const Text("設定"),
-                      subtitle: const SelectionArea(child: Text("密碼、客服、關於留伴")),
+                      title: const Text('設定'),
+                      subtitle: const SelectionArea(child: Text('密碼、客服、關於留伴')),
                       trailing: const Icon(
                         Icons.chevron_right,
-                        semanticLabel: "前往詳情",
+                        semanticLabel: '前往詳情',
                       ),
                       onTap: () => unawaitedDebugFuture(
-                        "ProfileScreen.settingsTile.pushSettings",
-                        context.push("/settings"),
+                        'ProfileScreen.settingsTile.pushSettings',
+                        context.push('/settings'),
                       ),
                     ),
                   ),
@@ -247,12 +247,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       radius: 36,
                       child: Text(
                         session.phase == AccountPhase.verifiedStudent
-                            ? "留"
-                            : "?",
+                            ? '留'
+                            : '?',
                         semanticsLabel:
                             session.phase == AccountPhase.verifiedStudent
-                            ? "已認證，留伴預設頭像"
-                            : "頭像占位",
+                            ? '已認證，留伴預設頭像'
+                            : '頭像占位',
                         style: const TextStyle(fontSize: 24),
                       ),
                     ),
@@ -265,7 +265,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Semantics(
                               header: true,
                               label: titleName,
-                              hint: "目前顯示名稱或載入狀態",
+                              hint: '目前顯示名稱或載入狀態',
                               excludeSemantics: true,
                               child: Text(
                                 titleName,
@@ -303,16 +303,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   spacing: 8,
                                   runSpacing: 8,
                                   children: [
-                                    _schoolChip(context, "港大", alumni: true),
-                                    _schoolChip(context, "中大", alumni: false),
+                                    _schoolChip(context, '港大', alumni: true),
+                                    _schoolChip(context, '中大', alumni: false),
                                   ],
                                 ),
                             ] else
                               Text(
                                 session.phase ==
                                         AccountPhase.pendingVerification
-                                    ? "審核通過後顯示學籍標籤"
-                                    : "登入並通過審核後顯示",
+                                    ? '審核通過後顯示學籍標籤'
+                                    : '登入並通過審核後顯示',
                                 style: Theme.of(context).textTheme.bodySmall
                                     ?.copyWith(
                                       color: Theme.of(
@@ -330,12 +330,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 if (kDebugMode) ...[
                   Semantics(
                     header: true,
-                    label: "帳戶狀態（開發預覽）",
-                    hint: "僅除錯組建可用於模擬審核階段",
+                    label: '帳戶狀態（開發預覽）',
+                    hint: '僅除錯組建可用於模擬審核階段',
                     excludeSemantics: true,
                     child: SelectionArea(
                       child: Text(
-                        "帳戶狀態（開發預覽）",
+                        '帳戶狀態（開發預覽）',
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ),
@@ -348,12 +348,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Semantics(
                         button: true,
                         selected: session.phase == AccountPhase.guest,
-                        label: "切換為訪客狀態，訪客",
-                        hint: "僅開發預覽：模擬訪客階段",
+                        label: '切換為訪客狀態，訪客',
+                        hint: '僅開發預覽：模擬訪客階段',
                         excludeSemantics: true,
                         child: ChoiceChip(
-                          tooltip: "切換為訪客狀態",
-                          label: const Text("訪客"),
+                          tooltip: '切換為訪客狀態',
+                          label: const Text('訪客'),
                           selected: session.phase == AccountPhase.guest,
                           onSelected: (_) =>
                               session.setPhase(AccountPhase.guest),
@@ -363,12 +363,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         button: true,
                         selected:
                             session.phase == AccountPhase.pendingVerification,
-                        label: "切換為審核中狀態，審核中",
-                        hint: "僅開發預覽：模擬審核中階段",
+                        label: '切換為審核中狀態，審核中',
+                        hint: '僅開發預覽：模擬審核中階段',
                         excludeSemantics: true,
                         child: ChoiceChip(
-                          tooltip: "切換為審核中狀態",
-                          label: const Text("審核中"),
+                          tooltip: '切換為審核中狀態',
+                          label: const Text('審核中'),
                           selected:
                               session.phase == AccountPhase.pendingVerification,
                           onSelected: (_) => session.setPhase(
@@ -379,12 +379,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Semantics(
                         button: true,
                         selected: session.phase == AccountPhase.verifiedStudent,
-                        label: "切換為已認證狀態，已認證",
-                        hint: "僅開發預覽：模擬已認證階段",
+                        label: '切換為已認證狀態，已認證',
+                        hint: '僅開發預覽：模擬已認證階段',
                         excludeSemantics: true,
                         child: ChoiceChip(
-                          tooltip: "切換為已認證狀態",
-                          label: const Text("已認證"),
+                          tooltip: '切換為已認證狀態',
+                          label: const Text('已認證'),
                           selected:
                               session.phase == AccountPhase.verifiedStudent,
                           onSelected: (_) =>
@@ -397,7 +397,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Semantics(
                     container: true,
                     label: ApiDevSemantics.profilePhasePreviewDisclaimer,
-                    hint: "僅開發預覽用說明文字",
+                    hint: '僅開發預覽用說明文字',
                     excludeSemantics: true,
                     child: SelectionArea(
                       child: Text(
@@ -412,48 +412,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
                 if (hasToken) ...[
                   Tooltip(
-                    message: "同步目前審核狀態",
+                    message: '同步目前審核狀態',
                     child: Semantics(
                       button: true,
-                      label: "同步目前審核狀態",
-                      hint: "GET 審核狀態與個人檔；詳見副標 Api 說明",
+                      label: '同步目前審核狀態',
+                      hint: 'GET 審核狀態與個人檔；詳見副標 Api 說明',
                       excludeSemantics: true,
                       child: ListTile(
                         contentPadding: EdgeInsets.zero,
                         leading: const Icon(
                           Icons.sync,
-                          semanticLabel: "同步審核狀態",
+                          semanticLabel: '同步審核狀態',
                         ),
-                        title: const Text("同步審核狀態"),
+                        title: const Text('同步審核狀態'),
                         subtitle: SelectionArea(
                           child: Text(ApiDevSemantics.verificationSyncSubtitle),
                         ),
                         onTap: () => unawaitedDebug(
-                          "ProfileScreen._syncVerificationStatus",
+                          'ProfileScreen._syncVerificationStatus',
                           _syncVerificationStatus(session),
                         ),
                       ),
                     ),
                   ),
                   Tooltip(
-                    message: "重新載入個人檔案",
+                    message: '重新載入個人檔案',
                     child: Semantics(
                       button: true,
-                      label: "重新載入個人檔案",
-                      hint: "向伺服器重新取得個人資料",
+                      label: '重新載入個人檔案',
+                      hint: '向伺服器重新取得個人資料',
                       excludeSemantics: true,
                       child: ListTile(
                         contentPadding: EdgeInsets.zero,
                         leading: const Icon(
                           Icons.person_search,
-                          semanticLabel: "重新載入個人檔案",
+                          semanticLabel: '重新載入個人檔案',
                         ),
-                        title: const Text("重新載入個人檔案"),
+                        title: const Text('重新載入個人檔案'),
                         subtitle: SelectionArea(
                           child: Text(ApiDevSemantics.profileMeGet),
                         ),
                         onTap: () => unawaitedDebugFuture(
-                          "ProfileScreen._loadMe",
+                          'ProfileScreen._loadMe',
                           _loadMe(),
                         ),
                       ),
@@ -462,46 +462,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 8),
                 ],
                 Tooltip(
-                  message: "前往註冊或提交身分審核",
+                  message: '前往註冊或提交身分審核',
                   child: Semantics(
                     button: true,
-                    label: "前往註冊或提交身分審核",
-                    hint: "開啟註冊表單；可上傳 Offer、錄取證明或學生證",
+                    label: '前往註冊或提交身分審核',
+                    hint: '開啟註冊表單；可上傳 Offer、錄取證明或學生證',
                     excludeSemantics: true,
                     child: FilledButton(
                       onPressed: () => unawaitedDebugFuture(
-                        "ProfileScreen.guest.pushRegister",
-                        context.push("/register"),
+                        'ProfileScreen.guest.pushRegister',
+                        context.push('/register'),
                       ),
-                      child: const Text("前往註冊／審核"),
+                      child: const Text('前往註冊／審核'),
                     ),
                   ),
                 ),
                 const SizedBox(height: 12),
                 Tooltip(
-                  message: "登入",
+                  message: '登入',
                   child: Semantics(
                     button: true,
-                    label: "登入，已有帳號",
-                    hint: "開啟登入畫面",
+                    label: '登入，已有帳號',
+                    hint: '開啟登入畫面',
                     excludeSemantics: true,
                     child: FilledButton.tonal(
                       onPressed: () => unawaitedDebugFuture(
-                        "ProfileScreen.guest.pushLogin",
-                        context.push("/login"),
+                        'ProfileScreen.guest.pushLogin',
+                        context.push('/login'),
                       ),
-                      child: const Text("已有帳號 · 登入"),
+                      child: const Text('已有帳號 · 登入'),
                     ),
                   ),
                 ),
                 const SizedBox(height: 12),
                 Tooltip(
-                  message: "清除登入狀態並回到訪客",
+                  message: '清除登入狀態並回到訪客',
                   child: Semantics(
                     button: true,
                     enabled: hasToken || session.phase != AccountPhase.guest,
-                    label: "清除登入狀態並回到訪客",
-                    hint: "清除權限並以訪客身分瀏覽",
+                    label: '清除登入狀態並回到訪客',
+                    hint: '清除權限並以訪客身分瀏覽',
                     excludeSemantics: true,
                     child: OutlinedButton(
                       onPressed:
@@ -518,8 +518,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               session.signOut();
                             },
                       child: kDebugMode
-                          ? const Text("退出登入（預覽）")
-                          : const Text("退出登入"),
+                          ? const Text('退出登入（預覽）')
+                          : const Text('退出登入'),
                     ),
                   ),
                 ),
@@ -539,8 +539,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final dto = EducationEntryDto(schoolShortName: shortName, alumni: alumni);
     return Semantics(
       container: true,
-      label: "學籍標籤，${dto.chipLabel}",
-      hint: "學校或校友身分標籤，僅顯示",
+      label: '學籍標籤，${dto.chipLabel}',
+      hint: '學校或校友身分標籤，僅顯示',
       excludeSemantics: true,
       child: Chip(
         label: Text(dto.chipLabel),
@@ -555,8 +555,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   static Widget _schoolChipFromDto(BuildContext context, EducationEntryDto e) {
     return Semantics(
       container: true,
-      label: "學籍標籤，${e.chipLabel}",
-      hint: "學校或校友身分標籤，僅顯示",
+      label: '學籍標籤，${e.chipLabel}',
+      hint: '學校或校友身分標籤，僅顯示',
       excludeSemantics: true,
       child: Chip(
         label: Text(e.chipLabel),

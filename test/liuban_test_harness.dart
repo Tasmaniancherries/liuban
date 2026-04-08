@@ -1,17 +1,17 @@
-import "package:flutter/material.dart";
-import "package:liuban/app/liuban_app.dart";
-import "package:liuban/core/app_container.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/locale/app_locale_controller.dart";
-import "package:liuban/core/locale/app_locale_scope.dart";
-import "package:liuban/core/persistence/app_persistence.dart";
-import "package:liuban/core/persistence/app_persistence_scope.dart";
-import "package:liuban/core/session/app_session.dart";
-import "package:liuban/core/session/app_session_scope.dart";
-import "package:liuban/core/theme/theme_mode_controller.dart";
-import "package:liuban/core/theme/theme_mode_scope.dart";
-import "package:flutter_test/flutter_test.dart";
-import "package:shared_preferences/shared_preferences.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:liuban/app/liuban_app.dart';
+import 'package:liuban/core/app_container.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/locale/app_locale_controller.dart';
+import 'package:liuban/core/locale/app_locale_scope.dart';
+import 'package:liuban/core/persistence/app_persistence.dart';
+import 'package:liuban/core/persistence/app_persistence_scope.dart';
+import 'package:liuban/core/session/app_session.dart';
+import 'package:liuban/core/session/app_session_scope.dart';
+import 'package:liuban/core/theme/theme_mode_controller.dart';
+import 'package:liuban/core/theme/theme_mode_scope.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// 建立用於 widget 測試的留伴 app 樹（預設 baseUrl 無效，不打出真實流量）。
 Future<Widget> liubanAppTestWidget({TextScaler? textScaler}) async {
@@ -21,7 +21,7 @@ Future<Widget> liubanAppTestWidget({TextScaler? textScaler}) async {
   final container = AppContainer(
     sessionTokens: persistence.sessionTokens,
     guestDeviceId: persistence.guestDeviceId,
-    baseUrl: "https://example.invalid",
+    baseUrl: 'https://example.invalid',
     logHttpTraffic: false,
   );
   final tree = AppPersistenceScope(

@@ -1,4 +1,4 @@
-import "package:flutter/foundation.dart";
+import 'package:flutter/foundation.dart';
 
 /// Access / Refresh 雙令牌；[bearer] 等同 [accessToken]，相容舊程式碼。
 class AuthSessionTokens extends ChangeNotifier {

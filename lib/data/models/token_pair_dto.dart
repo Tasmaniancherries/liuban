@@ -1,4 +1,4 @@
-import "package:liuban/data/models/json_utils.dart";
+import 'package:liuban/data/models/json_utils.dart';
 
 /// 登入或 refresh 回傳之 token 對。
 ///
@@ -12,16 +12,16 @@ class TokenPairDto {
 
   factory TokenPairDto.fromJson(Map<String, dynamic> json) {
     final access =
-        json["access_token"] as String? ??
-        json["accessToken"] as String? ??
-        json["token"] as String?;
+        json['access_token'] as String? ??
+        json['accessToken'] as String? ??
+        json['token'] as String?;
     if (access == null || access.isEmpty) {
-      throw const FormatException("缺少 access_token");
+      throw const FormatException('缺少 access_token');
     }
     return TokenPairDto(
       accessToken: access,
       refreshToken:
-          json["refresh_token"] as String? ?? json["refreshToken"] as String?,
+          json['refresh_token'] as String? ?? json['refreshToken'] as String?,
     );
   }
 

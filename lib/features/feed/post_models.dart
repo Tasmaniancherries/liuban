@@ -17,27 +17,27 @@ enum PostAudience {
 PostAudience? postAudienceFromApiValue(String? v) {
   if (v == null || v.isEmpty) return null;
   return switch (v) {
-    "public" => PostAudience.publicSquare,
-    "school" => PostAudience.schoolPeers,
-    "friends" => PostAudience.friendsOnly,
-    "private" => PostAudience.selfOnly,
+    'public' => PostAudience.publicSquare,
+    'school' => PostAudience.schoolPeers,
+    'friends' => PostAudience.friendsOnly,
+    'private' => PostAudience.selfOnly,
     _ => null,
   };
 }
 
 extension PostAudienceLabel on PostAudience {
   String get shortLabel => switch (this) {
-    PostAudience.publicSquare => "公開",
-    PostAudience.schoolPeers => "本校",
-    PostAudience.friendsOnly => "好友",
-    PostAudience.selfOnly => "僅自己",
+    PostAudience.publicSquare => '公開',
+    PostAudience.schoolPeers => '本校',
+    PostAudience.friendsOnly => '好友',
+    PostAudience.selfOnly => '僅自己',
   };
 
   /// 與後端 `audience` 欄位對齊（契約：`docs/backend_domain_apis_contract.md`「audience 枚舉」）。
   String get apiValue => switch (this) {
-    PostAudience.publicSquare => "public",
-    PostAudience.schoolPeers => "school",
-    PostAudience.friendsOnly => "friends",
-    PostAudience.selfOnly => "private",
+    PostAudience.publicSquare => 'public',
+    PostAudience.schoolPeers => 'school',
+    PostAudience.friendsOnly => 'friends',
+    PostAudience.selfOnly => 'private',
   };
 }

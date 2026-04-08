@@ -1,8 +1,8 @@
-import "package:dio/dio.dart";
-import "package:liuban/core/config/app_config.dart";
-import "package:liuban/core/network/auth_session_tokens.dart";
-import "package:liuban/data/models/json_utils.dart";
-import "package:liuban/data/models/token_pair_dto.dart";
+import 'package:dio/dio.dart';
+import 'package:liuban/core/config/app_config.dart';
+import 'package:liuban/core/network/auth_session_tokens.dart';
+import 'package:liuban/data/models/json_utils.dart';
+import 'package:liuban/data/models/token_pair_dto.dart';
 
 /// 與後端約定：**JSON** `POST .../auth/refresh`，body `{"refresh_token": "..."}`。
 ///
@@ -23,22 +23,22 @@ class TokenRefreshInterceptor extends QueuedInterceptor {
 
   String get _refreshPath {
     final p = AppConfig.apiPrefix;
-    if (p.startsWith("/")) {
-      return "$p/auth/refresh";
+    if (p.startsWith('/')) {
+      return '$p/auth/refresh';
     }
-    return "/$p/auth/refresh";
+    return '/$p/auth/refresh';
   }
 
   bool _isAuthExemptPath(String path) {
-    return path.contains("/auth/login") ||
-        path.contains("/auth/register") ||
-        path.contains("/auth/refresh");
+    return path.contains('/auth/login') ||
+        path.contains('/auth/register') ||
+        path.contains('/auth/refresh');
   }
 
   Future<TokenPairDto> _callRefresh(String refreshToken) async {
     final res = await _plainDio.post<dynamic>(
       _refreshPath,
-      data: <String, dynamic>{"refresh_token": refreshToken},
+      data: <String, dynamic>{'refresh_token': refreshToken},
     );
     return TokenPairDto.fromJson(asJsonMap(res.data));
   }
@@ -57,7 +57,7 @@ class TokenRefreshInterceptor extends QueuedInterceptor {
       return handler.next(err);
     }
 
-    if (err.requestOptions.extra["_refreshRetried"] == true) {
+    if (err.requestOptions.extra['_refreshRetried'] == true) {
       _tokens.clear();
       return handler.next(err);
     }
@@ -76,8 +76,8 @@ class TokenRefreshInterceptor extends QueuedInterceptor {
       );
 
       final ro = err.requestOptions;
-      ro.headers["Authorization"] = "Bearer ${_tokens.accessToken}";
-      ro.extra["_refreshRetried"] = true;
+      ro.headers['Authorization'] = 'Bearer ${_tokens.accessToken}';
+      ro.extra['_refreshRetried'] = true;
 
       final clone = await _sessionDio.fetch<dynamic>(ro);
       handler.resolve(clone);

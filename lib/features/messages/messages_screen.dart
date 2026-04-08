@@ -1,15 +1,15 @@
-import "package:flutter/material.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:go_router/go_router.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/core/persistence/app_persistence_scope.dart";
-import "package:liuban/core/session/app_session_scope.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
-import "package:liuban/core/ui/scroll_constants.dart";
-import "package:liuban/data/models/friend_inbox_item_dto.dart";
-import "package:liuban/widgets/guest_lock_overlay.dart";
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/persistence/app_persistence_scope.dart';
+import 'package:liuban/core/session/app_session_scope.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
+import 'package:liuban/core/ui/scroll_constants.dart';
+import 'package:liuban/data/models/friend_inbox_item_dto.dart';
+import 'package:liuban/widgets/guest_lock_overlay.dart';
 
 class _FriendsInboxLoad {
   const _FriendsInboxLoad({
@@ -48,19 +48,19 @@ class _MessagesScreenState extends State<MessagesScreen> {
           child: _MessagesTabPersistenceBinder(
             child: Scaffold(
               appBar: AppBar(
-                title: const Text("訊息", semanticsLabel: "訊息與客服"),
+                title: const Text('訊息', semanticsLabel: '訊息與客服'),
                 bottom: TabBar(
                   tabs: [
                     Tab(
                       child: Semantics(
-                        hint: "切換至官方客服與訪客留言分頁",
-                        child: const Text("官方客服", semanticsLabel: "官方客服對話入口"),
+                        hint: '切換至官方客服與訪客留言分頁',
+                        child: const Text('官方客服', semanticsLabel: '官方客服對話入口'),
                       ),
                     ),
                     Tab(
                       child: Semantics(
-                        hint: "切換至好友私訊收件匣分頁",
-                        child: const Text("好友", semanticsLabel: "好友私信列表"),
+                        hint: '切換至好友私訊收件匣分頁',
+                        child: const Text('好友', semanticsLabel: '好友私信列表'),
                       ),
                     ),
                   ],
@@ -71,21 +71,21 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   const _SupportEntry(),
                   GuestLockOverlay(
                     locked: session.isGuestLike,
-                    title: "好友私信",
-                    message: "通過身分審核並互為好友後，可在此發起聊天。",
+                    title: '好友私信',
+                    message: '通過身分審核並互為好友後，可在此發起聊天。',
                     onGoToLogin: () => unawaitedDebugFuture(
-                      "MessagesScreen.guestLockGoToLogin",
-                      context.push("/login"),
+                      'MessagesScreen.guestLockGoToLogin',
+                      context.push('/login'),
                     ),
                     onGoToRegister: () => unawaitedDebugFuture(
-                      "MessagesScreen.guestLockGoToRegister",
-                      context.push("/register"),
+                      'MessagesScreen.guestLockGoToRegister',
+                      context.push('/register'),
                     ),
                     child: _FriendsInbox(
                       refreshTick: _inboxRefreshTick,
                       guestLocked: session.isGuestLike,
                       onAddFriend: () async {
-                        await context.push<void>("/add-friend");
+                        await context.push<void>('/add-friend');
                         if (!mounted) return;
                         setState(() => _inboxRefreshTick++);
                       },
@@ -132,7 +132,7 @@ class _MessagesTabPersistenceBinderState
     final p = AppPersistenceScope.maybeOf(context);
     if (p == null) return;
     unawaitedDebug(
-      "MessagesScreen.writeMessagesTabIndex",
+      'MessagesScreen.writeMessagesTabIndex',
       p.writeMessagesTabIndex(c.index),
     );
   }
@@ -171,22 +171,22 @@ class _SupportEntryState extends State<_SupportEntry>
             content: Semantics(
               liveRegion: true,
               container: true,
-              label: "提示。${ApiDevSemantics.supportGuestBanner}",
-              hint: "可使用知道了關閉此橫幅",
+              label: '提示。${ApiDevSemantics.supportGuestBanner}',
+              hint: '可使用知道了關閉此橫幅',
               excludeSemantics: true,
               child: Text(ApiDevSemantics.supportGuestBanner),
             ),
             actions: [
               Tooltip(
-                message: "關閉提示",
+                message: '關閉提示',
                 child: Semantics(
                   button: true,
-                  label: "關閉訪客提示",
-                  hint: "隱藏此訪客說明橫幅",
+                  label: '關閉訪客提示',
+                  hint: '隱藏此訪客說明橫幅',
                   excludeSemantics: true,
                   child: TextButton(
                     onPressed: () => setState(() => _showBanner = false),
-                    child: const Text("知道了"),
+                    child: const Text('知道了'),
                   ),
                 ),
               ),
@@ -202,17 +202,17 @@ class _SupportEntryState extends State<_SupportEntry>
                   Icon(
                     Icons.support_agent,
                     size: 56,
-                    semanticLabel: "客服",
+                    semanticLabel: '客服',
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(height: 16),
                   Semantics(
                     header: true,
-                    label: "與留伴客服對話",
-                    hint: "下方按鈕可進入官方客服聊天",
+                    label: '與留伴客服對話',
+                    hint: '下方按鈕可進入官方客服聊天',
                     excludeSemantics: true,
                     child: Text(
-                      "與留伴客服對話",
+                      '與留伴客服對話',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
@@ -220,16 +220,16 @@ class _SupportEntryState extends State<_SupportEntry>
                   Semantics(
                     container: true,
                     label:
-                        "說明。合作、申訴、審核問題皆可留言。商家洽談也可走此通道。"
-                        " ${ApiDevSemantics.supportMessages}",
-                    hint: "客服通道用途說明",
+                        '說明。合作、申訴、審核問題皆可留言。商家洽談也可走此通道。'
+                        ' ${ApiDevSemantics.supportMessages}',
+                    hint: '客服通道用途說明',
                     excludeSemantics: true,
                     child: SelectionArea(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            "合作、申訴、審核問題皆可留言。商家洽談也可走此通道。",
+                            '合作、申訴、審核問題皆可留言。商家洽談也可走此通道。',
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
@@ -255,19 +255,19 @@ class _SupportEntryState extends State<_SupportEntry>
                   ),
                   const SizedBox(height: 24),
                   Tooltip(
-                    message: "進入對話",
+                    message: '進入對話',
                     child: Semantics(
                       button: true,
-                      label: "進入官方客服對話",
-                      hint: "開啟官方客服聊天畫面",
+                      label: '進入官方客服對話',
+                      hint: '開啟官方客服聊天畫面',
                       excludeSemantics: true,
                       child: FilledButton.icon(
                         onPressed: () => unawaitedDebugFuture(
-                          "MessagesScreen._SupportEntry.pushSupport",
-                          context.push<void>("/support"),
+                          'MessagesScreen._SupportEntry.pushSupport',
+                          context.push<void>('/support'),
                         ),
-                        icon: const Icon(Icons.chat, semanticLabel: "進入對話"),
-                        label: const Text("進入對話"),
+                        icon: const Icon(Icons.chat, semanticLabel: '進入對話'),
+                        label: const Text('進入對話'),
                       ),
                     ),
                   ),
@@ -409,7 +409,7 @@ class _FriendsInboxState extends State<_FriendsInbox>
                           ),
                           child: const Center(
                             child: CircularProgressIndicator(
-                              semanticsLabel: "載入中",
+                              semanticsLabel: '載入中',
                             ),
                           ),
                         ),
@@ -429,7 +429,7 @@ class _FriendsInboxState extends State<_FriendsInbox>
                           child: Semantics(
                             header: true,
                             label: ApiDevSemantics.friendsInbox,
-                            hint: "下方為好友私訊會話列表",
+                            hint: '下方為好友私訊會話列表',
                             excludeSemantics: true,
                             child: SelectionArea(
                               child: Text(
@@ -474,12 +474,12 @@ class _FriendsInboxState extends State<_FriendsInbox>
                             child: Center(
                               child: Semantics(
                                 container: true,
-                                label: "暫無好友會話",
-                                hint: "下拉可重新整理；通過審核並互加好友後會顯示在此",
+                                label: '暫無好友會話',
+                                hint: '下拉可重新整理；通過審核並互加好友後會顯示在此',
                                 excludeSemantics: true,
                                 child: SelectionArea(
                                   child: Text(
-                                    "暫無好友會話",
+                                    '暫無好友會話',
                                     style: Theme.of(
                                       context,
                                     ).textTheme.bodyLarge,
@@ -514,24 +514,24 @@ class _InboxTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final m = item;
-    final preview = m.lastMessagePreview ?? "尚無預覽";
+    final preview = m.lastMessagePreview ?? '尚無預覽';
     return Tooltip(
-      message: "開啟與 @${m.peerCustomId} 的私聊",
+      message: '開啟與 @${m.peerCustomId} 的私聊',
       child: Semantics(
         button: true,
-        label: "@${m.peerCustomId}。$preview",
-        hint: "開啟與 @${m.peerCustomId} 的私聊",
+        label: '@${m.peerCustomId}。$preview',
+        hint: '開啟與 @${m.peerCustomId} 的私聊',
         excludeSemantics: true,
         child: ListTile(
           leading: CircleAvatar(
             child: Text(
-              m.peerCustomId.isNotEmpty ? m.peerCustomId[0].toUpperCase() : "?",
+              m.peerCustomId.isNotEmpty ? m.peerCustomId[0].toUpperCase() : '?',
               semanticsLabel: m.peerCustomId.isNotEmpty
-                  ? "@${m.peerCustomId} 的大頭貼"
-                  : "私訊對象頭像",
+                  ? '@${m.peerCustomId} 的大頭貼'
+                  : '私訊對象頭像',
             ),
           ),
-          title: SelectionArea(child: Text("@${m.peerCustomId}")),
+          title: SelectionArea(child: Text('@${m.peerCustomId}')),
           subtitle: SelectionArea(
             child: Text(preview, maxLines: 1, overflow: TextOverflow.ellipsis),
           ),
@@ -539,8 +539,8 @@ class _InboxTile extends StatelessWidget {
             final pid = Uri.encodeComponent(m.peerId);
             final u = Uri.encodeComponent(m.peerCustomId);
             unawaitedDebugFuture(
-              "MessagesScreen._FriendsInboxTile.openDm",
-              context.push("/dm/$pid?custom=$u"),
+              'MessagesScreen._FriendsInboxTile.openDm',
+              context.push('/dm/$pid?custom=$u'),
             );
           },
         ),
@@ -567,12 +567,12 @@ class _InboxHeader extends StatelessWidget {
           Expanded(
             child: Semantics(
               header: true,
-              label: "雙向好友 · 無粉絲數",
-              hint: "此分頁為互關好友收件匣；右側可管理申請與加好友",
+              label: '雙向好友 · 無粉絲數',
+              hint: '此分頁為互關好友收件匣；右側可管理申請與加好友',
               excludeSemantics: true,
               child: SelectionArea(
                 child: Text(
-                  "雙向好友 · 無粉絲數",
+                  '雙向好友 · 無粉絲數',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
@@ -582,39 +582,39 @@ class _InboxHeader extends StatelessWidget {
           ),
           if (showRequestsLink)
             Tooltip(
-              message: "查看待處理好友申請",
+              message: '查看待處理好友申請',
               child: Semantics(
                 button: true,
-                label: "查看待處理好友申請",
-                hint: "開啟待處理好友邀請列表",
+                label: '查看待處理好友申請',
+                hint: '開啟待處理好友邀請列表',
                 excludeSemantics: true,
                 child: TextButton(
                   onPressed: () => unawaitedDebugFuture(
-                    "MessagesScreen._InboxHeader.pushFriendRequests",
-                    context.push("/friend-requests"),
+                    'MessagesScreen._InboxHeader.pushFriendRequests',
+                    context.push('/friend-requests'),
                   ),
-                  child: const Text("待處理申請"),
+                  child: const Text('待處理申請'),
                 ),
               ),
             ),
           Tooltip(
-            message: "添加好友",
+            message: '添加好友',
             child: Semantics(
               button: true,
-              label: "添加好友",
-              hint: "開啟輸入對方 ID 以送出申請",
+              label: '添加好友',
+              hint: '開啟輸入對方 ID 以送出申請',
               excludeSemantics: true,
               child: FilledButton.tonalIcon(
                 onPressed: () => unawaitedDebug(
-                  "MessagesScreen._InboxHeader.onAddFriend",
+                  'MessagesScreen._InboxHeader.onAddFriend',
                   onAddFriend(),
                 ),
                 icon: const Icon(
                   Icons.person_add_alt_1,
                   size: 20,
-                  semanticLabel: "添加好友",
+                  semanticLabel: '添加好友',
                 ),
-                label: const Text("添加好友"),
+                label: const Text('添加好友'),
               ),
             ),
           ),

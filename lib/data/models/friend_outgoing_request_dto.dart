@@ -1,4 +1,4 @@
-import "package:liuban/data/models/json_utils.dart";
+import 'package:liuban/data/models/json_utils.dart';
 
 /// 我發出的好友申請。
 class FriendOutgoingRequestDto {
@@ -18,13 +18,13 @@ class FriendOutgoingRequestDto {
 
   factory FriendOutgoingRequestDto.fromJson(Map<String, dynamic> json) {
     return FriendOutgoingRequestDto(
-      id: json["id"]?.toString() ?? "",
+      id: json['id']?.toString() ?? '',
       toCustomId:
-          json["to_custom_id"] as String? ??
-          json["target_custom_id"] as String? ??
-          "",
-      status: json["status"] as String? ?? "pending",
-      createdAt: json["created_at"] as String?,
+          json['to_custom_id'] as String? ??
+          json['target_custom_id'] as String? ??
+          '',
+      status: json['status'] as String? ?? 'pending',
+      createdAt: json['created_at'] as String?,
     );
   }
 
@@ -34,10 +34,10 @@ class FriendOutgoingRequestDto {
   static List<FriendOutgoingRequestDto> mockOutgoing() =>
       const <FriendOutgoingRequestDto>[
         FriendOutgoingRequestDto(
-          id: "mock_o1",
-          toCustomId: "library_fan",
-          status: "pending",
-          createdAt: "2026-03-27",
+          id: 'mock_o1',
+          toCustomId: 'library_fan',
+          status: 'pending',
+          createdAt: '2026-03-27',
         ),
       ];
 }

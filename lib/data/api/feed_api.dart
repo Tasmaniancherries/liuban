@@ -1,7 +1,7 @@
-import "package:dio/dio.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/data/models/feed_post_dto.dart";
-import "package:liuban/data/models/json_utils.dart";
+import 'package:dio/dio.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/data/models/feed_post_dto.dart';
+import 'package:liuban/data/models/json_utils.dart';
 
 /// 廣場動態（公開／本校／好友、發佈／編輯／檢舉／刪除）。
 ///
@@ -14,10 +14,10 @@ class FeedApi {
   final String apiPrefix;
 
   String _path(String relative) {
-    if (relative.startsWith("/")) {
-      return "$apiPrefix$relative";
+    if (relative.startsWith('/')) {
+      return '$apiPrefix$relative';
     }
-    return "$apiPrefix/$relative";
+    return '$apiPrefix/$relative';
   }
 
   Future<List<FeedPostDto>> listPublicFeed({
@@ -26,8 +26,8 @@ class FeedApi {
   }) async {
     try {
       final res = await _dio.get<dynamic>(
-        _path("/feed/public"),
-        queryParameters: <String, dynamic>{"page": page, "page_size": pageSize},
+        _path('/feed/public'),
+        queryParameters: <String, dynamic>{'page': page, 'page_size': pageSize},
       );
       return FeedPostDto.listFromResponse(res.data);
     } on DioException catch (e) {
@@ -42,8 +42,8 @@ class FeedApi {
   }) async {
     try {
       final res = await _dio.get<dynamic>(
-        _path("/feed/school"),
-        queryParameters: <String, dynamic>{"page": page, "page_size": pageSize},
+        _path('/feed/school'),
+        queryParameters: <String, dynamic>{'page': page, 'page_size': pageSize},
       );
       return FeedPostDto.listFromResponse(res.data);
     } on DioException catch (e) {
@@ -57,8 +57,8 @@ class FeedApi {
   }) async {
     try {
       final res = await _dio.get<dynamic>(
-        _path("/feed/friends"),
-        queryParameters: <String, dynamic>{"page": page, "page_size": pageSize},
+        _path('/feed/friends'),
+        queryParameters: <String, dynamic>{'page': page, 'page_size': pageSize},
       );
       return FeedPostDto.listFromResponse(res.data);
     } on DioException catch (e) {
@@ -70,7 +70,7 @@ class FeedApi {
   Future<FeedPostDto> getPost(String id) async {
     try {
       final enc = Uri.encodeComponent(id);
-      final res = await _dio.get<dynamic>(_path("/feed/posts/$enc"));
+      final res = await _dio.get<dynamic>(_path('/feed/posts/$enc'));
       return FeedPostDto.fromJson(asJsonMap(res.data));
     } on DioException catch (e) {
       throw LiubanApiException.fromDio(e);
@@ -84,19 +84,19 @@ class FeedApi {
   }) async {
     try {
       final res = await _dio.post<dynamic>(
-        _path("/feed/posts"),
+        _path('/feed/posts'),
         data: <String, dynamic>{
-          "body": body,
-          "audience": audienceApiValue,
-          "hide_school": hideSchool,
+          'body': body,
+          'audience': audienceApiValue,
+          'hide_school': hideSchool,
         },
       );
       final data = res.data;
       if (data == null || (data is Map && data.isEmpty)) {
         return FeedPostDto(
-          id: "local",
-          authorId: "",
-          authorDisplay: "我",
+          id: 'local',
+          authorId: '',
+          authorDisplay: '我',
           body: body,
           audience: audienceApiValue,
           hideSchool: hideSchool,
@@ -118,19 +118,19 @@ class FeedApi {
     try {
       final enc = Uri.encodeComponent(postId);
       final res = await _dio.patch<dynamic>(
-        _path("/feed/posts/$enc"),
+        _path('/feed/posts/$enc'),
         data: <String, dynamic>{
-          "body": body,
-          "audience": audienceApiValue,
-          "hide_school": hideSchool,
+          'body': body,
+          'audience': audienceApiValue,
+          'hide_school': hideSchool,
         },
       );
       final data = res.data;
       if (data == null || (data is Map && data.isEmpty)) {
         return FeedPostDto(
           id: postId,
-          authorId: "",
-          authorDisplay: "",
+          authorId: '',
+          authorDisplay: '',
           body: body,
           audience: audienceApiValue,
           hideSchool: hideSchool,
@@ -147,9 +147,9 @@ class FeedApi {
     try {
       final enc = Uri.encodeComponent(postId);
       await _dio.post<dynamic>(
-        _path("/feed/posts/$enc/report"),
+        _path('/feed/posts/$enc/report'),
         data: <String, dynamic>{
-          if (reason != null && reason.isNotEmpty) "reason": reason,
+          if (reason != null && reason.isNotEmpty) 'reason': reason,
         },
       );
     } on DioException catch (e) {
@@ -161,7 +161,7 @@ class FeedApi {
   Future<void> deletePost(String postId) async {
     try {
       final enc = Uri.encodeComponent(postId);
-      await _dio.delete<dynamic>(_path("/feed/posts/$enc"));
+      await _dio.delete<dynamic>(_path('/feed/posts/$enc'));
     } on DioException catch (e) {
       throw LiubanApiException.fromDio(e);
     }

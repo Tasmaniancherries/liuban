@@ -1,15 +1,15 @@
-import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/core/session/app_session_scope.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/session/verification_phase_mapper.dart";
-import "package:liuban/data/models/feed_post_dto.dart";
-import "package:liuban/features/feed/compose_post_screen.dart";
-import "package:liuban/widgets/auth_required_gate.dart";
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/session/app_session_scope.dart';
+import 'package:liuban/core/session/verification_phase_mapper.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
+import 'package:liuban/data/models/feed_post_dto.dart';
+import 'package:liuban/features/feed/compose_post_screen.dart';
+import 'package:liuban/widgets/auth_required_gate.dart';
 
 /// 發佈／編輯動態：需登入，且須為已通過身分審核（Offer／錄取或學生證）之帳號（與廣場 FAB 權限一致）。
 class ComposeAccessGate extends StatelessWidget {
@@ -24,7 +24,7 @@ class ComposeAccessGate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AuthRequiredGate(
-      title: _isEdit ? "編輯動態" : "發佈動態",
+      title: _isEdit ? '編輯動態' : '發佈動態',
       child: _ComposeVerifiedShell(
         isEdit: _isEdit,
         editingPostId: editingPostId,
@@ -65,7 +65,7 @@ class _ComposeVerifiedShellState extends State<_ComposeVerifiedShell> {
       ).setPhase(accountPhaseFromVerificationApi(st.phase));
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          "已同步審核狀態",
+          '已同步審核狀態',
           semanticsHint: ApiDevSemantics.verificationSyncSuccessSnackHint,
         ),
       );
@@ -106,14 +106,14 @@ class _ComposeVerifiedShellState extends State<_ComposeVerifiedShell> {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-              widget.isEdit ? "編輯動態" : "發佈動態",
-              semanticsLabel: widget.isEdit ? "編輯廣場動態" : "發佈廣場動態",
+              widget.isEdit ? '編輯動態' : '發佈動態',
+              semanticsLabel: widget.isEdit ? '編輯廣場動態' : '發佈廣場動態',
             ),
             leading: Semantics(
-              hint: "關閉撰寫限制說明並返回上一頁",
+              hint: '關閉撰寫限制說明並返回上一頁',
               child: IconButton(
-                tooltip: "返回",
-                icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
+                tooltip: '返回',
+                icon: const Icon(Icons.arrow_back, semanticLabel: '返回'),
                 onPressed: _syncing ? null : () => context.pop(),
               ),
             ),
@@ -126,28 +126,28 @@ class _ComposeVerifiedShellState extends State<_ComposeVerifiedShell> {
                 children: [
                   Icon(
                     Icons.verified_user_outlined,
-                    semanticLabel: "需通過審核才能發佈",
+                    semanticLabel: '需通過審核才能發佈',
                     size: 48,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(height: 16),
                   Semantics(
                     header: true,
-                    label: "通過身分審核後才可發佈廣場動態。審核中與訪客權限相同，可先到「我的」同步審核狀態。",
-                    hint: "下方按鈕可同步審核狀態或前往個人頁",
+                    label: '通過身分審核後才可發佈廣場動態。審核中與訪客權限相同，可先到「我的」同步審核狀態。',
+                    hint: '下方按鈕可同步審核狀態或前往個人頁',
                     excludeSemantics: true,
                     child: SelectionArea(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            "通過身分審核後才可發佈廣場動態",
+                            '通過身分審核後才可發佈廣場動態',
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            "審核中與訪客權限相同，可先到「我的」同步審核狀態。",
+                            '審核中與訪客權限相同，可先到「我的」同步審核狀態。',
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(
@@ -162,20 +162,20 @@ class _ComposeVerifiedShellState extends State<_ComposeVerifiedShell> {
                   ),
                   const SizedBox(height: 28),
                   Tooltip(
-                    message: "同步審核狀態",
+                    message: '同步審核狀態',
                     child: Semantics(
                       button: true,
                       enabled: !_syncing,
-                      label: "同步審核狀態",
+                      label: '同步審核狀態',
                       hint: _syncing
-                          ? "處理中"
+                          ? '處理中'
                           : ApiDevSemantics.verificationSyncSubtitle,
                       excludeSemantics: true,
                       child: FilledButton.tonalIcon(
                         onPressed: _syncing
                             ? null
                             : () => unawaitedDebug(
-                                "ComposeAccessGate._syncVerification",
+                                'ComposeAccessGate._syncVerification',
                                 _syncVerification(),
                               ),
                         icon: _syncing
@@ -183,48 +183,48 @@ class _ComposeVerifiedShellState extends State<_ComposeVerifiedShell> {
                                 width: 18,
                                 height: 18,
                                 child: CircularProgressIndicator(
-                                  semanticsLabel: "處理中",
+                                  semanticsLabel: '處理中',
                                   strokeWidth: 2,
                                 ),
                               )
                             : const Icon(
                                 Icons.sync,
                                 size: 20,
-                                semanticLabel: "同步審核狀態",
+                                semanticLabel: '同步審核狀態',
                               ),
-                        label: const Text("同步審核狀態"),
+                        label: const Text('同步審核狀態'),
                       ),
                     ),
                   ),
                   const SizedBox(height: 12),
                   Tooltip(
-                    message: "前往個人頁",
+                    message: '前往個人頁',
                     child: Semantics(
                       button: true,
                       enabled: !_syncing,
-                      label: "前往個人頁",
-                      hint: "開啟「我的」分頁",
+                      label: '前往個人頁',
+                      hint: '開啟「我的」分頁',
                       excludeSemantics: true,
                       child: FilledButton(
                         onPressed: _syncing
                             ? null
-                            : () => context.go("/profile"),
-                        child: const Text("前往我的"),
+                            : () => context.go('/profile'),
+                        child: const Text('前往我的'),
                       ),
                     ),
                   ),
                   const SizedBox(height: 8),
                   Tooltip(
-                    message: "返回上一頁",
+                    message: '返回上一頁',
                     child: Semantics(
                       button: true,
                       enabled: !_syncing,
-                      label: "返回上一頁",
-                      hint: "關閉並回到上一頁",
+                      label: '返回上一頁',
+                      hint: '關閉並回到上一頁',
                       excludeSemantics: true,
                       child: TextButton(
                         onPressed: _syncing ? null : () => context.pop(),
-                        child: const Text("返回"),
+                        child: const Text('返回'),
                       ),
                     ),
                   ),

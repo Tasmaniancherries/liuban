@@ -1,5 +1,5 @@
-import "package:flutter/material.dart";
-import "package:liuban/core/persistence/app_persistence.dart";
+import 'package:flutter/material.dart';
+import 'package:liuban/core/persistence/app_persistence.dart';
 
 class AppPersistenceScope extends InheritedWidget {
   const AppPersistenceScope({
@@ -13,7 +13,7 @@ class AppPersistenceScope extends InheritedWidget {
   static AppPersistence of(BuildContext context) {
     final scope = context
         .dependOnInheritedWidgetOfExactType<AppPersistenceScope>();
-    assert(scope != null, "AppPersistenceScope not found above this context");
+    assert(scope != null, 'AppPersistenceScope not found above this context');
     return scope!.persistence;
   }
 

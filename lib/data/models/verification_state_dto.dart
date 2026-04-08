@@ -1,4 +1,4 @@
-import "package:liuban/data/models/json_utils.dart";
+import 'package:liuban/data/models/json_utils.dart';
 
 /// `GET …/auth/me/verification` 回傳之帳戶審核狀態。
 ///
@@ -13,10 +13,10 @@ class VerificationStateDto {
   factory VerificationStateDto.fromJson(Map<String, dynamic> json) {
     return VerificationStateDto(
       phase:
-          json["phase"] as String? ??
-          json["account_phase"] as String? ??
-          "guest",
-      message: json["message"] as String?,
+          json['phase'] as String? ??
+          json['account_phase'] as String? ??
+          'guest',
+      message: json['message'] as String?,
     );
   }
 

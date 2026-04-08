@@ -1,12 +1,12 @@
-import "package:flutter/material.dart";
-import "package:flutter/services.dart";
-import "package:go_router/go_router.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
-import "package:liuban/core/ui/scroll_constants.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
+import 'package:liuban/core/ui/scroll_constants.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -41,35 +41,35 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       context: context,
       builder: (ctx) => Semantics(
         container: true,
-        label: "捨棄輸入確認",
+        label: '捨棄輸入確認',
         hint: ApiDevSemantics.discardUnsavedLocalFormDialogHint,
         child: AlertDialog(
-          title: const Text("捨棄輸入？"),
-          content: const SelectionArea(child: Text("密碼欄位已輸入內容，確定離開？")),
+          title: const Text('捨棄輸入？'),
+          content: const SelectionArea(child: Text('密碼欄位已輸入內容，確定離開？')),
           actions: [
             Tooltip(
-              message: "繼續輸入",
+              message: '繼續輸入',
               child: Semantics(
                 button: true,
-                label: "繼續輸入",
-                hint: "關閉對話框並保留密碼欄位",
+                label: '繼續輸入',
+                hint: '關閉對話框並保留密碼欄位',
                 excludeSemantics: true,
                 child: TextButton(
                   onPressed: () => Navigator.of(ctx).pop(false),
-                  child: const Text("取消"),
+                  child: const Text('取消'),
                 ),
               ),
             ),
             Tooltip(
-              message: "捨棄密碼欄位並離開",
+              message: '捨棄密碼欄位並離開',
               child: Semantics(
                 button: true,
-                label: "捨棄密碼欄位並離開",
-                hint: "離開並清除已輸入的密碼",
+                label: '捨棄密碼欄位並離開',
+                hint: '離開並清除已輸入的密碼',
                 excludeSemantics: true,
                 child: TextButton(
                   onPressed: () => Navigator.of(ctx).pop(true),
-                  child: const Text("捨棄"),
+                  child: const Text('捨棄'),
                 ),
               ),
             ),
@@ -107,7 +107,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     if (cur.isEmpty || nw.isEmpty || ag.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          "請填寫完整",
+          '請填寫完整',
           semanticsHint: ApiDevSemantics.changePasswordIncompleteSnackHint,
         ),
       );
@@ -116,7 +116,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     if (nw.length < 8) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          "新密碼至少 8 字元",
+          '新密碼至少 8 字元',
           semanticsHint: ApiDevSemantics.changePasswordTooShortSnackHint,
         ),
       );
@@ -125,7 +125,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     if (nw != ag) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          "兩次新密碼不一致",
+          '兩次新密碼不一致',
           semanticsHint: ApiDevSemantics.changePasswordMismatchSnackHint,
         ),
       );
@@ -140,7 +140,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       TextInput.finishAutofillContext(shouldSave: true);
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          "已更新密碼",
+          '已更新密碼',
           semanticsHint: ApiDevSemantics.changePasswordSuccessSnackHint,
         ),
       );
@@ -176,16 +176,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("修改密碼", semanticsLabel: "變更帳號密碼"),
+          title: const Text('修改密碼', semanticsLabel: '變更帳號密碼'),
           leading: Semantics(
-            hint: "返回上一頁；密碼欄位有內容時會先詢問是否捨棄",
+            hint: '返回上一頁；密碼欄位有內容時會先詢問是否捨棄',
             child: IconButton(
-              tooltip: "返回",
-              icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
+              tooltip: '返回',
+              icon: const Icon(Icons.arrow_back, semanticLabel: '返回'),
               onPressed: _submitting
                   ? null
                   : () => unawaitedDebug(
-                      "ChangePasswordScreen._tryPop",
+                      'ChangePasswordScreen._tryPop',
                       _tryPop(),
                     ),
             ),
@@ -200,7 +200,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               Semantics(
                 header: true,
                 label: ApiDevSemantics.authChangePassword,
-                hint: "下方為目前密碼與新密碼欄位",
+                hint: '下方為目前密碼與新密碼欄位',
                 excludeSemantics: true,
                 child: SelectionArea(
                   child: Text(
@@ -213,8 +213,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               ),
               const SizedBox(height: 20),
               Semantics(
-                label: "目前密碼",
-                hint: "輸入現正使用的登入密碼以驗證身分",
+                label: '目前密碼',
+                hint: '輸入現正使用的登入密碼以驗證身分',
                 textField: true,
                 child: TextField(
                   controller: _current,
@@ -222,12 +222,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   obscureText: _obscureCur,
                   autofillHints: const [AutofillHints.password],
                   decoration: InputDecoration(
-                    labelText: "目前密碼",
+                    labelText: '目前密碼',
                     border: const OutlineInputBorder(),
                     suffixIcon: Semantics(
-                      hint: _obscureCur ? "暫時顯示目前密碼" : "隱藏目前密碼內容",
+                      hint: _obscureCur ? '暫時顯示目前密碼' : '隱藏目前密碼內容',
                       child: IconButton(
-                        tooltip: _obscureCur ? "顯示密碼" : "隱藏密碼",
+                        tooltip: _obscureCur ? '顯示密碼' : '隱藏密碼',
                         onPressed: _submitting
                             ? null
                             : () => setState(() => _obscureCur = !_obscureCur),
@@ -235,7 +235,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           _obscureCur
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
-                          semanticLabel: _obscureCur ? "顯示密碼" : "隱藏密碼",
+                          semanticLabel: _obscureCur ? '顯示密碼' : '隱藏密碼',
                         ),
                       ),
                     ),
@@ -245,8 +245,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               ),
               const SizedBox(height: 16),
               Semantics(
-                label: "新密碼（至少 8 字元）",
-                hint: "設定新的登入密碼；需與確認欄位一致",
+                label: '新密碼（至少 8 字元）',
+                hint: '設定新的登入密碼；需與確認欄位一致',
                 textField: true,
                 child: TextField(
                   controller: _next,
@@ -254,12 +254,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   obscureText: _obscureNew,
                   autofillHints: const [AutofillHints.newPassword],
                   decoration: InputDecoration(
-                    labelText: "新密碼（至少 8 字元）",
+                    labelText: '新密碼（至少 8 字元）',
                     border: const OutlineInputBorder(),
                     suffixIcon: Semantics(
-                      hint: _obscureNew ? "暫時顯示新密碼" : "隱藏新密碼內容",
+                      hint: _obscureNew ? '暫時顯示新密碼' : '隱藏新密碼內容',
                       child: IconButton(
-                        tooltip: _obscureNew ? "顯示密碼" : "隱藏密碼",
+                        tooltip: _obscureNew ? '顯示密碼' : '隱藏密碼',
                         onPressed: _submitting
                             ? null
                             : () => setState(() => _obscureNew = !_obscureNew),
@@ -267,7 +267,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           _obscureNew
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
-                          semanticLabel: _obscureNew ? "顯示密碼" : "隱藏密碼",
+                          semanticLabel: _obscureNew ? '顯示密碼' : '隱藏密碼',
                         ),
                       ),
                     ),
@@ -277,8 +277,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               ),
               const SizedBox(height: 16),
               Semantics(
-                label: "確認新密碼",
-                hint: "再次輸入新密碼；完成後可送出修改",
+                label: '確認新密碼',
+                hint: '再次輸入新密碼；完成後可送出修改',
                 textField: true,
                 child: TextField(
                   controller: _again,
@@ -286,12 +286,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   obscureText: _obscureAgain,
                   autofillHints: const [AutofillHints.newPassword],
                   decoration: InputDecoration(
-                    labelText: "確認新密碼",
+                    labelText: '確認新密碼',
                     border: const OutlineInputBorder(),
                     suffixIcon: Semantics(
-                      hint: _obscureAgain ? "暫時顯示確認新密碼" : "隱藏確認新密碼內容",
+                      hint: _obscureAgain ? '暫時顯示確認新密碼' : '隱藏確認新密碼內容',
                       child: IconButton(
-                        tooltip: _obscureAgain ? "顯示密碼" : "隱藏密碼",
+                        tooltip: _obscureAgain ? '顯示密碼' : '隱藏密碼',
                         onPressed: _submitting
                             ? null
                             : () => setState(
@@ -301,7 +301,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           _obscureAgain
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
-                          semanticLabel: _obscureAgain ? "顯示密碼" : "隱藏密碼",
+                          semanticLabel: _obscureAgain ? '顯示密碼' : '隱藏密碼',
                         ),
                       ),
                     ),
@@ -309,24 +309,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   textInputAction: TextInputAction.done,
                   onSubmitted: (_) {
                     if (_submitting) return;
-                    unawaitedDebug("ChangePasswordScreen._submit", _submit());
+                    unawaitedDebug('ChangePasswordScreen._submit', _submit());
                   },
                 ),
               ),
               const SizedBox(height: 28),
               Tooltip(
-                message: "確認修改密碼",
+                message: '確認修改密碼',
                 child: Semantics(
                   button: true,
                   enabled: !_submitting,
-                  label: "確認修改密碼",
-                  hint: _submitting ? "處理中" : "送出後以新密碼登入",
+                  label: '確認修改密碼',
+                  hint: _submitting ? '處理中' : '送出後以新密碼登入',
                   excludeSemantics: true,
                   child: FilledButton(
                     onPressed: _submitting
                         ? null
                         : () => unawaitedDebug(
-                            "ChangePasswordScreen._submit",
+                            'ChangePasswordScreen._submit',
                             _submit(),
                           ),
                     child: _submitting
@@ -334,11 +334,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             height: 22,
                             width: 22,
                             child: CircularProgressIndicator(
-                              semanticsLabel: "處理中",
+                              semanticsLabel: '處理中',
                               strokeWidth: 2,
                             ),
                           )
-                        : const Text("確認修改"),
+                        : const Text('確認修改'),
                   ),
                 ),
               ),

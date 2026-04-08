@@ -1,5 +1,5 @@
-import "package:dio/dio.dart";
-import "package:liuban/core/network/api_exception.dart";
+import 'package:dio/dio.dart';
+import 'package:liuban/core/network/api_exception.dart';
 
 /// 官方客服留言（訪客可呼叫）。
 ///
@@ -11,10 +11,10 @@ class SupportApi {
   final String apiPrefix;
 
   String _path(String relative) {
-    if (relative.startsWith("/")) {
-      return "$apiPrefix$relative";
+    if (relative.startsWith('/')) {
+      return '$apiPrefix$relative';
     }
-    return "$apiPrefix/$relative";
+    return '$apiPrefix/$relative';
   }
 
   /// 訪客亦可呼叫；後端可用 guest_token 併線程。
@@ -25,11 +25,11 @@ class SupportApi {
   }) async {
     try {
       await _dio.post<dynamic>(
-        _path("/support/messages"),
+        _path('/support/messages'),
         data: <String, dynamic>{
-          "text": text,
-          "guest_token": ?guestToken,
-          "contact_hint": ?contactHint,
+          'text': text,
+          'guest_token': ?guestToken,
+          'contact_hint': ?contactHint,
         },
       );
     } on DioException catch (e) {

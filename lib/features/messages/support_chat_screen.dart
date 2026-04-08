@@ -1,13 +1,13 @@
-import "dart:async" show unawaited;
+import 'dart:async' show unawaited;
 
-import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
-import "package:liuban/core/ui/scroll_constants.dart";
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
+import 'package:liuban/core/ui/scroll_constants.dart';
 
 class ChatMessage {
   const ChatMessage({
@@ -34,7 +34,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
   final _scroll = ScrollController();
   final List<ChatMessage> _items = [
     ChatMessage(
-      text: "你好，這裡是留伴官方客服。訪客也可留言，我們會盡快回覆。",
+      text: '你好，這裡是留伴官方客服。訪客也可留言，我們會盡快回覆。',
       fromUser: false,
       time: DateTime.now().subtract(const Duration(minutes: 2)),
     ),
@@ -56,35 +56,35 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
       context: context,
       builder: (ctx) => Semantics(
         container: true,
-        label: "捨棄未送出訊息確認",
+        label: '捨棄未送出訊息確認',
         hint: ApiDevSemantics.discardUnsentMessageDraftHint,
         child: AlertDialog(
-          title: const Text("捨棄未送出訊息？"),
-          content: const SelectionArea(child: Text("輸入框內尚有內容，確定離開？")),
+          title: const Text('捨棄未送出訊息？'),
+          content: const SelectionArea(child: Text('輸入框內尚有內容，確定離開？')),
           actions: [
             Tooltip(
-              message: "繼續輸入",
+              message: '繼續輸入',
               child: Semantics(
                 button: true,
-                label: "繼續輸入",
-                hint: "關閉對話框並保留輸入框內容",
+                label: '繼續輸入',
+                hint: '關閉對話框並保留輸入框內容',
                 excludeSemantics: true,
                 child: TextButton(
                   onPressed: () => Navigator.of(ctx).pop(false),
-                  child: const Text("取消"),
+                  child: const Text('取消'),
                 ),
               ),
             ),
             Tooltip(
-              message: "捨棄未送出訊息",
+              message: '捨棄未送出訊息',
               child: Semantics(
                 button: true,
-                label: "捨棄未送出訊息",
-                hint: "離開並清除未送出的文字",
+                label: '捨棄未送出訊息',
+                hint: '離開並清除未送出的文字',
                 excludeSemantics: true,
                 child: TextButton(
                   onPressed: () => Navigator.of(ctx).pop(true),
-                  child: const Text("捨棄"),
+                  child: const Text('捨棄'),
                 ),
               ),
             ),
@@ -169,16 +169,16 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("官方客服", semanticsLabel: "官方客服聊天"),
+          title: const Text('官方客服', semanticsLabel: '官方客服聊天'),
           leading: Semantics(
-            hint: "返回上一頁；輸入框有未送出內容時會先詢問",
+            hint: '返回上一頁；輸入框有未送出內容時會先詢問',
             child: IconButton(
-              tooltip: "返回",
-              icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
+              tooltip: '返回',
+              icon: const Icon(Icons.arrow_back, semanticLabel: '返回'),
               onPressed: _sending
                   ? null
                   : () =>
-                        unawaitedDebug("SupportChatScreen._tryPop", _tryPop()),
+                        unawaitedDebug('SupportChatScreen._tryPop', _tryPop()),
             ),
           ),
         ),
@@ -189,7 +189,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
               child: Semantics(
                 header: true,
                 label: ApiDevSemantics.supportMessages,
-                hint: "開發與 API 說明，下方為客服對話",
+                hint: '開發與 API 說明，下方為客服對話',
                 excludeSemantics: true,
                 child: SelectionArea(
                   child: Text(
@@ -227,8 +227,8 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                     context,
                   ).formatTimeOfDay(TimeOfDay.fromDateTime(m.time));
                   final bubbleLabel = m.fromUser
-                      ? "我，$timeLabel：${m.text}"
-                      : "官方客服，$timeLabel：${m.text}";
+                      ? '我，$timeLabel：${m.text}'
+                      : '官方客服，$timeLabel：${m.text}';
                   return Align(
                     alignment: align,
                     child: ConstrainedBox(
@@ -238,7 +238,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                       child: Semantics(
                         container: true,
                         label: bubbleLabel,
-                        hint: "聊天訊息氣泡",
+                        hint: '聊天訊息氣泡',
                         excludeSemantics: true,
                         child: Card(
                           color: bg,
@@ -269,8 +269,8 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                   children: [
                     Expanded(
                       child: Semantics(
-                        label: "訊息輸入",
-                        hint: "送出鍵或傳送按鈕可送出",
+                        label: '訊息輸入',
+                        hint: '送出鍵或傳送按鈕可送出',
                         textField: true,
                         child: TextField(
                           controller: _input,
@@ -278,26 +278,26 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                           maxLines: 4,
                           enabled: !_sending,
                           decoration: const InputDecoration(
-                            hintText: "輸入訊息⋯",
+                            hintText: '輸入訊息⋯',
                             border: OutlineInputBorder(),
                           ),
                           textInputAction: TextInputAction.send,
                           onSubmitted: (_) {
                             if (_sending) return;
-                            unawaitedDebug("SupportChatScreen._send", _send());
+                            unawaitedDebug('SupportChatScreen._send', _send());
                           },
                         ),
                       ),
                     ),
                     const SizedBox(width: 8),
                     Semantics(
-                      hint: _sending ? "訊息送出中" : "送出輸入框內文字給官方客服",
+                      hint: _sending ? '訊息送出中' : '送出輸入框內文字給官方客服',
                       child: IconButton.filled(
-                        tooltip: "傳送",
+                        tooltip: '傳送',
                         onPressed: _sending
                             ? null
                             : () => unawaitedDebug(
-                                "SupportChatScreen._send",
+                                'SupportChatScreen._send',
                                 _send(),
                               ),
                         icon: _sending
@@ -305,11 +305,11 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                                 width: 22,
                                 height: 22,
                                 child: CircularProgressIndicator(
-                                  semanticsLabel: "處理中",
+                                  semanticsLabel: '處理中',
                                   strokeWidth: 2,
                                 ),
                               )
-                            : const Icon(Icons.send, semanticLabel: "傳送"),
+                            : const Icon(Icons.send, semanticLabel: '傳送'),
                       ),
                     ),
                   ],

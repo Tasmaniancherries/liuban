@@ -1,14 +1,14 @@
-import "package:flutter/material.dart";
-import "package:flutter/semantics.dart";
-import "package:go_router/go_router.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
-import "package:liuban/data/models/feed_post_dto.dart";
-import "package:liuban/features/feed/feed_post_share.dart";
-import "package:liuban/features/feed/feed_report_flow.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
+import 'package:go_router/go_router.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
+import 'package:liuban/data/models/feed_post_dto.dart';
+import 'package:liuban/features/feed/feed_post_share.dart';
+import 'package:liuban/features/feed/feed_report_flow.dart';
 
 class _ResolvedPost {
   const _ResolvedPost({
@@ -51,12 +51,12 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
     if (_started) return;
     _started = true;
     _future = _loadAndNotify();
-    unawaitedDebug("FeedPostDetailScreen._loadMyUserId", _loadMyUserId());
+    unawaitedDebug('FeedPostDetailScreen._loadMyUserId', _loadMyUserId());
   }
 
   void _refreshDetail() {
     setState(() => _future = _loadAndNotify());
-    unawaitedDebug("FeedPostDetailScreen._loadMyUserId", _loadMyUserId());
+    unawaitedDebug('FeedPostDetailScreen._loadMyUserId', _loadMyUserId());
   }
 
   Future<void> _onPullRefresh() async {
@@ -190,12 +190,12 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("動態詳情", semanticsLabel: "單則廣場動態詳情"),
+        title: const Text('動態詳情', semanticsLabel: '單則廣場動態詳情'),
         leading: Semantics(
-          hint: "關閉動態詳情並返回上一頁",
+          hint: '關閉動態詳情並返回上一頁',
           child: IconButton(
-            tooltip: "返回",
-            icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
+            tooltip: '返回',
+            icon: const Icon(Icons.arrow_back, semanticLabel: '返回'),
             onPressed: () => context.pop(),
           ),
         ),
@@ -217,17 +217,17 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
               final canBlock = post.authorId.isNotEmpty && !isMine;
               final canModerateOthers = !isMine;
               return Semantics(
-                hint: "開啟選單：分享、編輯或刪除（本人）、檢舉與屏蔽等",
+                hint: '開啟選單：分享、編輯或刪除（本人）、檢舉與屏蔽等',
                 child: PopupMenuButton<String>(
-                  tooltip: "更多",
-                  icon: const Icon(Icons.more_vert, semanticLabel: "更多選項"),
+                  tooltip: '更多',
+                  icon: const Icon(Icons.more_vert, semanticLabel: '更多選項'),
                   onSelected: (v) async {
-                    if (v == "share") {
+                    if (v == 'share') {
                       await _onShareLink();
-                    } else if (v == "edit" && isMine) {
+                    } else if (v == 'edit' && isMine) {
                       final enc = Uri.encodeComponent(post.id);
                       final summary = await this.context.push<String>(
-                        "/compose/edit/$enc",
+                        '/compose/edit/$enc',
                         extra: post,
                       );
                       if (!mounted) return;
@@ -241,38 +241,38 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
                           ),
                         );
                       }
-                    } else if (v == "delete" && isMine) {
+                    } else if (v == 'delete' && isMine) {
                       await _onDelete();
-                    } else if (v == "report" && canModerateOthers) {
+                    } else if (v == 'report' && canModerateOthers) {
                       await _onReport();
-                    } else if (v == "block" && canBlock) {
+                    } else if (v == 'block' && canBlock) {
                       await _onBlockAuthor(post.authorId);
                     }
                   },
                   itemBuilder: (context) => [
                     const PopupMenuItem<String>(
-                      value: "share",
-                      child: Text("分享連結", semanticsLabel: "分享此動態連結"),
+                      value: 'share',
+                      child: Text('分享連結', semanticsLabel: '分享此動態連結'),
                     ),
                     if (isMine) ...[
                       const PopupMenuItem<String>(
-                        value: "edit",
-                        child: Text("編輯", semanticsLabel: "編輯此動態"),
+                        value: 'edit',
+                        child: Text('編輯', semanticsLabel: '編輯此動態'),
                       ),
                       const PopupMenuItem<String>(
-                        value: "delete",
-                        child: Text("刪除", semanticsLabel: "刪除此動態"),
+                        value: 'delete',
+                        child: Text('刪除', semanticsLabel: '刪除此動態'),
                       ),
                     ],
                     if (canModerateOthers)
                       const PopupMenuItem<String>(
-                        value: "report",
-                        child: Text("檢舉", semanticsLabel: "檢舉此動態"),
+                        value: 'report',
+                        child: Text('檢舉', semanticsLabel: '檢舉此動態'),
                       ),
                     if (canBlock)
                       const PopupMenuItem<String>(
-                        value: "block",
-                        child: Text("屏蔽此用戶", semanticsLabel: "屏蔽動態作者"),
+                        value: 'block',
+                        child: Text('屏蔽此用戶', semanticsLabel: '屏蔽動態作者'),
                       ),
                   ],
                 ),
@@ -286,7 +286,7 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
         builder: (context, snap) {
           if (snap.connectionState != ConnectionState.done) {
             return const Center(
-              child: CircularProgressIndicator(semanticsLabel: "載入中"),
+              child: CircularProgressIndicator(semanticsLabel: '載入中'),
             );
           }
           final resolved = snap.data;
@@ -330,15 +330,15 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
                               ),
                               const SizedBox(height: 12),
                               Tooltip(
-                                message: "返回上一頁",
+                                message: '返回上一頁',
                                 child: Semantics(
                                   button: true,
-                                  label: "返回上一頁",
-                                  hint: "離開錯誤狀態並回到上一頁",
+                                  label: '返回上一頁',
+                                  hint: '離開錯誤狀態並回到上一頁',
                                   excludeSemantics: true,
                                   child: FilledButton(
                                     onPressed: () => context.pop(),
-                                    child: const Text("返回"),
+                                    child: const Text('返回'),
                                   ),
                                 ),
                               ),
@@ -354,7 +354,7 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
           }
           final p = resolved.post;
           final audience = p.audience;
-          final authorLabel = p.authorDisplay.isEmpty ? "匿名" : p.authorDisplay;
+          final authorLabel = p.authorDisplay.isEmpty ? '匿名' : p.authorDisplay;
           return RefreshIndicator(
             onRefresh: _onPullRefresh,
             child: SingleChildScrollView(
@@ -363,9 +363,9 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
               padding: const EdgeInsets.all(20),
               child: Semantics(
                 customSemanticsActions: <CustomSemanticsAction, VoidCallback>{
-                  const CustomSemanticsAction(label: "分享或複製此動態連結"): () =>
+                  const CustomSemanticsAction(label: '分享或複製此動態連結'): () =>
                       unawaitedDebug(
-                        "FeedPostDetailScreen._onShareLink",
+                        'FeedPostDetailScreen._onShareLink',
                         _onShareLink(),
                       ),
                 },
@@ -379,7 +379,7 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
                           child: Semantics(
                             container: true,
                             label: ApiDevSemantics.feedPostDetailFallbackBanner,
-                            hint: "下拉頁面可重新整理；完整內容以伺服器為準",
+                            hint: '下拉頁面可重新整理；完整內容以伺服器為準',
                             excludeSemantics: true,
                             child: Text(
                               ApiDevSemantics.feedPostDetailFallbackBanner,
@@ -398,7 +398,7 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
                             child: Semantics(
                               header: true,
                               label: authorLabel,
-                              hint: "動態作者顯示名稱",
+                              hint: '動態作者顯示名稱',
                               excludeSemantics: true,
                               child: Text(
                                 authorLabel,
@@ -422,7 +422,7 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
                       if (p.hideSchool) ...[
                         const SizedBox(height: 8),
                         Text(
-                          "作者已隱藏學校標籤",
+                          '作者已隱藏學校標籤',
                           style: Theme.of(context).textTheme.labelSmall
                               ?.copyWith(
                                 color: Theme.of(context).colorScheme.primary,

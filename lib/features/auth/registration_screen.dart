@@ -1,18 +1,18 @@
-import "dart:typed_data";
+import 'dart:typed_data';
 
-import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
-import "package:image_picker/image_picker.dart";
-import "package:liuban/core/app_container_scope.dart";
-import "package:liuban/core/debug/unawaited_debug.dart";
-import "package:liuban/core/network/api_exception.dart";
-import "package:liuban/core/session/app_session.dart";
-import "package:liuban/core/session/app_session_scope.dart";
-import "package:liuban/core/text/account_input_normalize.dart";
-import "package:liuban/core/ui/api_dev_semantics.dart";
-import "package:liuban/core/ui/liuban_snackbar.dart";
-import "package:liuban/core/ui/scroll_constants.dart";
-import "package:liuban/data/api/auth_api.dart";
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/debug/unawaited_debug.dart';
+import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/session/app_session.dart';
+import 'package:liuban/core/session/app_session_scope.dart';
+import 'package:liuban/core/text/account_input_normalize.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_snackbar.dart';
+import 'package:liuban/core/ui/scroll_constants.dart';
+import 'package:liuban/data/api/auth_api.dart';
 
 /// 註冊與身分審核：上傳 Offer／錄取證明或學生證擇一；頂部無障礙說明見 [ApiDevSemantics.registrationBanner]。
 class RegistrationScreen extends StatefulWidget {
@@ -53,35 +53,35 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       context: context,
       builder: (ctx) => Semantics(
         container: true,
-        label: "捨棄註冊資料確認",
+        label: '捨棄註冊資料確認',
         hint: ApiDevSemantics.discardUnsavedLocalFormDialogHint,
         child: AlertDialog(
-          title: const Text("捨棄註冊資料？"),
-          content: const SelectionArea(child: Text("表單內容與已選圖片將不會儲存，確定離開？")),
+          title: const Text('捨棄註冊資料？'),
+          content: const SelectionArea(child: Text('表單內容與已選圖片將不會儲存，確定離開？')),
           actions: [
             Tooltip(
-              message: "繼續填寫",
+              message: '繼續填寫',
               child: Semantics(
                 button: true,
-                label: "繼續填寫",
-                hint: "關閉對話框並保留註冊表單",
+                label: '繼續填寫',
+                hint: '關閉對話框並保留註冊表單',
                 excludeSemantics: true,
                 child: TextButton(
                   onPressed: () => Navigator.of(ctx).pop(false),
-                  child: const Text("取消"),
+                  child: const Text('取消'),
                 ),
               ),
             ),
             Tooltip(
-              message: "捨棄註冊資料並離開",
+              message: '捨棄註冊資料並離開',
               child: Semantics(
                 button: true,
-                label: "捨棄註冊資料並離開",
-                hint: "離開並清除表單與已選圖片",
+                label: '捨棄註冊資料並離開',
+                hint: '離開並清除表單與已選圖片',
                 excludeSemantics: true,
                 child: TextButton(
                   onPressed: () => Navigator.of(ctx).pop(true),
-                  child: const Text("捨棄"),
+                  child: const Text('捨棄'),
                 ),
               ),
             ),
@@ -136,36 +136,36 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   String get _defaultMultipartFilename => switch (_docKind) {
-    RegistrationVerificationDocumentKind.offerOrAdmissionProof => "offer.jpg",
-    RegistrationVerificationDocumentKind.studentIdCard => "student_id_card.jpg",
+    RegistrationVerificationDocumentKind.offerOrAdmissionProof => 'offer.jpg',
+    RegistrationVerificationDocumentKind.studentIdCard => 'student_id_card.jpg',
   };
 
   String _uploadButtonLabelShort(bool hasFile) {
     if (!hasFile) {
       return switch (_docKind) {
         RegistrationVerificationDocumentKind.offerOrAdmissionProof =>
-          "上傳 Offer／錄取證明",
-        RegistrationVerificationDocumentKind.studentIdCard => "上傳學生證",
+          '上傳 Offer／錄取證明',
+        RegistrationVerificationDocumentKind.studentIdCard => '上傳學生證',
       };
     }
-    return "重新選擇圖片";
+    return '重新選擇圖片';
   }
 
   String _uploadTooltip(bool hasFile) {
     if (!hasFile) {
       return switch (_docKind) {
         RegistrationVerificationDocumentKind.offerOrAdmissionProof =>
-          "上傳 Offer 或錄取證明圖片",
-        RegistrationVerificationDocumentKind.studentIdCard => "上傳學生證照片",
+          '上傳 Offer 或錄取證明圖片',
+        RegistrationVerificationDocumentKind.studentIdCard => '上傳學生證照片',
       };
     }
-    return "重新選擇審核用圖片";
+    return '重新選擇審核用圖片';
   }
 
   String _previewSemanticLabel() => switch (_docKind) {
     RegistrationVerificationDocumentKind.offerOrAdmissionProof =>
-      "錄取證明或 Offer 預覽",
-    RegistrationVerificationDocumentKind.studentIdCard => "學生證預覽",
+      '錄取證明或 Offer 預覽',
+    RegistrationVerificationDocumentKind.studentIdCard => '學生證預覽',
   };
 
   Future<void> _submit(AppSession session) async {
@@ -176,7 +176,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     if (id.isEmpty || sch.isEmpty || sid.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          "請填寫完整資料",
+          '請填寫完整資料',
           semanticsHint: ApiDevSemantics.registrationIncompleteSnackHint,
         ),
       );
@@ -185,8 +185,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     if (_documentBytes == null) {
       final msg = switch (_docKind) {
         RegistrationVerificationDocumentKind.offerOrAdmissionProof =>
-          "請上傳 Offer 或錄取證明圖片",
-        RegistrationVerificationDocumentKind.studentIdCard => "請上傳學生證照片",
+          '請上傳 Offer 或錄取證明圖片',
+        RegistrationVerificationDocumentKind.studentIdCard => '請上傳學生證照片',
       };
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
@@ -218,7 +218,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          "已提交，審核中。通過前仍為訪客權限。",
+          '已提交，審核中。通過前仍為訪客權限。',
           semanticsHint: ApiDevSemantics.registrationSubmitSuccessSnackHint,
         ),
       );
@@ -257,16 +257,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("註冊 · 身分審核", semanticsLabel: "註冊與身分審核"),
+          title: const Text('註冊 · 身分審核', semanticsLabel: '註冊與身分審核'),
           leading: Semantics(
-            hint: "返回上一頁；表單有內容時會先詢問是否捨棄",
+            hint: '返回上一頁；表單有內容時會先詢問是否捨棄',
             child: IconButton(
-              tooltip: "返回",
-              icon: const Icon(Icons.arrow_back, semanticLabel: "返回"),
+              tooltip: '返回',
+              icon: const Icon(Icons.arrow_back, semanticLabel: '返回'),
               onPressed: _submitting
                   ? null
                   : () =>
-                        unawaitedDebug("RegistrationScreen._tryPop", _tryPop()),
+                        unawaitedDebug('RegistrationScreen._tryPop', _tryPop()),
             ),
           ),
         ),
@@ -279,7 +279,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               Semantics(
                 header: true,
                 label: ApiDevSemantics.registrationBanner,
-                hint: "下方可選擇驗證文件類型並上傳圖片",
+                hint: '下方可選擇驗證文件類型並上傳圖片',
                 excludeSemantics: true,
                 child: SelectionArea(
                   child: Text(
@@ -290,8 +290,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               const SizedBox(height: 24),
               Semantics(
-                label: "選擇審核用文件類型",
-                hint: "切換後需重新選擇圖片；Offer 與學生證擇一上傳即可",
+                label: '選擇審核用文件類型',
+                hint: '切換後需重新選擇圖片；Offer 與學生證擇一上傳即可',
                 excludeSemantics: true,
                 child: SegmentedButton<RegistrationVerificationDocumentKind>(
                   showSelectedIcon: false,
@@ -299,12 +299,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ButtonSegment(
                       value: RegistrationVerificationDocumentKind
                           .offerOrAdmissionProof,
-                      label: Text("Offer／錄取"),
+                      label: Text('Offer／錄取'),
                       icon: Icon(Icons.description_outlined, size: 18),
                     ),
                     ButtonSegment(
                       value: RegistrationVerificationDocumentKind.studentIdCard,
-                      label: Text("學生證"),
+                      label: Text('學生證'),
                       icon: Icon(Icons.badge_outlined, size: 18),
                     ),
                   ],
@@ -322,8 +322,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               const SizedBox(height: 24),
               Semantics(
-                label: "自訂 ID",
-                hint: "作為留伴公開帳號；輸入時不需加 @",
+                label: '自訂 ID',
+                hint: '作為留伴公開帳號；輸入時不需加 @',
                 textField: true,
                 child: TextField(
                   controller: _customId,
@@ -332,8 +332,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   autocorrect: false,
                   enableSuggestions: false,
                   decoration: const InputDecoration(
-                    labelText: "自訂 ID",
-                    hintText: "例如 liuxin_2026",
+                    labelText: '自訂 ID',
+                    hintText: '例如 liuxin_2026',
                     border: OutlineInputBorder(),
                   ),
                   textInputAction: TextInputAction.next,
@@ -342,16 +342,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               const SizedBox(height: 12),
               Semantics(
-                label: "學校（主學校）",
-                hint: "填寫主學校全名，供審核對照",
+                label: '學校（主學校）',
+                hint: '填寫主學校全名，供審核對照',
                 textField: true,
                 child: TextField(
                   controller: _school,
                   enabled: !_submitting,
                   autofillHints: const [AutofillHints.organizationName],
                   decoration: const InputDecoration(
-                    labelText: "學校（主學校）",
-                    hintText: "例如 香港大學",
+                    labelText: '學校（主學校）',
+                    hintText: '例如 香港大學',
                     border: OutlineInputBorder(),
                   ),
                   textInputAction: TextInputAction.next,
@@ -359,14 +359,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               const SizedBox(height: 12),
               Semantics(
-                label: "學號（機密，僅審核用）",
-                hint: "學號為機密資料，僅用於審核；欄位已隱藏顯示",
+                label: '學號（機密，僅審核用）',
+                hint: '學號為機密資料，僅用於審核；欄位已隱藏顯示',
                 textField: true,
                 child: TextField(
                   controller: _studentId,
                   enabled: !_submitting,
                   decoration: const InputDecoration(
-                    labelText: "學號（機密，僅審核用）",
+                    labelText: '學號（機密，僅審核用）',
                     border: OutlineInputBorder(),
                   ),
                   obscureText: true,
@@ -376,7 +376,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   onSubmitted: (_) {
                     if (_submitting) return;
                     unawaitedDebug(
-                      "RegistrationScreen._submit",
+                      'RegistrationScreen._submit',
                       _submit(session),
                     );
                   },
@@ -389,9 +389,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   label: switch (_docKind) {
                     RegistrationVerificationDocumentKind
                         .offerOrAdmissionProof =>
-                      "請上傳 Offer 或錄取證明圖片，為必填項目",
+                      '請上傳 Offer 或錄取證明圖片，為必填項目',
                     RegistrationVerificationDocumentKind.studentIdCard =>
-                      "請上傳學生證照片；須含可辨識之學籍資訊",
+                      '請上傳學生證照片；須含可辨識之學籍資訊',
                   },
                   excludeSemantics: true,
                   child: Padding(
@@ -400,9 +400,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       switch (_docKind) {
                         RegistrationVerificationDocumentKind
                             .offerOrAdmissionProof =>
-                          "請上傳 Offer 或錄取證明圖片（必填）",
+                          '請上傳 Offer 或錄取證明圖片（必填）',
                         RegistrationVerificationDocumentKind.studentIdCard =>
-                          "請上傳學生證照片，需清楚可辨識姓名、學校或學號（必填）",
+                          '請上傳學生證照片，需清楚可辨識姓名、學校或學號（必填）',
                       },
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -417,9 +417,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     hint: switch (_docKind) {
                       RegistrationVerificationDocumentKind
                           .offerOrAdmissionProof =>
-                        "已選取之 Offer 或證明圖預覽，僅供審核參考",
+                        '已選取之 Offer 或證明圖預覽，僅供審核參考',
                       RegistrationVerificationDocumentKind.studentIdCard =>
-                        "已選取之學生證預覽，僅供審核參考",
+                        '已選取之學生證預覽，僅供審核參考',
                     },
                     child: Image.memory(
                       _documentBytes!,
@@ -434,10 +434,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Semantics(
                   container: true,
                   label: "已選檔案：${_documentName ?? "已選擇圖片"}",
-                  hint: "目前選取之審核用圖檔名稱",
+                  hint: '目前選取之審核用圖檔名稱',
                   excludeSemantics: true,
                   child: Text(
-                    _documentName ?? "已選擇圖片",
+                    _documentName ?? '已選擇圖片',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
@@ -451,27 +451,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   button: true,
                   enabled: !_submitting,
                   label: _uploadButtonLabelShort(hasDoc),
-                  hint: "開啟相簿挑選圖片",
+                  hint: '開啟相簿挑選圖片',
                   excludeSemantics: true,
                   child: OutlinedButton.icon(
                     onPressed: _submitting
                         ? null
                         : () => unawaitedDebug(
-                            "RegistrationScreen._pickVerificationImage",
+                            'RegistrationScreen._pickVerificationImage',
                             _pickVerificationImage(),
                           ),
-                    icon: const Icon(Icons.upload_file, semanticLabel: "上傳圖片"),
+                    icon: const Icon(Icons.upload_file, semanticLabel: '上傳圖片'),
                     label: Text(_uploadButtonLabelShort(hasDoc)),
                   ),
                 ),
               ),
               const SizedBox(height: 28),
               Tooltip(
-                message: "提交註冊資料審核",
+                message: '提交註冊資料審核',
                 child: Semantics(
                   button: true,
                   enabled: !_submitting,
-                  label: "提交註冊資料審核",
+                  label: '提交註冊資料審核',
                   hint: ApiDevSemantics.registrationSubmitHint(
                     submitting: _submitting,
                   ),
@@ -480,7 +480,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     onPressed: _submitting
                         ? null
                         : () => unawaitedDebug(
-                            "RegistrationScreen._submit",
+                            'RegistrationScreen._submit',
                             _submit(session),
                           ),
                     child: _submitting
@@ -488,31 +488,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             height: 22,
                             width: 22,
                             child: CircularProgressIndicator(
-                              semanticsLabel: "處理中",
+                              semanticsLabel: '處理中',
                               strokeWidth: 2,
                             ),
                           )
-                        : const Text("提交審核"),
+                        : const Text('提交審核'),
                   ),
                 ),
               ),
               const SizedBox(height: 12),
               Tooltip(
-                message: "稍後再完成註冊",
+                message: '稍後再完成註冊',
                 child: Semantics(
                   button: true,
                   enabled: !_submitting,
-                  label: "稍後再完成註冊",
-                  hint: "離開註冊畫面且不提交",
+                  label: '稍後再完成註冊',
+                  hint: '離開註冊畫面且不提交',
                   excludeSemantics: true,
                   child: TextButton(
                     onPressed: _submitting
                         ? null
                         : () => unawaitedDebug(
-                            "RegistrationScreen._tryPop",
+                            'RegistrationScreen._tryPop',
                             _tryPop(),
                           ),
-                    child: const Text("稍後再說"),
+                    child: const Text('稍後再說'),
                   ),
                 ),
               ),
