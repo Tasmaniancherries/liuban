@@ -102,7 +102,6 @@ class DioClient {
         headers: <String, dynamic>{
           Headers.acceptHeader: Headers.jsonContentType,
         },
-        responseType: ResponseType.json,
         listFormat: ListFormat.multiCompatible,
       ),
     );
@@ -142,7 +141,6 @@ class DioClient {
         headers: <String, dynamic>{
           Headers.acceptHeader: Headers.jsonContentType,
         },
-        responseType: ResponseType.json,
         listFormat: ListFormat.multiCompatible,
       ),
     );

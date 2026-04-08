@@ -6,10 +6,7 @@ class LiubanTheme {
   static const Color seed = Color(0xFF1E6B5C);
 
   static ThemeData light() {
-    final scheme = ColorScheme.fromSeed(
-      seedColor: seed,
-      brightness: Brightness.light,
-    );
+    final scheme = ColorScheme.fromSeed(seedColor: seed);
     return ThemeData(
       colorScheme: scheme,
       useMaterial3: true,

@@ -87,11 +87,7 @@ class TokenRefreshInterceptor extends QueuedInterceptor {
         return handler.next(e);
       }
       return handler.next(
-        DioException(
-          requestOptions: err.requestOptions,
-          error: e,
-          type: DioExceptionType.unknown,
-        ),
+        DioException(requestOptions: err.requestOptions, error: e),
       );
     }
   }

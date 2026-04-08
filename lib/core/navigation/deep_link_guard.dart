@@ -60,7 +60,7 @@ bool _isAllowedDynamicRouteShape(List<String> segs) {
 }
 
 String _normalizePathForGuard(String rawPath) {
-  final slashNormalized = rawPath.replaceAll('\\', '/');
+  final slashNormalized = rawPath.replaceAll(r'\', '/');
   final squashed = slashNormalized.replaceAll(RegExp('/+'), '/');
   if (squashed.isEmpty) return '/';
   if (squashed.length > 1 && squashed.endsWith('/')) {
@@ -128,7 +128,7 @@ String _truncateHostForLog(String host) {
 
 String _normalizeLogPath(String path) {
   final trimmed = path.trim();
-  final slashNormalized = trimmed.replaceAll('\\', '/');
+  final slashNormalized = trimmed.replaceAll(r'\', '/');
   var squashed = slashNormalized.replaceAll(RegExp('/+'), '/');
   if (squashed.isEmpty) return '/';
   if (squashed.length > 1 && squashed.endsWith('/')) {

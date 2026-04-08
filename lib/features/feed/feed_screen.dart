@@ -338,15 +338,12 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
       batch = switch (widget.kind) {
         FeedStreamKind.public => await container.feed.listPublicFeed(
           page: page,
-          pageSize: _pageSize,
         ),
         FeedStreamKind.school => await container.feed.listSchoolFeed(
           page: page,
-          pageSize: _pageSize,
         ),
         FeedStreamKind.friends => await container.feed.listFriendsFeed(
           page: page,
-          pageSize: _pageSize,
         ),
       };
       if (replace && page == 1) {

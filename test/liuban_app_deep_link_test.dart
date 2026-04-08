@@ -341,10 +341,7 @@ void main() {
   );
 
   test('buildDeepLinkDedupSignature keeps short input unchanged', () {
-    expect(
-      buildDeepLinkDedupSignature('/feed?x=1', maxChars: 1024),
-      '/feed?x=1',
-    );
+    expect(buildDeepLinkDedupSignature('/feed?x=1'), '/feed?x=1');
   });
 
   test('buildDeepLinkDedupSignature clamps long input to configured max', () {

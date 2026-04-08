@@ -172,7 +172,6 @@ class _LiubanAppState extends State<LiubanApp> {
   static const Duration _deepLinkDedupWindow = Duration(milliseconds: 1500);
   static const int _maxIncomingDeepLinkUriChars = 8192;
   static const int _maxIncomingDeepLinkLocationChars = 4096;
-  static const int _maxDeepLinkDedupSignatureChars = 1024;
   static const String _deepLinkSourceInitial = 'initial';
   static const String _deepLinkSourceStream = 'stream';
 
@@ -340,10 +339,7 @@ class _LiubanAppState extends State<LiubanApp> {
       _notifyDeepLinkRejected(ApiDevSemantics.deepLinkUserMessageLinkTooLong);
       return;
     }
-    final deepLinkSig = buildDeepLinkDedupSignature(
-      uriText,
-      maxChars: _maxDeepLinkDedupSignatureChars,
-    );
+    final deepLinkSig = buildDeepLinkDedupSignature(uriText);
     final nowMs = _nowMs();
     _pruneDeepLinkDedupState(nowMs);
     if (_isDuplicateDeepLink(deepLinkSig, nowMs)) {

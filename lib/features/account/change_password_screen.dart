@@ -137,7 +137,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         context,
       ).auth.changePassword(currentPassword: cur, newPassword: nw);
       if (!mounted) return;
-      TextInput.finishAutofillContext(shouldSave: true);
+      TextInput.finishAutofillContext();
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
           '已更新密碼',

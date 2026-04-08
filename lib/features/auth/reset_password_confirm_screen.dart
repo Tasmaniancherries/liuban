@@ -143,7 +143,7 @@ class _ResetPasswordConfirmScreenState
         context,
       ).auth.completePasswordResetWithToken(token: raw, newPassword: p);
       if (!mounted) return;
-      TextInput.finishAutofillContext(shouldSave: true);
+      TextInput.finishAutofillContext();
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
           '密碼已重設，請使用新密碼登入',

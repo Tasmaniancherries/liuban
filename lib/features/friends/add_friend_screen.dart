@@ -181,7 +181,6 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                   enabled: !_submitting,
                   autocorrect: false,
                   enableSuggestions: false,
-                  textCapitalization: TextCapitalization.none,
                   textInputAction: TextInputAction.done,
                   decoration: const InputDecoration(
                     labelText: '對方 ID',

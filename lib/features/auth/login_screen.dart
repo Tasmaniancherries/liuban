@@ -134,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
         session.setPhase(AccountPhase.pendingVerification);
       }
       if (!mounted) return;
-      TextInput.finishAutofillContext(shouldSave: true);
+      TextInput.finishAutofillContext();
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
           '登入成功',
@@ -226,7 +226,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   autocorrect: false,
                   enableSuggestions: false,
                   textInputAction: TextInputAction.next,
-                  textCapitalization: TextCapitalization.none,
                 ),
               ),
               const SizedBox(height: 12),

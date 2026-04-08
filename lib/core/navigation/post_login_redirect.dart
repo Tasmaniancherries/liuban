@@ -6,7 +6,7 @@ String? sanitizePostLoginRedirect(String? raw) {
   if (t.length > 768) return null;
   if (!t.startsWith('/')) return null;
   if (t.startsWith('//')) return null;
-  if (t.contains('://') || t.contains('\\')) return null;
+  if (t.contains('://') || t.contains(r'\')) return null;
   if (t.toLowerCase().startsWith('/login')) return null;
   return t;
 }

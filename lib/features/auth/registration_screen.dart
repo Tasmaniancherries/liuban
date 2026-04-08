@@ -337,7 +337,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     border: OutlineInputBorder(),
                   ),
                   textInputAction: TextInputAction.next,
-                  textCapitalization: TextCapitalization.none,
                 ),
               ),
               const SizedBox(height: 12),

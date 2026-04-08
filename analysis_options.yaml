@@ -51,3 +51,14 @@ linter:
     sort_pub_dependencies: true
     tighten_type_of_initializing_formals: true
     unnecessary_nullable_for_final_variable_declarations: true
+
+    # Control flow, enums, and small cleanups
+    avoid_redundant_argument_values: true
+    dangling_library_doc_comments: true
+    exhaustive_cases: true
+    noop_primitive_operations: true
+    prefer_void_to_null: true
+    unnecessary_breaks: true
+    unnecessary_constructor_name: true
+    unnecessary_parenthesis: true
+    use_raw_strings: true
