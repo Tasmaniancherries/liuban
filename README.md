@@ -52,10 +52,7 @@ flutter build apk --debug
 ## 開發與測試
 
 ```bash
-flutter pub get
-dart format .   # CI 會檢查格式；也可用 dart format --output=none --set-exit-if-changed . 只檢查不寫入
-dart analyze --fatal-infos   # 與 CI 相同；含 unawaited_futures、cancel_subscriptions、close_sinks、avoid_void_async
-flutter test
+bash tool/ci_quality.sh   # 與 CI quality job 完全一致（含 lockfile/format/analyze/test+coverage）
 ```
 
 產生覆蓋率報告（`coverage/lcov.info`；可本機用 IDE／[`lcov`](https://github.com/linux-test-project/lcov) 檢視；CI 將此檔上傳為 **artifact**）：
