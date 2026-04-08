@@ -79,7 +79,7 @@ class TokenRefreshInterceptor extends QueuedInterceptor {
       ro.headers["Authorization"] = "Bearer ${_tokens.accessToken}";
       ro.extra["_refreshRetried"] = true;
 
-      final clone = await _sessionDio.fetch(ro);
+      final clone = await _sessionDio.fetch<dynamic>(ro);
       handler.resolve(clone);
     } catch (e) {
       _tokens.clear();

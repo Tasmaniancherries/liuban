@@ -6,6 +6,8 @@ Use a Flutter/Dart toolchain that satisfies `pubspec.yaml` `environment.sdk` (cu
 
 The repo includes `.editorconfig` and `.gitattributes` (text defaults to LF). Prefer `dart format` so CI stays green. VS Code users: install recommended extensions from `.vscode/extensions.json` when prompted.
 
+`analysis_options.yaml` enables Dart **`strict-inference`** and **`strict-casts`** (in addition to `package:flutter_lints`). Prefer explicit type arguments on generic calls when the analyzer reports `inference_failure_*` rather than weakening types.
+
 Report security issues privately; see `SECURITY.md` (also linked from **New issue** via `.github/ISSUE_TEMPLATE/config.yml`). Pull requests against `main` also run GitHub **Dependency review** when Dependency graph is enabled for the repository.
 
 CI on `main` is two-stage: Dart **quality** (format / analyze / tests + coverage artifact) must pass before **Web & Android** smoke builds run, saving time when analysis or tests fail. The compile job also uploads a short-lived **debug APK** artifact for sanity checks (not for store release).

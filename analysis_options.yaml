@@ -6,6 +6,9 @@ analyzer:
     - .dart_tool/**
     - ios/Pods/**
     - "**/Pods/**"
+  language:
+    strict-inference: true
+    strict-casts: true
 
 linter:
   rules:
