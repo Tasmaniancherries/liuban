@@ -12,8 +12,18 @@ on:
   workflow_dispatch: {}
   push:
     branches: ["main"]
+    paths-ignore:
+      - "**/*.md"
+      - ".github/ISSUE_TEMPLATE/**"
+      - ".github/pull_request_template.md"
+      - "LICENSE"
   pull_request:
     branches: ["main"]
+    paths-ignore:
+      - "**/*.md"
+      - ".github/ISSUE_TEMPLATE/**"
+      - ".github/pull_request_template.md"
+      - "LICENSE"
 
 jobs:
   quality:
