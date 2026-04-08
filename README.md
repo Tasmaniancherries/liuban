@@ -87,6 +87,8 @@ flutter test test/unawaited_debug_test.dart
 
 其他（路由／門檻／UI 小件）：`test/router_build_test.dart`（`buildRouter` 首屏與錯誤頁）、`test/auth_required_gate_test.dart`、`test/compose_access_gate_test.dart`、`test/widget_phase_guest_lock_test.dart`（`PhaseBadge`／`GuestLockOverlay`）、`test/scroll_behavior_test.dart`、`test/liuban_snackbar_test.dart`。
 
+其他（登入與主殼）：`test/login_screen_test.dart`（返回／捨棄輸入／空表單驗證）、`test/main_shell_navigation_test.dart`（底部導航切換分頁）。
+
 ## 專案結構（概要）
 
 | 路徑 | 說明 |
