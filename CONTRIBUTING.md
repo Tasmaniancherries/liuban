@@ -23,12 +23,6 @@ When upgrading Flutter for the whole team, bump **`env.FLUTTER_VERSION`** at the
 Run the same checks as CI:
 
 ```bash
-./tool/ci_quality.sh
-```
-
-Equivalent shortcut via `make`:
-
-```bash
 make ci-quality
 ```
 
@@ -51,12 +45,6 @@ flutter build apk --debug
 ```
 
 Combined smoke build command used by CI compile job:
-
-```bash
-./tool/ci_smoke_builds.sh
-```
-
-Equivalent shortcut:
 
 ```bash
 make ci-smoke

@@ -46,7 +46,7 @@ jobs:
           cache: true
 
       - name: Quality checks
-        run: ./tool/ci_quality.sh
+        run: make ci-quality
 
       - name: Upload coverage (lcov)
         uses: actions/upload-artifact@v7
@@ -100,7 +100,7 @@ jobs:
           build-root-directory: android
 
       - name: Smoke builds (web + Android)
-        run: ./tool/ci_smoke_builds.sh
+        run: make ci-smoke
 
       - name: Upload debug APK (artifact)
         uses: actions/upload-artifact@v7

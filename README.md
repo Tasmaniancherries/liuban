@@ -52,7 +52,7 @@ flutter build apk --debug
 ## 開發與測試
 
 ```bash
-./tool/ci_quality.sh   # 與 CI quality job 完全一致（含 lockfile/format/analyze/test+coverage）
+make ci-quality   # 與 CI quality job 完全一致（含 lockfile/format/analyze/test+coverage）
 ```
 
 也可用 `make` 快捷（封裝同一組命令）：
