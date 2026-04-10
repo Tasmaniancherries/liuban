@@ -104,4 +104,35 @@ void main() {
     expectLiubanAppBarTitle('@river_2026');
     expect(find.text('請先登入以使用此功能'), findsOneWidget);
   });
+
+  testWidgets('/dm/:peerId without custom uses decoded peer id title', (
+    tester,
+  ) async {
+    final router = await pumpLiubanRouter(tester);
+    router.go('/dm/${Uri.encodeComponent('u 1')}');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expectLiubanAppBarTitle('@u 1');
+    expect(find.text('請先登入以使用此功能'), findsOneWidget);
+  });
+
+  testWidgets('/compose enters compose auth gate title', (tester) async {
+    final router = await pumpLiubanRouter(tester);
+    router.go('/compose');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expectLiubanAppBarTitle('發佈動態');
+    expect(find.text('請先登入以使用此功能'), findsOneWidget);
+  });
+
+  testWidgets('/compose/edit/:postId enters edit auth gate title', (
+    tester,
+  ) async {
+    final router = await pumpLiubanRouter(tester);
+    router.go('/compose/edit/${Uri.encodeComponent('p 1')}');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expectLiubanAppBarTitle('編輯動態');
+    expect(find.text('請先登入以使用此功能'), findsOneWidget);
+  });
 }
