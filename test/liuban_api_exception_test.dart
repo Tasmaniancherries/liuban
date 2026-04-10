@@ -83,6 +83,60 @@ void main() {
       expect(LiubanApiException.fromDio(e).message, '已取消');
     });
 
+    test('fallback mapping covers other DioException types', () {
+      final sendTimeout = LiubanApiException.fromDio(
+        DioException(requestOptions: _ro(), type: DioExceptionType.sendTimeout),
+      );
+      final receiveTimeout = LiubanApiException.fromDio(
+        DioException(
+          requestOptions: _ro(),
+          type: DioExceptionType.receiveTimeout,
+        ),
+      );
+      final badCertificate = LiubanApiException.fromDio(
+        DioException(
+          requestOptions: _ro(),
+          type: DioExceptionType.badCertificate,
+        ),
+      );
+      final badResponse = LiubanApiException.fromDio(
+        DioException(requestOptions: _ro(), type: DioExceptionType.badResponse),
+      );
+      final connectionError = LiubanApiException.fromDio(
+        DioException(
+          requestOptions: _ro(),
+          type: DioExceptionType.connectionError,
+        ),
+      );
+      final unknown = LiubanApiException.fromDio(
+        DioException(requestOptions: _ro()),
+      );
+
+      expect(sendTimeout.message, '送出逾時');
+      expect(receiveTimeout.message, '讀取逾時');
+      expect(badCertificate.message, '憑證錯誤');
+      expect(badResponse.message, '伺服器回應錯誤');
+      expect(connectionError.message, '網路連線失敗');
+      expect(unknown.message, '未知錯誤');
+    });
+
+    test('dio exception message is used when server body is absent', () {
+      final e = DioException(
+        requestOptions: _ro(),
+        message: 'socket closed',
+      );
+      expect(LiubanApiException.fromDio(e).message, 'socket closed');
+    });
+
+    test('raw keeps original DioException instance', () {
+      final e = DioException(
+        requestOptions: _ro(),
+        type: DioExceptionType.connectionError,
+      );
+      final x = LiubanApiException.fromDio(e);
+      expect(identical(x.raw, e), isTrue);
+    });
+
     test('toString includes status and code', () {
       final x = LiubanApiException(message: 'm', statusCode: 403, code: 'C');
       expect(x.toString(), 'LiubanApiException(403, C): m');
