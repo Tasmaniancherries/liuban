@@ -359,7 +359,9 @@ class _FriendsInboxState extends State<_FriendsInbox>
 
   Future<void> _pullRefresh() async {
     final next = _loadAndNotify();
-    setState(() => _future = next);
+    setState(() {
+      _future = next;
+    });
     await next;
   }
 

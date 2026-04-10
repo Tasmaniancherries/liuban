@@ -81,7 +81,9 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
 
   Future<void> _onRefresh() async {
     final next = _loadAndNotify();
-    setState(() => _future = next);
+    setState(() {
+      _future = next;
+    });
     await next;
   }
 

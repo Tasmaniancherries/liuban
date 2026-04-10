@@ -88,7 +88,9 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
 
   Future<void> _onPullRefresh() async {
     final next = _loadWithNotify();
-    setState(() => _future = next);
+    setState(() {
+      _future = next;
+    });
     await next;
   }
 
