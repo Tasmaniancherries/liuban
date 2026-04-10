@@ -75,4 +75,47 @@ void main() {
       expect(find.text('分享至…'), findsNothing);
     },
   );
+
+  testWidgets('copy failure shows error snackbar and keeps sheet open', (
+    tester,
+  ) async {
+    const url = 'https://liuban.app/post/abc';
+    final messenger =
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+    messenger.setMockMethodCallHandler(SystemChannels.platform, (call) async {
+      if (call.method == 'Clipboard.setData') {
+        throw PlatformException(code: 'clipboard-error');
+      }
+      if (call.method == 'HapticFeedback.vibrate') {
+        return null;
+      }
+      return null;
+    });
+    addTearDown(
+      () => messenger.setMockMethodCallHandler(SystemChannels.platform, null),
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Builder(
+            builder: (context) {
+              return TextButton(
+                onPressed: () => showShareLinkSheet(context, url: url),
+                child: const Text('open'),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('複製連結'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('無法複製連結'), findsOneWidget);
+    expect(find.text('分享至…'), findsOneWidget);
+  });
 }
