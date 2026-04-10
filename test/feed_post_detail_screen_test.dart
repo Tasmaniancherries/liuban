@@ -80,6 +80,53 @@ class _DetailMenuAdapter implements HttpClientAdapter {
   }
 }
 
+class _FailThenSuccessPostAdapter implements HttpClientAdapter {
+  var _postCalls = 0;
+
+  @override
+  void close({bool force = false}) {}
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<List<int>>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    if (options.path.contains('/feed/posts/')) {
+      _postCalls += 1;
+      if (_postCalls == 1) {
+        return ResponseBody.fromString(
+          jsonEncode({'message': 'post api fail'}),
+          500,
+          headers: {
+            Headers.contentTypeHeader: ['application/json'],
+          },
+        );
+      }
+      return ResponseBody.fromString(
+        jsonEncode({
+          'id': 'post-1',
+          'author_id': 'u1',
+          'author_display': '作者',
+          'body': 'reloaded body',
+          'audience': 'public',
+        }),
+        200,
+        headers: {
+          Headers.contentTypeHeader: ['application/json'],
+        },
+      );
+    }
+    return ResponseBody.fromString(
+      jsonEncode({'message': 'not found'}),
+      404,
+      headers: {
+        Headers.contentTypeHeader: ['application/json'],
+      },
+    );
+  }
+}
+
 Widget _buildHarness(
   Widget child, {
   HttpClientAdapter? adapter,
@@ -177,5 +224,33 @@ void main() {
     expect(find.text('刪除'), findsOneWidget);
     expect(find.text('檢舉'), findsNothing);
     expect(find.text('屏蔽此用戶'), findsNothing);
+  });
+
+  testWidgets('pull-to-refresh retries from error state and shows content', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _buildHarness(
+        const FeedPostDetailScreen(postId: 'post-1'),
+        adapter: _FailThenSuccessPostAdapter(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text(ApiDevSemantics.feedPostDetailLoadFailedTitle),
+      findsOneWidget,
+    );
+
+    await tester.drag(find.byType(SingleChildScrollView), const Offset(0, 300));
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pumpAndSettle();
+
+    expect(find.text('reloaded body'), findsOneWidget);
+    expect(
+      find.text(ApiDevSemantics.feedPostDetailLoadFailedTitle),
+      findsNothing,
+    );
   });
 }

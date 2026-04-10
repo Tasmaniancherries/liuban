@@ -55,13 +55,17 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
   }
 
   void _refreshDetail() {
-    setState(() => _future = _loadAndNotify());
+    setState(() {
+      _future = _loadAndNotify();
+    });
     unawaitedDebug('FeedPostDetailScreen._loadMyUserId', _loadMyUserId());
   }
 
   Future<void> _onPullRefresh() async {
     final next = _loadAndNotify();
-    setState(() => _future = next);
+    setState(() {
+      _future = next;
+    });
     await next;
     await _loadMyUserId();
   }
