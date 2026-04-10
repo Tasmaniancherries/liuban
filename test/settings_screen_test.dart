@@ -105,6 +105,24 @@ void main() {
     expect(find.text('版本 ${AppConfig.appVersion}'), findsWidgets);
   });
 
+  testWidgets('about dialog close button dismisses the dialog', (tester) async {
+    await tester.pumpWidget(_buildHarness(const SettingsScreen()));
+
+    await tester.tap(find.text('關於留伴'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AboutDialog), findsOneWidget);
+
+    final closeLabel = MaterialLocalizations.of(
+      tester.element(find.byType(AboutDialog)),
+    ).closeButtonLabel;
+
+    await tester.tap(find.text(closeLabel));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AboutDialog), findsNothing);
+  });
+
   testWidgets('legal dialog close button dismisses the dialog', (tester) async {
     await tester.pumpWidget(_buildHarness(const SettingsScreen()));
 
