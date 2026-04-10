@@ -127,6 +127,50 @@ class _FailThenSuccessPostAdapter implements HttpClientAdapter {
   }
 }
 
+class _FetchMeApiErrorAdapter implements HttpClientAdapter {
+  @override
+  void close({bool force = false}) {}
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<List<int>>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    if (options.path.endsWith('/auth/me')) {
+      return ResponseBody.fromString(
+        jsonEncode({'message': 'fetch me api fail'}),
+        500,
+        headers: {
+          Headers.contentTypeHeader: ['application/json'],
+        },
+      );
+    }
+    if (options.path.contains('/feed/posts/')) {
+      return ResponseBody.fromString(
+        jsonEncode({
+          'id': 'post-1',
+          'author_id': 'u1',
+          'author_display': '作者',
+          'body': 'detail body',
+          'audience': 'public',
+        }),
+        200,
+        headers: {
+          Headers.contentTypeHeader: ['application/json'],
+        },
+      );
+    }
+    return ResponseBody.fromString(
+      jsonEncode({'message': 'not found'}),
+      404,
+      headers: {
+        Headers.contentTypeHeader: ['application/json'],
+      },
+    );
+  }
+}
+
 Widget _buildHarness(
   Widget child, {
   HttpClientAdapter? adapter,
@@ -253,4 +297,20 @@ void main() {
       findsNothing,
     );
   });
+
+  testWidgets(
+    'shows fetchMe API error message when auth/me returns API error',
+    (tester) async {
+      await tester.pumpWidget(
+        _buildHarness(
+          const FeedPostDetailScreen(postId: 'post-1'),
+          adapter: _FetchMeApiErrorAdapter(),
+          accessToken: 'token',
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('fetch me api fail'), findsOneWidget);
+    },
+  );
 }
