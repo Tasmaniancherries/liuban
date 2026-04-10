@@ -31,14 +31,67 @@ class _AlwaysErrorAdapter implements HttpClientAdapter {
   }
 }
 
-Widget _buildHarness(Widget child) {
+class _DetailMenuAdapter implements HttpClientAdapter {
+  _DetailMenuAdapter({required this.postAuthorId, required this.meUserId});
+
+  final String postAuthorId;
+  final String meUserId;
+
+  @override
+  void close({bool force = false}) {}
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<List<int>>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    if (options.path.endsWith('/auth/me')) {
+      return ResponseBody.fromString(
+        jsonEncode({'id': meUserId, 'custom_id': 'me'}),
+        200,
+        headers: {
+          Headers.contentTypeHeader: ['application/json'],
+        },
+      );
+    }
+    if (options.path.contains('/feed/posts/')) {
+      return ResponseBody.fromString(
+        jsonEncode({
+          'id': 'post-1',
+          'author_id': postAuthorId,
+          'author_display': '作者',
+          'body': 'detail body',
+          'audience': 'public',
+        }),
+        200,
+        headers: {
+          Headers.contentTypeHeader: ['application/json'],
+        },
+      );
+    }
+    return ResponseBody.fromString(
+      jsonEncode({'message': 'not found'}),
+      404,
+      headers: {
+        Headers.contentTypeHeader: ['application/json'],
+      },
+    );
+  }
+}
+
+Widget _buildHarness(
+  Widget child, {
+  HttpClientAdapter? adapter,
+  String? accessToken,
+}) {
   final container = AppContainer(
     guestDeviceId: 'test-device',
     logHttpTraffic: false,
     baseUrl: 'https://example.invalid',
-    sessionTokens: AuthSessionTokens(),
+    sessionTokens: AuthSessionTokens(accessToken: accessToken),
   );
-  container.dio.httpClientAdapter = _AlwaysErrorAdapter();
+  container.dio.httpClientAdapter = adapter ?? _AlwaysErrorAdapter();
   return AppContainerScope(
     container: container,
     child: MaterialApp(home: child),
@@ -84,5 +137,45 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('返回'), findsOneWidget);
+  });
+
+  testWidgets('shows report and block for non-owned post', (tester) async {
+    await tester.pumpWidget(
+      _buildHarness(
+        const FeedPostDetailScreen(postId: 'post-1'),
+        adapter: _DetailMenuAdapter(postAuthorId: 'author-a', meUserId: 'me-1'),
+        accessToken: 'token',
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('更多'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('分享連結'), findsOneWidget);
+    expect(find.text('檢舉'), findsOneWidget);
+    expect(find.text('屏蔽此用戶'), findsOneWidget);
+    expect(find.text('編輯'), findsNothing);
+    expect(find.text('刪除'), findsNothing);
+  });
+
+  testWidgets('shows edit and delete for owned post', (tester) async {
+    await tester.pumpWidget(
+      _buildHarness(
+        const FeedPostDetailScreen(postId: 'post-1'),
+        adapter: _DetailMenuAdapter(postAuthorId: 'me-1', meUserId: 'me-1'),
+        accessToken: 'token',
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('更多'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('分享連結'), findsOneWidget);
+    expect(find.text('編輯'), findsOneWidget);
+    expect(find.text('刪除'), findsOneWidget);
+    expect(find.text('檢舉'), findsNothing);
+    expect(find.text('屏蔽此用戶'), findsNothing);
   });
 }
