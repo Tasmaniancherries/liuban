@@ -31,6 +31,36 @@ Widget _buildHarness(Widget child) {
 }
 
 void main() {
+  testWidgets('changes theme mode from dialog and updates subtitle', (
+    tester,
+  ) async {
+    await tester.pumpWidget(_buildHarness(const SettingsScreen()));
+
+    await tester.tap(find.text('主題'));
+    await tester.pumpAndSettle();
+    expect(find.text('外觀'), findsOneWidget);
+
+    await tester.tap(find.text('深色'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('深色'), findsOneWidget);
+  });
+
+  testWidgets('changes locale from dialog and updates subtitle', (
+    tester,
+  ) async {
+    await tester.pumpWidget(_buildHarness(const SettingsScreen()));
+
+    await tester.tap(find.text('介面語言'));
+    await tester.pumpAndSettle();
+    expect(find.text('介面語言'), findsWidgets);
+
+    await tester.tap(find.text('English'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('English'), findsOneWidget);
+  });
+
   testWidgets('opens legal dialog and shows placeholder text', (tester) async {
     await tester.pumpWidget(_buildHarness(const SettingsScreen()));
 
