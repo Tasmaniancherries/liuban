@@ -104,4 +104,28 @@ void main() {
     expect(find.text('留伴'), findsOneWidget);
     expect(find.text('版本 ${AppConfig.appVersion}'), findsWidgets);
   });
+
+  testWidgets('legal dialog close button dismisses the dialog', (tester) async {
+    await tester.pumpWidget(_buildHarness(const SettingsScreen()));
+
+    await tester.tap(find.text('用戶協議與隱私'));
+    await tester.pumpAndSettle();
+    expect(find.text(ApiDevSemantics.settingsLegalPlaceholder), findsOneWidget);
+
+    await tester.tap(find.text('關閉'));
+    await tester.pumpAndSettle();
+    expect(find.text(ApiDevSemantics.settingsLegalPlaceholder), findsNothing);
+  });
+
+  testWidgets('opens open-source licenses page from settings', (tester) async {
+    await tester.pumpWidget(_buildHarness(const SettingsScreen()));
+
+    final licenseTile = find.widgetWithText(ListTile, '開源許可');
+    await tester.ensureVisible(licenseTile);
+    await tester.pumpAndSettle();
+    await tester.tap(licenseTile);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(LicensePage), findsOneWidget);
+  });
 }
