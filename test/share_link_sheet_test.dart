@@ -168,6 +168,56 @@ void main() {
     expect(find.text('分享至…'), findsNothing);
   });
 
+  testWidgets('system share sends uri and subject via plugin channel', (
+    tester,
+  ) async {
+    const url = 'https://liuban.app/post/abc';
+    MethodCall? shareCall;
+    final messenger =
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+    messenger.setMockMethodCallHandler(_shareChannel, (call) async {
+      shareCall = call;
+      return '';
+    });
+    messenger.setMockMethodCallHandler(SystemChannels.platform, (call) async {
+      if (call.method == 'HapticFeedback.vibrate') {
+        return null;
+      }
+      return null;
+    });
+    addTearDown(() {
+      messenger.setMockMethodCallHandler(_shareChannel, null);
+      messenger.setMockMethodCallHandler(SystemChannels.platform, null);
+    });
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Builder(
+            builder: (context) {
+              return TextButton(
+                onPressed: () => showShareLinkSheet(context, url: url),
+                child: const Text('open'),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('分享至…'));
+    await tester.pumpAndSettle();
+
+    expect(shareCall, isNotNull);
+    expect(shareCall!.method, 'share');
+    final args = (shareCall!.arguments as Map).cast<String, dynamic>();
+    expect(args['uri'], url);
+    expect(args['subject'], '留伴');
+    expect(find.text('分享至…'), findsNothing);
+  });
+
   testWidgets('share sheet exposes key semantics labels', (tester) async {
     const url = 'https://liuban.app/post/abc';
     final handle = tester.ensureSemantics();
