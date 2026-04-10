@@ -31,6 +31,30 @@ Widget _buildHarness(Widget child) {
 }
 
 void main() {
+  testWidgets('theme dialog marks current option with check icon', (
+    tester,
+  ) async {
+    await tester.pumpWidget(_buildHarness(const SettingsScreen()));
+
+    await tester.tap(find.text('主題'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('外觀'), findsOneWidget);
+    expect(find.byIcon(Icons.check), findsOneWidget);
+  });
+
+  testWidgets('locale dialog marks current option with check icon', (
+    tester,
+  ) async {
+    await tester.pumpWidget(_buildHarness(const SettingsScreen()));
+
+    await tester.tap(find.text('介面語言'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('介面語言'), findsWidgets);
+    expect(find.byIcon(Icons.check), findsOneWidget);
+  });
+
   testWidgets('changes theme mode from dialog and updates subtitle', (
     tester,
   ) async {
