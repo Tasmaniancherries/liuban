@@ -167,4 +167,32 @@ void main() {
     expect(find.text('無法開啟系統分享'), findsOneWidget);
     expect(find.text('分享至…'), findsNothing);
   });
+
+  testWidgets('share sheet exposes key semantics labels', (tester) async {
+    const url = 'https://liuban.app/post/abc';
+    final handle = tester.ensureSemantics();
+    try {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) {
+                return TextButton(
+                  onPressed: () => showShareLinkSheet(context, url: url),
+                  child: const Text('open'),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+
+      expect(find.bySemanticsLabel('複製連結'), findsOneWidget);
+      expect(find.bySemanticsLabel('分享至其他 App'), findsOneWidget);
+    } finally {
+      handle.dispose();
+    }
+  });
 }
