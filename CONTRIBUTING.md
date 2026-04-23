@@ -73,7 +73,7 @@ Android: `android/gradle.properties` uses JVM heap settings that fit typical lap
 
 Use concise, scoped messages, for example:
 
-- `feat: add deep-link fallback for promotion detail`
+- `feat: improve deep-link handling for promotion detail`
 - `fix: guard context usage after async gaps`
 - `ci: enforce lockfile in dependency step`
 
