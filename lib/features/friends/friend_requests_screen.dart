@@ -12,24 +12,24 @@ import 'package:liuban/data/models/friend_request_dto.dart';
 class _IncomingTabLoad {
   const _IncomingTabLoad({
     required this.items,
-    required this.usedErrorFallback,
+    required this.loadFailed,
     this.apiFailureSnackMessage,
   });
 
   final List<FriendRequestDto> items;
-  final bool usedErrorFallback;
+  final bool loadFailed;
   final String? apiFailureSnackMessage;
 }
 
 class _OutgoingTabLoad {
   const _OutgoingTabLoad({
     required this.items,
-    required this.usedErrorFallback,
+    required this.loadFailed,
     this.apiFailureSnackMessage,
   });
 
   final List<FriendOutgoingRequestDto> items;
-  final bool usedErrorFallback;
+  final bool loadFailed;
   final String? apiFailureSnackMessage;
 }
 
@@ -61,8 +61,8 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen>
     _incoming = _loadIncoming();
     _outgoing = _loadOutgoing();
     unawaitedDebug(
-      'FriendRequestsScreen._notifyIfAnyFriendRequestsFallback',
-      _notifyIfAnyFriendRequestsFallback(),
+      'FriendRequestsScreen._notifyIfAnyFriendRequestsLoadFailure',
+      _notifyIfAnyFriendRequestsLoadFailure(),
     );
   }
 
@@ -77,18 +77,15 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen>
       final list = await AppContainerScope.of(
         context,
       ).friends.listIncomingRequests();
-      return _IncomingTabLoad(items: list, usedErrorFallback: false);
+      return _IncomingTabLoad(items: list, loadFailed: false);
     } on LiubanApiException catch (e) {
       return _IncomingTabLoad(
-        items: FriendRequestDto.mockPending(),
-        usedErrorFallback: true,
+        items: const <FriendRequestDto>[],
+        loadFailed: true,
         apiFailureSnackMessage: e.message,
       );
     } catch (_) {
-      return _IncomingTabLoad(
-        items: FriendRequestDto.mockPending(),
-        usedErrorFallback: true,
-      );
+      return const _IncomingTabLoad(items: <FriendRequestDto>[], loadFailed: true);
     }
   }
 
@@ -97,42 +94,42 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen>
       final list = await AppContainerScope.of(
         context,
       ).friends.listOutgoingRequests();
-      return _OutgoingTabLoad(items: list, usedErrorFallback: false);
+      return _OutgoingTabLoad(items: list, loadFailed: false);
     } on LiubanApiException catch (e) {
       return _OutgoingTabLoad(
-        items: FriendOutgoingRequestDto.mockOutgoing(),
-        usedErrorFallback: true,
+        items: const <FriendOutgoingRequestDto>[],
+        loadFailed: true,
         apiFailureSnackMessage: e.message,
       );
     } catch (_) {
-      return _OutgoingTabLoad(
-        items: FriendOutgoingRequestDto.mockOutgoing(),
-        usedErrorFallback: true,
+      return const _OutgoingTabLoad(
+        items: <FriendOutgoingRequestDto>[],
+        loadFailed: true,
       );
     }
   }
 
-  void _scheduleFriendRequestsFallbackSnack({String? apiMessage}) {
+  void _scheduleFriendRequestsLoadFailureSnack({String? apiMessage}) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       ScaffoldMessenger.maybeOf(context)?.showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          apiMessage ?? ApiDevSemantics.friendRequestsListsErrorFallbackMessage,
+          apiMessage ?? ApiDevSemantics.friendRequestsListsLoadFailedMessage,
           semanticsHint: apiMessage != null
               ? ApiDevSemantics.friendRequestsListsGetApiErrorSnackHint
-              : ApiDevSemantics.friendRequestsListsErrorFallbackSnackHint,
+              : ApiDevSemantics.friendRequestsListsLoadFailedSnackHint,
         ),
       );
     });
   }
 
-  Future<void> _notifyIfAnyFriendRequestsFallback() async {
+  Future<void> _notifyIfAnyFriendRequestsLoadFailure() async {
     final ir = await _incoming!;
     final or = await _outgoing!;
     if (!mounted) return;
-    if (ir.usedErrorFallback || or.usedErrorFallback) {
+    if (ir.loadFailed || or.loadFailed) {
       final apiMsg = ir.apiFailureSnackMessage ?? or.apiFailureSnackMessage;
-      _scheduleFriendRequestsFallbackSnack(apiMessage: apiMsg);
+      _scheduleFriendRequestsLoadFailureSnack(apiMessage: apiMsg);
     }
   }
 
@@ -146,9 +143,9 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen>
     final ir = await inc;
     final or = await out;
     if (!mounted) return;
-    if (ir.usedErrorFallback || or.usedErrorFallback) {
+    if (ir.loadFailed || or.loadFailed) {
       final apiMsg = ir.apiFailureSnackMessage ?? or.apiFailureSnackMessage;
-      _scheduleFriendRequestsFallbackSnack(apiMessage: apiMsg);
+      _scheduleFriendRequestsLoadFailureSnack(apiMessage: apiMsg);
     }
   }
 
@@ -267,7 +264,6 @@ class _IncomingPanel extends StatelessWidget {
               }
               final load = snap.data!;
               final items = load.items;
-              final usingMock = load.usedErrorFallback;
               return ListView(
                 cacheExtent: kLiubanListCacheExtent,
                 keyboardDismissBehavior:
@@ -289,27 +285,6 @@ class _IncomingPanel extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (usingMock) ...[
-                    const SizedBox(height: 8),
-                    Semantics(
-                      container: true,
-                      label: ApiDevSemantics
-                          .friendRequestsMockDataBannerVisibleText,
-                      hint: ApiDevSemantics
-                          .friendRequestsMockDataBannerSemanticsHint,
-                      excludeSemantics: true,
-                      child: SelectionArea(
-                        child: Text(
-                          ApiDevSemantics
-                              .friendRequestsMockDataBannerVisibleText,
-                          style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.tertiary,
-                              ),
-                        ),
-                      ),
-                    ),
-                  ],
                   const SizedBox(height: 16),
                   if (items.isEmpty)
                     Padding(
@@ -434,7 +409,6 @@ class _OutgoingPanel extends StatelessWidget {
               }
               final load = snap.data!;
               final items = load.items;
-              final usingMock = load.usedErrorFallback;
               return ListView(
                 cacheExtent: kLiubanListCacheExtent,
                 keyboardDismissBehavior:
@@ -456,27 +430,6 @@ class _OutgoingPanel extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (usingMock) ...[
-                    const SizedBox(height: 8),
-                    Semantics(
-                      container: true,
-                      label: ApiDevSemantics
-                          .friendRequestsMockDataBannerVisibleText,
-                      hint: ApiDevSemantics
-                          .friendRequestsMockDataBannerSemanticsHint,
-                      excludeSemantics: true,
-                      child: SelectionArea(
-                        child: Text(
-                          ApiDevSemantics
-                              .friendRequestsMockDataBannerVisibleText,
-                          style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.tertiary,
-                              ),
-                        ),
-                      ),
-                    ),
-                  ],
                   const SizedBox(height: 16),
                   if (items.isEmpty)
                     Padding(

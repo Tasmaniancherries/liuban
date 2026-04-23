@@ -24,7 +24,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   UserProfileDto? _me;
   bool _loadingMe = false;
   String? _lastToken;
-  bool _meFromFallback = false;
 
   Future<bool>? _loadMeInFlight;
 
@@ -44,7 +43,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (!mounted) return false;
       setState(() {
         _me = me;
-        _meFromFallback = false;
       });
       return true;
     } on LiubanApiException catch (e, st) {
@@ -53,8 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
       if (mounted) {
         setState(() {
-          _me = UserProfileDto.previewFallback();
-          _meFromFallback = true;
+          _me = null;
         });
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
@@ -73,16 +70,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
       if (mounted) {
         setState(() {
-          _me = UserProfileDto.previewFallback();
-          _meFromFallback = true;
+          _me = null;
         });
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
           ScaffoldMessenger.maybeOf(context)?.showSnackBar(
             liubanSnackBarWithSemanticsHint(
-              ApiDevSemantics.profileMeLoadErrorFallbackMessage,
-              semanticsHint:
-                  ApiDevSemantics.profileMeLoadErrorFallbackSnackHint,
+              ApiDevSemantics.profileMeLoadFailedMessage,
+              semanticsHint: ApiDevSemantics.profileMeLoadFailedSnackHint,
             ),
           );
         });
@@ -133,10 +128,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.didChangeDependencies();
     final token = AppContainerScope.of(context).sessionTokens.accessToken;
     if (token == null || token.isEmpty) {
-      if (_me != null || _meFromFallback) {
+      if (_me != null) {
         setState(() {
           _me = null;
-          _meFromFallback = false;
         });
       }
       _lastToken = null;
@@ -221,26 +215,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 const Divider(height: 32),
-                if (hasToken && _meFromFallback)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Semantics(
-                      container: true,
-                      label: ApiDevSemantics.profileMeMockDataBannerVisibleText,
-                      hint:
-                          ApiDevSemantics.profileMeMockDataBannerSemanticsHint,
-                      excludeSemantics: true,
-                      child: SelectionArea(
-                        child: Text(
-                          ApiDevSemantics.profileMeMockDataBannerVisibleText,
-                          style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.tertiary,
-                              ),
-                        ),
-                      ),
-                    ),
-                  ),
                 Row(
                   children: [
                     CircleAvatar(

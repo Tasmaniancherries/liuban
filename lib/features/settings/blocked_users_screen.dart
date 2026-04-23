@@ -11,12 +11,12 @@ import 'package:liuban/data/models/blocked_user_dto.dart';
 class _BlockedUsersLoad {
   const _BlockedUsersLoad({
     required this.items,
-    required this.usedErrorFallback,
+    required this.loadFailed,
     this.apiFailureSnackMessage,
   });
 
   final List<BlockedUserDto> items;
-  final bool usedErrorFallback;
+  final bool loadFailed;
   final String? apiFailureSnackMessage;
 }
 
@@ -37,33 +37,30 @@ class _BlockedUsersScreenState extends State<BlockedUsersScreen> {
       final list = await AppContainerScope.of(
         context,
       ).friends.listBlockedUsers();
-      return _BlockedUsersLoad(items: list, usedErrorFallback: false);
+      return _BlockedUsersLoad(items: list, loadFailed: false);
     } on LiubanApiException catch (e) {
       return _BlockedUsersLoad(
-        items: BlockedUserDto.mockList(),
-        usedErrorFallback: true,
+        items: const <BlockedUserDto>[],
+        loadFailed: true,
         apiFailureSnackMessage: e.message,
       );
     } catch (_) {
-      return _BlockedUsersLoad(
-        items: BlockedUserDto.mockList(),
-        usedErrorFallback: true,
-      );
+      return const _BlockedUsersLoad(items: <BlockedUserDto>[], loadFailed: true);
     }
   }
 
   Future<_BlockedUsersLoad> _loadAndNotify() async {
     final r = await _load();
-    if (r.usedErrorFallback && mounted) {
+    if (r.loadFailed && mounted) {
       final apiMsg = r.apiFailureSnackMessage;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         ScaffoldMessenger.maybeOf(context)?.showSnackBar(
           liubanSnackBarWithSemanticsHint(
-            apiMsg ?? ApiDevSemantics.blockedUsersListErrorFallbackMessage,
+            apiMsg ?? ApiDevSemantics.blockedUsersListLoadFailedMessage,
             semanticsHint: apiMsg != null
                 ? ApiDevSemantics.blockedUsersListGetApiErrorSnackHint
-                : ApiDevSemantics.blockedUsersListErrorFallbackSnackHint,
+                : ApiDevSemantics.blockedUsersListLoadFailedSnackHint,
           ),
         );
       });
@@ -198,7 +195,6 @@ class _BlockedUsersScreenState extends State<BlockedUsersScreen> {
                 }
                 final load = snap.data!;
                 final items = load.items;
-                final usingMock = load.usedErrorFallback;
                 return ListView(
                   cacheExtent: kLiubanListCacheExtent,
                   keyboardDismissBehavior:
@@ -223,27 +219,6 @@ class _BlockedUsersScreenState extends State<BlockedUsersScreen> {
                         ),
                       ),
                     ),
-                    if (usingMock) ...[
-                      const SizedBox(height: 8),
-                      Semantics(
-                        container: true,
-                        label: ApiDevSemantics
-                            .blockedUsersMockDataBannerVisibleText,
-                        hint: ApiDevSemantics
-                            .blockedUsersMockDataBannerSemanticsHint,
-                        excludeSemantics: true,
-                        child: SelectionArea(
-                          child: Text(
-                            ApiDevSemantics
-                                .blockedUsersMockDataBannerVisibleText,
-                            style: Theme.of(context).textTheme.labelMedium
-                                ?.copyWith(
-                                  color: Theme.of(context).colorScheme.tertiary,
-                                ),
-                          ),
-                        ),
-                      ),
-                    ],
                     const SizedBox(height: 16),
                     if (items.isEmpty)
                       Padding(

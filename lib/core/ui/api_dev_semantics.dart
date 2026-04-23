@@ -12,14 +12,14 @@ abstract final class ApiDevSemantics {
   static String _p(String sentence) => '$sentence $docsTrail';
 
   static String get feedPublicList => _p(
-    '優先載入 GET ${AppConfig.apiPrefix}/feed/public；失敗時本地示例。可載入更多、下拉刷新；發佈成功後可刷新。',
+    '優先載入 GET ${AppConfig.apiPrefix}/feed/public。可載入更多、下拉刷新；發佈成功後可刷新。',
   );
 
   static String get feedSchoolList =>
-      _p('優先載入 GET ${AppConfig.apiPrefix}/feed/school；僅已認證同校；失敗時本校示例。可載入更多。');
+      _p('優先載入 GET ${AppConfig.apiPrefix}/feed/school；僅已認證同校。可載入更多。');
 
   static String get feedFriendsList =>
-      _p('優先載入 GET ${AppConfig.apiPrefix}/feed/friends；雙向好友；失敗時好友示例。可載入更多。');
+      _p('優先載入 GET ${AppConfig.apiPrefix}/feed/friends；雙向好友。可載入更多。');
 
   /// [FeedScreen] 分頁載入下一頁失敗時之 SnackBar 本文。
   static const String feedLoadMoreFailedMessage = '載入更多失敗，請稍後再試';
@@ -28,29 +28,21 @@ abstract final class ApiDevSemantics {
   static String get feedLoadMoreFailedSnackHint =>
       _p('載入更多為同一動態列表 GET 之分頁請求失敗；已顯示內容保留。可下拉重新整理自第一頁重試。');
 
-  /// [_FeedStreamTab] 第一頁 GET 失敗、改用示例資料時之 SnackBar 本文。
-  static const String feedInitialLoadFallbackMessage = '無法載入最新動態，已顯示示例內容';
-
-  /// 同上之無障礙 hint（公開／本校／好友見 [feedPublicList] 等）。
-  static String get feedInitialLoadFallbackSnackHint =>
-      _p('向伺服器載入第一頁失敗，列表為本地示例；與即時資料不同步，「載入更多」已停用。可下拉重新整理重試。');
-
-  /// [_FeedStreamTab] 第一頁列表 GET 失敗且後端回傳業務訊息、改用示例時（本體為 [LiubanApiException.message]）；端點見 [feedPublicList] 等。
+  /// [_FeedStreamTab] 第一頁列表 GET 失敗且後端回傳業務訊息時（本體為 [LiubanApiException.message]）；端點見 [feedPublicList] 等。
   static String get feedInitialLoadApiErrorSnackHint => _p(
     '載入動態列表失敗，訊息由後端回傳。預期：GET ${AppConfig.apiPrefix}/feed/public、…/school 或 …/friends（第一頁）。',
   );
 
+  /// [_FeedStreamTab] 第一頁 GET 發生非 API 例外時之 SnackBar 本文。
+  static const String feedInitialLoadFailedMessage = '載入動態失敗，請稍後再試';
+
+  /// 同上之無障礙 hint；列表維持空狀態並可下拉重試。
+  static String get feedInitialLoadFailedSnackHint =>
+      _p('載入第一頁失敗，已維持空列表；可下拉重新整理重試同一 feed 端點。');
+
   /// [_FeedStreamTab] 載入更多同一列表失敗且後端回傳業務訊息時（本體為 [LiubanApiException.message]）。
   static String get feedLoadMoreApiErrorSnackHint =>
       _p('載入下一頁失敗，訊息由後端回傳。與第一頁相同之 feed 列表 GET，帶分頁參數。');
-
-  /// 示例模式下列表頂部可見灰字（接在 [feedPublicList] 等說明下方）。
-  static const String feedMockDataBannerVisibleText =
-      '目前為離線示例，與伺服器不同步；下拉可重新整理。';
-
-  /// 同上之無障礙 hint。
-  static String get feedMockDataBannerSemanticsHint =>
-      _p('列表請求失敗後之備援內容，非 GET 回應。重新整理仍打目前分頁對應之 feed 端點。');
 
   /// 動態分頁右下角「發佈」FAB（開啟撰寫頁；實際送出見 [composePostSubmitHint]）。
   static String get feedComposeFabHint => _p(
@@ -82,29 +74,21 @@ abstract final class ApiDevSemantics {
   );
 
   static String get friendsInbox =>
-      _p('優先載入 GET ${AppConfig.apiPrefix}/friends/inbox；失敗時示例資料。');
+      _p('優先載入 GET ${AppConfig.apiPrefix}/friends/inbox。');
 
-  /// [_FriendsInbox] GET 失敗改用示例時之 SnackBar 本文。
-  static const String friendsInboxErrorFallbackMessage = '無法載入好友收件匣，已顯示示例內容';
+  /// [_FriendsInbox] GET 發生非 API 例外時之 SnackBar 本文。
+  static const String friendsInboxLoadFailedMessage = '無法載入好友收件匣，請稍後再試';
 
-  /// 同上之無障礙 hint。
-  static String get friendsInboxErrorFallbackSnackHint =>
-      _p('GET ${AppConfig.apiPrefix}/friends/inbox 失敗，列表為示例。可下拉重新整理重試。');
+  /// 同上之無障礙 hint；列表維持空狀態，可下拉重試。
+  static String get friendsInboxLoadFailedSnackHint =>
+      _p('GET ${AppConfig.apiPrefix}/friends/inbox 失敗，列表維持空狀態。可下拉重新整理重試。');
 
-  /// [_FriendsInbox] GET 失敗且後端回傳業務訊息、仍顯示例列表時（本體為 [LiubanApiException.message]）。
+  /// [_FriendsInbox] GET 失敗且後端回傳業務訊息時（本體為 [LiubanApiException.message]）。
   static String get friendsInboxGetApiErrorSnackHint =>
       _p('載入收件匣失敗，訊息由後端回傳。預期：GET ${AppConfig.apiPrefix}/friends/inbox。');
 
-  /// 收件匣示例模式下列表頂可見提示（接在 [friendsInbox] 說明下方）。
-  static const String friendsInboxMockDataBannerVisibleText =
-      '目前為離線示例，與伺服器不同步；下拉可重新整理。';
-
-  /// 同上之無障礙 hint。
-  static String get friendsInboxMockDataBannerSemanticsHint =>
-      _p('收件匣請求失敗後之備援內容。重新整理仍打 GET ${AppConfig.apiPrefix}/friends/inbox。');
-
   static String get dmThread => _p(
-    '私訊：GET 與 POST ${AppConfig.apiPrefix}/friends/dm/對方 ID 經編碼後/messages；失敗時示例對話。',
+    '私訊：GET 與 POST ${AppConfig.apiPrefix}/friends/dm/對方 ID 經編碼後/messages。',
   );
 
   /// [DmChatScreen] 送出訊息 [LiubanApiException]。
@@ -119,53 +103,38 @@ abstract final class ApiDevSemantics {
     '預期 POST ${AppConfig.apiPrefix}/friends/dm/對方 ID 經編碼後/messages；非業務錯誤或網路失敗。可稍後重試。',
   );
 
-  /// [DmChatScreen] 載入對話 GET 失敗、改用示例時之 SnackBar 本文。
-  static const String dmThreadLoadErrorFallbackMessage = '無法載入對話，已顯示示例訊息';
+  /// [DmChatScreen] 載入對話 GET 失敗時之 SnackBar 本文。
+  static const String dmThreadLoadFailedMessage = '無法載入對話，請稍後再試';
 
   /// 同上之無障礙 hint。
-  static String get dmThreadLoadErrorFallbackSnackHint => _p(
-    'GET ${AppConfig.apiPrefix}/friends/dm/對方 ID 經編碼後/messages 失敗，畫面為示例對話。可下拉重新整理。',
+  static String get dmThreadLoadFailedSnackHint => _p(
+    'GET ${AppConfig.apiPrefix}/friends/dm/對方 ID 經編碼後/messages 失敗，畫面維持空狀態。可下拉重新整理。',
   );
 
-  /// [DmChatScreen] 載入私訊 GET 失敗且後端回傳業務訊息、仍顯示例執緒時（本體為 [LiubanApiException.message]）。
+  /// [DmChatScreen] 載入私訊 GET 失敗且後端回傳業務訊息時（本體為 [LiubanApiException.message]）。
   static String get dmThreadGetApiErrorSnackHint => _p(
     '載入對話失敗，訊息由後端回傳。預期：GET ${AppConfig.apiPrefix}/friends/dm/對方 ID 經編碼後/messages。',
   );
 
-  /// 示例私訊執緒時，API 說明下方的可見提示。
-  static const String dmMockThreadBannerVisibleText = '目前為示例對話，非伺服器紀錄；下拉可重新整理。';
-
-  /// 同上之無障礙 hint。
-  static String get dmMockThreadBannerSemanticsHint =>
-      _p('對話載入失敗後之備援；與實際 GET 內容不同。');
-
   static String get promotionsList =>
-      _p('優先載入 GET ${AppConfig.apiPrefix}/promotions；失敗時本地示例。');
+      _p('優先載入 GET ${AppConfig.apiPrefix}/promotions。');
 
   /// 推廣列表頁頂部說明（含 API 與 docs 尾註）。
   static String get promotionListBanner =>
       '合作方提供素材，經審核後由留伴平台代為發佈（與廣場用戶帖分流）。'
-      '優先載入 GET ${AppConfig.apiPrefix}/promotions；失敗時本地示例。'
+      '優先載入 GET ${AppConfig.apiPrefix}/promotions。'
       '長按列表項可分享或複製該則推廣連結。 $docsTrail';
 
-  /// [PromotionListScreen] GET 失敗、改用示例列表時之 SnackBar 本文。
-  static const String promotionListErrorFallbackMessage = '無法載入推廣列表，已顯示示例內容';
+  /// [PromotionListScreen] GET 失敗時之 SnackBar 本文。
+  static const String promotionListLoadFailedMessage = '無法載入推廣列表，請稍後再試';
 
   /// 同上之無障礙 hint。
-  static String get promotionListErrorFallbackSnackHint =>
-      _p('GET ${AppConfig.apiPrefix}/promotions 失敗，列表為本地示例。可下拉重新整理重試。');
+  static String get promotionListLoadFailedSnackHint =>
+      _p('GET ${AppConfig.apiPrefix}/promotions 失敗，列表維持空狀態。可下拉重新整理重試。');
 
-  /// [PromotionListScreen] GET 列表失敗且後端回傳業務訊息、仍顯示例時（本體為 [LiubanApiException.message]）。
+  /// [PromotionListScreen] GET 列表失敗且後端回傳業務訊息時（本體為 [LiubanApiException.message]）。
   static String get promotionListGetApiErrorSnackHint =>
       _p('載入推廣列表失敗，訊息由後端回傳。預期：GET ${AppConfig.apiPrefix}/promotions。');
-
-  /// 推廣列表示例模式下列表頂部可見灰字（接在 [promotionListBanner] 下方）。
-  static const String promotionListMockDataBannerVisibleText =
-      '目前為離線示例，與伺服器不同步；下拉可重新整理。';
-
-  /// 同上之無障礙 hint。
-  static String get promotionListMockDataBannerSemanticsHint =>
-      _p('推廣列表請求失敗後之備援內容。重新整理仍打 GET ${AppConfig.apiPrefix}/promotions。');
 
   static String get passwordResetComplete => _p(
     'POST ${AppConfig.apiPrefix}/auth/password/reset/complete，body：token、new_password。郵件或 App 連結應帶 token。',
@@ -196,45 +165,33 @@ abstract final class ApiDevSemantics {
   );
 
   static String get friendsBlocks => _p(
-    '已屏蔽：GET ${AppConfig.apiPrefix}/friends/blocks；解除：POST ${AppConfig.apiPrefix}/friends/blocks/remove。失敗時示例。',
+    '已屏蔽：GET ${AppConfig.apiPrefix}/friends/blocks；解除：POST ${AppConfig.apiPrefix}/friends/blocks/remove。',
   );
 
-  /// [BlockedUsersScreen] GET 失敗改用示例時之 SnackBar 本文。
-  static const String blockedUsersListErrorFallbackMessage = '無法載入屏蔽列表，已顯示示例內容';
+  /// [BlockedUsersScreen] GET 非 API 例外時之 SnackBar 本文。
+  static const String blockedUsersListLoadFailedMessage = '無法載入屏蔽列表，請稍後再試';
 
-  /// 同上之無障礙 hint。
-  static String get blockedUsersListErrorFallbackSnackHint =>
-      _p('GET ${AppConfig.apiPrefix}/friends/blocks 失敗，列表為示例。可下拉重新整理重試。');
+  /// 同上之無障礙 hint；列表維持空狀態，可下拉重試。
+  static String get blockedUsersListLoadFailedSnackHint =>
+      _p('GET ${AppConfig.apiPrefix}/friends/blocks 失敗，列表維持空狀態。可下拉重新整理重試。');
 
-  /// [BlockedUsersScreen] GET 失敗且後端回傳業務訊息、仍顯示例時（本體為 [LiubanApiException.message]）。
+  /// [BlockedUsersScreen] GET 失敗且後端回傳業務訊息時（本體為 [LiubanApiException.message]）。
   static String get blockedUsersListGetApiErrorSnackHint =>
       _p('載入屏蔽列表失敗，訊息由後端回傳。預期：GET ${AppConfig.apiPrefix}/friends/blocks。');
-
-  static const String blockedUsersMockDataBannerVisibleText =
-      '目前為離線示例，與伺服器不同步；下拉可重新整理。';
-
-  static String get blockedUsersMockDataBannerSemanticsHint =>
-      _p('屏蔽列表請求失敗後之備援。重新整理仍打 GET ${AppConfig.apiPrefix}/friends/blocks。');
 
   static String get profileMeGet =>
       _p('GET ${AppConfig.apiPrefix}/auth/me 向伺服器取得個人檔。');
 
-  /// [ProfileScreen] `GET …/auth/me` 失敗、改用占位時之 SnackBar 本文。
-  static const String profileMeLoadErrorFallbackMessage = '無法載入個人檔，已顯示占位內容';
+  /// [ProfileScreen] `GET …/auth/me` 非 API 例外時之 SnackBar 本文。
+  static const String profileMeLoadFailedMessage = '無法載入個人檔，請稍後再試';
 
-  static String get profileMeLoadErrorFallbackSnackHint =>
-      _p('GET ${AppConfig.apiPrefix}/auth/me 失敗；畫面為客戶端占位示例。可下拉重新整理。');
+  static String get profileMeLoadFailedSnackHint =>
+      _p('GET ${AppConfig.apiPrefix}/auth/me 失敗；畫面維持未載入狀態。可下拉重新整理。');
 
   /// `GET …/auth/me`（[fetchMe]）失敗且後端回傳業務訊息時之 SnackBar hint（本體為 [LiubanApiException.message]）。
   /// [ProfileScreen]、[_FeedStreamTab]、[FeedPostDetailScreen] 共用。
   static String get authMeLoadApiErrorSnackHint =>
       _p('取得目前帳號失敗，訊息由後端回傳。預期：GET ${AppConfig.apiPrefix}/auth/me。');
-
-  static const String profileMeMockDataBannerVisibleText =
-      '離線占位資料，非伺服器個人檔；下拉可重新整理。';
-
-  static String get profileMeMockDataBannerSemanticsHint =>
-      _p('個人檔請求失敗後之備援。重新整理仍打 GET ${AppConfig.apiPrefix}/auth/me。');
 
   static String get authChangePassword => _p(
     'POST ${AppConfig.apiPrefix}/auth/password，body：current_password、new_password。',
@@ -262,10 +219,10 @@ abstract final class ApiDevSemantics {
       _p('變更密碼失敗，訊息由後端回傳。預期：POST ${AppConfig.apiPrefix}/auth/password。');
 
   static String get friendRequestsIncoming =>
-      _p('優先載入 GET ${AppConfig.apiPrefix}/friends/requests/incoming；失敗時示例。');
+      _p('優先載入 GET ${AppConfig.apiPrefix}/friends/requests/incoming。');
 
   static String get friendRequestsOutgoing =>
-      _p('優先載入 GET ${AppConfig.apiPrefix}/friends/requests/outgoing；失敗時示例。');
+      _p('優先載入 GET ${AppConfig.apiPrefix}/friends/requests/outgoing。');
 
   static String get passwordResetRequest =>
       _p('POST ${AppConfig.apiPrefix}/auth/password/reset/request，body：email。');
@@ -332,37 +289,16 @@ abstract final class ApiDevSemantics {
     '預期為 POST ${AppConfig.apiPrefix}/friends/requests、.../respond、blocks、blocks/remove 等；非業務訊息時可能為網路或其他例外。',
   );
 
-  /// [FriendRequestsScreen] incoming 或 outgoing GET 失敗時之 SnackBar（統一提示）。
-  static const String friendRequestsListsErrorFallbackMessage =
-      '無法載入好友申請，已顯示示例內容';
+  /// [FriendRequestsScreen] incoming 或 outgoing GET 發生非 API 例外時之 SnackBar。
+  static const String friendRequestsListsLoadFailedMessage = '無法載入好友申請，請稍後再試';
 
-  static String get friendRequestsListsErrorFallbackSnackHint => _p(
-    'GET ${AppConfig.apiPrefix}/friends/requests/incoming 或 .../outgoing 失敗時，對應分頁為示例。可下拉重新整理。',
+  static String get friendRequestsListsLoadFailedSnackHint => _p(
+    'GET ${AppConfig.apiPrefix}/friends/requests/incoming 或 .../outgoing 失敗時，列表維持空狀態。可下拉重新整理。',
   );
 
-  /// [FriendRequestsScreen] 收到或發出列表 GET 失敗且後端回傳業務訊息、仍顯示例時（本體為 [LiubanApiException.message]）。
+  /// [FriendRequestsScreen] 收到或發出列表 GET 失敗且後端回傳業務訊息時（本體為 [LiubanApiException.message]）。
   static String get friendRequestsListsGetApiErrorSnackHint => _p(
     '載入好友申請失敗，訊息由後端回傳。預期：GET ${AppConfig.apiPrefix}/friends/requests/incoming 或 .../outgoing。',
-  );
-
-  /// 申請列表示例模式時該分頁頂可見提示（接在該 Tab 說明文字下方）。
-  static const String friendRequestsMockDataBannerVisibleText =
-      '此分頁為離線示例，與伺服器不同步；下拉可重新整理。';
-
-  static String get friendRequestsMockDataBannerSemanticsHint =>
-      _p('此 Tab 的請求失敗後顯示備援列表。');
-
-  /// 動態詳情頂部：列表 fallback 時的 API 說明。
-  static String get feedPostDetailFallbackBanner => _p(
-    '後端尚未回應，暫顯示列表快取內容。單篇請求為 GET ${AppConfig.apiPrefix}/feed/posts/動態 ID 已編碼。',
-  );
-
-  /// [FeedPostDetailScreen] GET 失敗、使用列表 [fallback] 時之 SnackBar 本文。
-  static const String feedPostDetailListFallbackSnackMessage =
-      '無法自伺服器載入此動態，暫顯示列表快取';
-
-  static String get feedPostDetailListFallbackSnackHint => _p(
-    'GET ${AppConfig.apiPrefix}/feed/posts/動態 ID 已編碼 失敗；內容來自列表頁傳入之快取。可下拉重新整理。',
   );
 
   /// [FeedPostDetailScreen] 已登入但無法取得帳號 user id（`GET …/auth/me`）時之 SnackBar 本文（非 [LiubanApiException] 或節流後仍用之簡短提示）。
@@ -504,30 +440,22 @@ abstract final class ApiDevSemantics {
 
   /// [PromotionDetailScreen] 無資料狀態之無障礙 hint。
   static String get promotionDetailEmptySemanticsHint => _p(
-    '伺服器與本地示例皆無此 ID 時顯示。請求：GET ${AppConfig.apiPrefix}/promotions/推廣 ID 已編碼。'
+    '伺服器無此 ID 或請求失敗時顯示。請求：GET ${AppConfig.apiPrefix}/promotions/推廣 ID 已編碼。'
     '可於此頁面向下拖曳重新整理，或使用返回鈕離開。',
   );
 
-  /// [PromotionDetailScreen] GET 失敗時之 SnackBar 本文（含無資料或僅備援內容）。
-  static const String promotionDetailErrorFallbackMessage = '無法自伺服器載入推廣內容';
+  /// [PromotionDetailScreen] GET 失敗時之 SnackBar 本文。
+  static const String promotionDetailLoadFailedMessage = '無法自伺服器載入推廣內容';
 
   /// 同上之無障礙 hint。
-  static String get promotionDetailErrorFallbackSnackHint => _p(
-    '單篇：GET ${AppConfig.apiPrefix}/promotions/推廣 ID 已編碼。失敗時畫面可能僅顯示本地示例摘要或進入無資料狀態；可下拉重新整理。',
+  static String get promotionDetailLoadFailedSnackHint => _p(
+    '單篇：GET ${AppConfig.apiPrefix}/promotions/推廣 ID 已編碼。失敗時畫面維持無資料狀態；可下拉重新整理。',
   );
 
-  /// [PromotionDetailScreen] GET 單篇失敗且後端回傳業務訊息時之 Snack hint（本體為 [LiubanApiException.message]，畫面仍可能為本地摘要）。
+  /// [PromotionDetailScreen] GET 單篇失敗且後端回傳業務訊息時之 Snack hint（本體為 [LiubanApiException.message]）。
   static String get promotionDetailGetApiErrorSnackHint => _p(
     '載入推廣詳情失敗，訊息由後端回傳。預期：GET ${AppConfig.apiPrefix}/promotions/推廣 ID 已編碼。',
   );
-
-  /// 詳情有備援內容時、開發說明下方之可見提示。
-  static const String promotionDetailCacheBannerVisibleText =
-      '目前顯示本地或示例摘要，非伺服器即時內容；下拉可重新整理。';
-
-  /// 同上之無障礙 hint。
-  static String get promotionDetailCacheBannerSemanticsHint =>
-      _p('詳情請求失敗後沿用本機或示例之 promotion 摘要；與 GET 回應可能不一致。');
 
   /// 動態詳情載入失敗（含編輯頁預載失敗 SnackBar）。
   static const String feedPostDetailLoadFailedTitle = '無法載入此動態';

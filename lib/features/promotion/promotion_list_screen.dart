@@ -13,12 +13,12 @@ import 'package:liuban/features/promotion/promotion_share.dart';
 class _PromotionListLoad {
   const _PromotionListLoad({
     required this.items,
-    required this.usedErrorFallback,
+    required this.loadFailed,
     this.apiFailureSnackMessage,
   });
 
   final List<PromotionItem> items;
-  final bool usedErrorFallback;
+  final bool loadFailed;
   final String? apiFailureSnackMessage;
 }
 
@@ -36,42 +36,33 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
     final container = AppContainerScope.of(context);
     try {
       final dtos = await container.promotion.listPromotions();
-      if (dtos.isEmpty) {
-        return const _PromotionListLoad(
-          items: kMockPromotions,
-          usedErrorFallback: false,
-        );
-      }
       return _PromotionListLoad(
         items: dtos.map(PromotionItem.fromDto).toList(),
-        usedErrorFallback: false,
+        loadFailed: false,
       );
     } on LiubanApiException catch (e) {
       return _PromotionListLoad(
-        items: kMockPromotions,
-        usedErrorFallback: true,
+        items: const <PromotionItem>[],
+        loadFailed: true,
         apiFailureSnackMessage: e.message,
       );
     } catch (_) {
-      return const _PromotionListLoad(
-        items: kMockPromotions,
-        usedErrorFallback: true,
-      );
+      return const _PromotionListLoad(items: <PromotionItem>[], loadFailed: true);
     }
   }
 
   Future<_PromotionListLoad> _loadAndNotify() async {
     final r = await _load();
-    if (r.usedErrorFallback && mounted) {
+    if (r.loadFailed && mounted) {
       final apiMsg = r.apiFailureSnackMessage;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         ScaffoldMessenger.maybeOf(context)?.showSnackBar(
           liubanSnackBarWithSemanticsHint(
-            apiMsg ?? ApiDevSemantics.promotionListErrorFallbackMessage,
+            apiMsg ?? ApiDevSemantics.promotionListLoadFailedMessage,
             semanticsHint: apiMsg != null
                 ? ApiDevSemantics.promotionListGetApiErrorSnackHint
-                : ApiDevSemantics.promotionListErrorFallbackSnackHint,
+                : ApiDevSemantics.promotionListLoadFailedSnackHint,
           ),
         );
       });
@@ -117,7 +108,6 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                 }
                 final load = snap.data!;
                 final items = load.items;
-                final usingMock = load.usedErrorFallback;
                 return ListView(
                   cacheExtent: kLiubanListCacheExtent,
                   keyboardDismissBehavior:
@@ -145,31 +135,24 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
                         ),
                       ),
                     ),
-                    if (usingMock) ...[
+                    if (items.isEmpty)
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-                        child: Semantics(
-                          container: true,
-                          label: ApiDevSemantics
-                              .promotionListMockDataBannerVisibleText,
-                          hint: ApiDevSemantics
-                              .promotionListMockDataBannerSemanticsHint,
-                          excludeSemantics: true,
-                          child: SelectionArea(
-                            child: Text(
-                              ApiDevSemantics
-                                  .promotionListMockDataBannerVisibleText,
-                              style: Theme.of(context).textTheme.labelMedium
-                                  ?.copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.tertiary,
-                                  ),
+                        padding: const EdgeInsets.only(top: 40),
+                        child: Center(
+                          child: Semantics(
+                            container: true,
+                            label: '暫無推廣內容',
+                            hint: '下拉可重新整理',
+                            excludeSemantics: true,
+                            child: SelectionArea(
+                              child: Text(
+                                '暫無推廣內容',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ],
                     for (var i = 0; i < items.length; i++) ...[
                       if (i != 0) const Divider(height: 1),
                       Tooltip(

@@ -5,10 +5,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:liuban/core/app_container.dart';
 import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/config/app_config.dart';
 import 'package:liuban/core/network/auth_session_tokens.dart';
 import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/data/api/auth_api.dart';
+import 'package:liuban/data/api/feed_api.dart';
 import 'package:liuban/data/models/feed_post_dto.dart';
+import 'package:liuban/data/models/user_profile_dto.dart';
 import 'package:liuban/features/feed/feed_post_detail_screen.dart';
+
+class _AuthFetchMeNonApiException extends AuthApi {
+  _AuthFetchMeNonApiException(super.dio, {required super.apiPrefix});
+
+  @override
+  Future<UserProfileDto> fetchMe() async {
+    throw StateError('simulated fetchMe non-LiubanApiException');
+  }
+}
+
+class _FeedGetPostNonApiException extends FeedApi {
+  _FeedGetPostNonApiException(super.dio, {required super.apiPrefix});
+
+  @override
+  Future<FeedPostDto> getPost(String id) async {
+    throw StateError('simulated getPost non-LiubanApiException');
+  }
+}
 
 class _AlwaysErrorAdapter implements HttpClientAdapter {
   @override
@@ -127,6 +149,41 @@ class _FailThenSuccessPostAdapter implements HttpClientAdapter {
   }
 }
 
+class _SuccessDetailAdapter implements HttpClientAdapter {
+  @override
+  void close({bool force = false}) {}
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<List<int>>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    if (options.path.contains('/feed/posts/')) {
+      return ResponseBody.fromString(
+        jsonEncode({
+          'id': 'ok-1',
+          'author_id': 'u9',
+          'author_display': '作者',
+          'body': '純 API 載入單篇成功',
+          'audience': 'public',
+        }),
+        200,
+        headers: {
+          Headers.contentTypeHeader: ['application/json'],
+        },
+      );
+    }
+    return ResponseBody.fromString(
+      jsonEncode({'message': 'not found'}),
+      404,
+      headers: {
+        Headers.contentTypeHeader: ['application/json'],
+      },
+    );
+  }
+}
+
 class _FetchMeApiErrorAdapter implements HttpClientAdapter {
   @override
   void close({bool force = false}) {}
@@ -190,32 +247,38 @@ Widget _buildHarness(
 }
 
 void main() {
-  testWidgets('shows fallback post content when detail API fails', (
+  testWidgets('loads detail from API', (
     tester,
   ) async {
-    const fallback = FeedPostDto(
-      id: 'p1',
-      authorId: 'u1',
-      authorDisplay: '示例作者',
-      body: 'fallback body',
-      audience: 'public',
-    );
     await tester.pumpWidget(
       _buildHarness(
-        const FeedPostDetailScreen(postId: 'p1', fallback: fallback),
+        const FeedPostDetailScreen(postId: 'ok-1'),
+        adapter: _SuccessDetailAdapter(),
       ),
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('fallback body'), findsOneWidget);
+    expect(find.text('純 API 載入單篇成功'), findsOneWidget);
+  });
+
+  testWidgets('shows load failed state when detail API fails', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _buildHarness(
+        const FeedPostDetailScreen(postId: 'p1'),
+      ),
+    );
+    await tester.pumpAndSettle();
+
     expect(
-      find.text(ApiDevSemantics.feedPostDetailFallbackBanner),
+      find.text(ApiDevSemantics.feedPostDetailLoadFailedTitle),
       findsOneWidget,
     );
     expect(find.text('post api fail'), findsOneWidget);
   });
 
-  testWidgets('shows load failed state when no fallback is available', (
+  testWidgets('shows load failed state when post is unavailable', (
     tester,
   ) async {
     await tester.pumpWidget(
@@ -311,6 +374,68 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('fetch me api fail'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'shows fetchMe generic snackbar when auth/me throws non-API error',
+    (tester) async {
+      final container = AppContainer(
+        guestDeviceId: 'g',
+        logHttpTraffic: false,
+        baseUrl: 'https://example.invalid',
+        sessionTokens: AuthSessionTokens(accessToken: 't'),
+        authApi: _AuthFetchMeNonApiException(
+          Dio(),
+          apiPrefix: AppConfig.apiPrefix,
+        ),
+      );
+      container.dio.httpClientAdapter = _SuccessDetailAdapter();
+
+      await tester.pumpWidget(
+        AppContainerScope(
+          container: container,
+          child: const MaterialApp(home: FeedPostDetailScreen(postId: 'ok-1')),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text(ApiDevSemantics.feedPostDetailFetchMeFailedMessage),
+        findsOneWidget,
+      );
+      expect(find.text('純 API 載入單篇成功'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'shows load failed generic snackbar when getPost throws non-API error',
+    (tester) async {
+      final container = AppContainer(
+        guestDeviceId: 'g',
+        logHttpTraffic: false,
+        baseUrl: 'https://example.invalid',
+        sessionTokens: AuthSessionTokens(accessToken: 't'),
+        feedApi: _FeedGetPostNonApiException(
+          Dio(),
+          apiPrefix: AppConfig.apiPrefix,
+        ),
+      );
+
+      await tester.pumpWidget(
+        AppContainerScope(
+          container: container,
+          child: const MaterialApp(
+            home: FeedPostDetailScreen(postId: 'p1'),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text(ApiDevSemantics.feedPostDetailLoadFailedTitle),
+        findsWidgets,
+      );
     },
   );
 }

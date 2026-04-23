@@ -12,12 +12,12 @@ import 'package:liuban/features/promotion/promotion_share.dart';
 class _PromotionDetailLoad {
   const _PromotionDetailLoad({
     required this.item,
-    required this.usedErrorFallback,
+    required this.loadFailed,
     this.apiFailureSnackMessage,
   });
 
   final PromotionItem? item;
-  final bool usedErrorFallback;
+  final bool loadFailed;
 
   /// 非空時顯示後端錯誤字串（仍可能已套用本地摘要）。
   final String? apiFailureSnackMessage;
@@ -51,34 +51,31 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
       final dto = await container.promotion.getPromotion(widget.promotionId);
       return _PromotionDetailLoad(
         item: PromotionItem.fromDto(dto),
-        usedErrorFallback: false,
+        loadFailed: false,
       );
     } on LiubanApiException catch (e) {
       return _PromotionDetailLoad(
-        item: promotionById(widget.promotionId),
-        usedErrorFallback: true,
+        item: null,
+        loadFailed: true,
         apiFailureSnackMessage: e.message,
       );
     } catch (_) {
-      return _PromotionDetailLoad(
-        item: promotionById(widget.promotionId),
-        usedErrorFallback: true,
-      );
+      return const _PromotionDetailLoad(item: null, loadFailed: true);
     }
   }
 
   Future<_PromotionDetailLoad> _loadWithNotify() async {
     final r = await _loadCore();
-    if (r.usedErrorFallback && mounted) {
+    if (r.loadFailed && mounted) {
       final apiMsg = r.apiFailureSnackMessage;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         ScaffoldMessenger.maybeOf(context)?.showSnackBar(
           liubanSnackBarWithSemanticsHint(
-            apiMsg ?? ApiDevSemantics.promotionDetailErrorFallbackMessage,
+            apiMsg ?? ApiDevSemantics.promotionDetailLoadFailedMessage,
             semanticsHint: apiMsg != null
                 ? ApiDevSemantics.promotionDetailGetApiErrorSnackHint
-                : ApiDevSemantics.promotionDetailErrorFallbackSnackHint,
+                : ApiDevSemantics.promotionDetailLoadFailedSnackHint,
           ),
         );
       });
@@ -211,7 +208,6 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
               },
             );
           }
-          final showCacheBanner = data.usedErrorFallback;
           return RefreshIndicator(
             onRefresh: _onPullRefresh,
             child: SingleChildScrollView(
@@ -250,25 +246,6 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
                           ),
                         ),
                       ),
-                      if (showCacheBanner) ...[
-                        Semantics(
-                          container: true,
-                          label: ApiDevSemantics
-                              .promotionDetailCacheBannerVisibleText,
-                          hint: ApiDevSemantics
-                              .promotionDetailCacheBannerSemanticsHint,
-                          excludeSemantics: true,
-                          child: Text(
-                            ApiDevSemantics
-                                .promotionDetailCacheBannerVisibleText,
-                            style: Theme.of(context).textTheme.labelMedium
-                                ?.copyWith(
-                                  color: Theme.of(context).colorScheme.tertiary,
-                                ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                      ],
                       Semantics(
                         header: true,
                         label: p.title,

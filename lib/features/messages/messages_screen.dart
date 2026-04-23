@@ -14,12 +14,12 @@ import 'package:liuban/widgets/guest_lock_overlay.dart';
 class _FriendsInboxLoad {
   const _FriendsInboxLoad({
     required this.items,
-    required this.usedErrorFallback,
+    required this.loadFailed,
     this.apiFailureSnackMessage,
   });
 
   final List<FriendInboxItemDto> items;
-  final bool usedErrorFallback;
+  final bool loadFailed;
   final String? apiFailureSnackMessage;
 }
 
@@ -317,39 +317,39 @@ class _FriendsInboxState extends State<_FriendsInbox>
     if (widget.guestLocked) {
       return const _FriendsInboxLoad(
         items: <FriendInboxItemDto>[],
-        usedErrorFallback: false,
+        loadFailed: false,
       );
     }
     final container = AppContainerScope.of(context);
     try {
       final list = await container.friends.listInbox();
-      return _FriendsInboxLoad(items: list, usedErrorFallback: false);
+      return _FriendsInboxLoad(items: list, loadFailed: false);
     } on LiubanApiException catch (e) {
       return _FriendsInboxLoad(
-        items: FriendInboxItemDto.mockInbox(),
-        usedErrorFallback: true,
+        items: const <FriendInboxItemDto>[],
+        loadFailed: true,
         apiFailureSnackMessage: e.message,
       );
     } catch (_) {
-      return _FriendsInboxLoad(
-        items: FriendInboxItemDto.mockInbox(),
-        usedErrorFallback: true,
+      return const _FriendsInboxLoad(
+        items: <FriendInboxItemDto>[],
+        loadFailed: true,
       );
     }
   }
 
   Future<_FriendsInboxLoad> _loadAndNotify() async {
     final r = await _load();
-    if (r.usedErrorFallback && mounted) {
+    if (r.loadFailed && mounted) {
       final apiMsg = r.apiFailureSnackMessage;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         ScaffoldMessenger.maybeOf(context)?.showSnackBar(
           liubanSnackBarWithSemanticsHint(
-            apiMsg ?? ApiDevSemantics.friendsInboxErrorFallbackMessage,
+            apiMsg ?? ApiDevSemantics.friendsInboxLoadFailedMessage,
             semanticsHint: apiMsg != null
                 ? ApiDevSemantics.friendsInboxGetApiErrorSnackHint
-                : ApiDevSemantics.friendsInboxErrorFallbackSnackHint,
+                : ApiDevSemantics.friendsInboxLoadFailedSnackHint,
           ),
         );
       });
@@ -419,7 +419,6 @@ class _FriendsInboxState extends State<_FriendsInbox>
                     }
                     final load = snap.data!;
                     final items = load.items;
-                    final usingMock = load.usedErrorFallback;
                     return ListView(
                       cacheExtent: kLiubanListCacheExtent,
                       keyboardDismissBehavior:
@@ -446,30 +445,6 @@ class _FriendsInboxState extends State<_FriendsInbox>
                             ),
                           ),
                         ),
-                        if (usingMock)
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
-                            child: Semantics(
-                              container: true,
-                              label: ApiDevSemantics
-                                  .friendsInboxMockDataBannerVisibleText,
-                              hint: ApiDevSemantics
-                                  .friendsInboxMockDataBannerSemanticsHint,
-                              excludeSemantics: true,
-                              child: SelectionArea(
-                                child: Text(
-                                  ApiDevSemantics
-                                      .friendsInboxMockDataBannerVisibleText,
-                                  style: Theme.of(context).textTheme.labelMedium
-                                      ?.copyWith(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.tertiary,
-                                      ),
-                                ),
-                              ),
-                            ),
-                          ),
                         if (items.isEmpty)
                           Padding(
                             padding: const EdgeInsets.only(top: 32),

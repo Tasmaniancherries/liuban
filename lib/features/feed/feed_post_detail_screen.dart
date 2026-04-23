@@ -11,26 +11,16 @@ import 'package:liuban/features/feed/feed_post_share.dart';
 import 'package:liuban/features/feed/feed_report_flow.dart';
 
 class _ResolvedPost {
-  const _ResolvedPost({
-    required this.post,
-    required this.fromListFallback,
-    this.listFallbackApiMessage,
-  });
+  const _ResolvedPost({required this.post});
 
   final FeedPostDto post;
-  final bool fromListFallback;
-
-  /// 非空表示單篇 GET 為 [LiubanApiException]，畫面暫用列表快取帖文。
-  final String? listFallbackApiMessage;
 }
 
-/// 廣場單篇：優先自伺服器載入單筆動態（路徑見 `ApiDevSemantics`／docs 契約，`id` 經 [Uri.encodeComponent]）；
-/// 失敗時使用列表頁傳入之 [fallback]。
+/// 廣場單篇：優先自伺服器載入單筆動態（路徑見 `ApiDevSemantics`／docs 契約，`id` 經 [Uri.encodeComponent]）。
 class FeedPostDetailScreen extends StatefulWidget {
-  const FeedPostDetailScreen({super.key, required this.postId, this.fallback});
+  const FeedPostDetailScreen({super.key, required this.postId});
 
   final String postId;
-  final FeedPostDto? fallback;
 
   @override
   State<FeedPostDetailScreen> createState() => _FeedPostDetailScreenState();
@@ -42,7 +32,7 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
   String? _myUserId;
   var _notifiedFetchMeFailure = false;
 
-  /// 僅在 [LiubanApiException] 且無 [FeedPostDetailScreen.fallback] 時，供 [_loadAndNotify] 顯示後端訊息。
+  /// 僅在 [LiubanApiException] 時，供 [_loadAndNotify] 顯示後端訊息。
   String? _pendingGetPostFailureApiMessage;
 
   @override
@@ -125,21 +115,11 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
       final dto = await AppContainerScope.of(
         context,
       ).feed.getPost(widget.postId);
-      return _ResolvedPost(post: dto, fromListFallback: false);
+      return _ResolvedPost(post: dto);
     } on LiubanApiException catch (e) {
-      if (widget.fallback != null) {
-        return _ResolvedPost(
-          post: widget.fallback!,
-          fromListFallback: true,
-          listFallbackApiMessage: e.message,
-        );
-      }
       _pendingGetPostFailureApiMessage = e.message;
       return null;
     } catch (_) {
-      if (widget.fallback != null) {
-        return _ResolvedPost(post: widget.fallback!, fromListFallback: true);
-      }
       return null;
     }
   }
@@ -147,20 +127,7 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
   Future<_ResolvedPost?> _loadAndNotify() async {
     final r = await _load();
     if (!mounted) return r;
-    if (r != null && r.fromListFallback) {
-      final apiMsg = r.listFallbackApiMessage;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-          liubanSnackBarWithSemanticsHint(
-            apiMsg ?? ApiDevSemantics.feedPostDetailListFallbackSnackMessage,
-            semanticsHint: apiMsg != null
-                ? ApiDevSemantics.feedPostGetApiErrorSnackHint
-                : ApiDevSemantics.feedPostDetailListFallbackSnackHint,
-          ),
-        );
-      });
-    } else if (r == null) {
+    if (r == null) {
       final apiMsg = _pendingGetPostFailureApiMessage;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
@@ -377,25 +344,6 @@ class _FeedPostDetailScreenState extends State<FeedPostDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (resolved.fromListFallback)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: Semantics(
-                            container: true,
-                            label: ApiDevSemantics.feedPostDetailFallbackBanner,
-                            hint: '下拉頁面可重新整理；完整內容以伺服器為準',
-                            excludeSemantics: true,
-                            child: Text(
-                              ApiDevSemantics.feedPostDetailFallbackBanner,
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurfaceVariant,
-                                  ),
-                            ),
-                          ),
-                        ),
                       Row(
                         children: [
                           Expanded(

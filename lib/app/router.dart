@@ -242,12 +242,7 @@ GoRouter buildRouter(
         builder: (context, state) {
           final raw = state.pathParameters['postId'] ?? '';
           final id = Uri.decodeComponent(raw);
-          final extra = state.extra;
-          FeedPostDto? fallback;
-          if (extra is FeedPostDto) {
-            fallback = extra;
-          }
-          return FeedPostDetailScreen(postId: id, fallback: fallback);
+          return FeedPostDetailScreen(postId: id);
         },
       ),
       StatefulShellRoute.indexedStack(

@@ -229,7 +229,6 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
   bool _initialLoading = true;
   bool _loadingMore = false;
   bool _hasMore = true;
-  bool _usingMock = false;
   int _page = 1;
   var _seenTick = 0;
   String? _myUserId;
@@ -320,7 +319,6 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
         _initialLoading = false;
         _loadingMore = false;
         _hasMore = false;
-        _usingMock = false;
         _page = 1;
       });
       return;
@@ -346,17 +344,9 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
           page: page,
         ),
       };
-      if (replace && page == 1) {
-        _usingMock = false;
-      }
     } on LiubanApiException catch (e) {
       if (replace && page == 1) {
-        batch = switch (widget.kind) {
-          FeedStreamKind.public => FeedPostDto.mockPublicFeed(),
-          FeedStreamKind.school => FeedPostDto.mockSchoolFeed(),
-          FeedStreamKind.friends => FeedPostDto.mockFriendsFeed(),
-        };
-        _usingMock = true;
+        batch = const <FeedPostDto>[];
         if (mounted) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
@@ -382,19 +372,14 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
       }
     } catch (_) {
       if (replace && page == 1) {
-        batch = switch (widget.kind) {
-          FeedStreamKind.public => FeedPostDto.mockPublicFeed(),
-          FeedStreamKind.school => FeedPostDto.mockSchoolFeed(),
-          FeedStreamKind.friends => FeedPostDto.mockFriendsFeed(),
-        };
-        _usingMock = true;
+        batch = const <FeedPostDto>[];
         if (mounted) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
             ScaffoldMessenger.maybeOf(context)?.showSnackBar(
               liubanSnackBarWithSemanticsHint(
-                ApiDevSemantics.feedInitialLoadFallbackMessage,
-                semanticsHint: ApiDevSemantics.feedInitialLoadFallbackSnackHint,
+                ApiDevSemantics.feedInitialLoadFailedMessage,
+                semanticsHint: ApiDevSemantics.feedInitialLoadFailedSnackHint,
               ),
             );
           });
@@ -431,11 +416,7 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
         }
       }
       _page = page;
-      if (_usingMock) {
-        _hasMore = false;
-      } else {
-        _hasMore = batch.length >= _pageSize;
-      }
+      _hasMore = batch.length >= _pageSize;
     });
   }
 
@@ -456,7 +437,7 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
   }
 
   Future<void> _onLoadMore() async {
-    if (_loadingMore || !_hasMore || _usingMock) return;
+    if (_loadingMore || !_hasMore) return;
     setState(() => _loadingMore = true);
     await _fetchPage(_page + 1, replace: false);
   }
@@ -486,7 +467,6 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
         posts: const <FeedPostDto>[],
         hint: '解鎖後才會向伺服器請求此列表。',
         showLoadMore: false,
-        usingMock: false,
       );
     }
 
@@ -514,8 +494,7 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
       context,
       posts: _posts,
       hint: widget.kind.listHint,
-      showLoadMore: !_usingMock && _hasMore,
-      usingMock: _usingMock,
+      showLoadMore: _hasMore,
     );
   }
 
@@ -524,7 +503,6 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
     required List<FeedPostDto> posts,
     required String hint,
     required bool showLoadMore,
-    required bool usingMock,
   }) {
     return RefreshIndicator(
       onRefresh: _onRefresh,
@@ -551,23 +529,6 @@ class _FeedStreamTabState extends State<_FeedStreamTab>
               ),
             ),
           ),
-          if (usingMock) ...[
-            const SizedBox(height: 6),
-            Semantics(
-              container: true,
-              label: ApiDevSemantics.feedMockDataBannerVisibleText,
-              hint: ApiDevSemantics.feedMockDataBannerSemanticsHint,
-              excludeSemantics: true,
-              child: SelectionArea(
-                child: Text(
-                  ApiDevSemantics.feedMockDataBannerVisibleText,
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
-                ),
-              ),
-            ),
-          ],
           if (posts.isEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 48),

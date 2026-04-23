@@ -29,7 +29,6 @@ class _DmChatScreenState extends State<DmChatScreen> {
   List<DmMessageDto> _items = <DmMessageDto>[];
   bool _loading = true;
   bool _sending = false;
-  bool _usingMockThread = false;
 
   bool get _hasUnsentDraft => _input.text.trim().isNotEmpty;
 
@@ -101,17 +100,14 @@ class _DmChatScreenState extends State<DmChatScreen> {
       setState(() {
         _items = list;
         _loading = false;
-        _usingMockThread = false;
       });
       _scrollToEnd();
     } on LiubanApiException catch (e) {
       if (!mounted) return;
       setState(() {
-        _items = DmMessageDto.mockThread();
+        _items = <DmMessageDto>[];
         _loading = false;
-        _usingMockThread = true;
       });
-      _scrollToEnd();
       if (mounted) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
@@ -126,18 +122,16 @@ class _DmChatScreenState extends State<DmChatScreen> {
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _items = DmMessageDto.mockThread();
+        _items = <DmMessageDto>[];
         _loading = false;
-        _usingMockThread = true;
       });
-      _scrollToEnd();
       if (mounted) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
           ScaffoldMessenger.maybeOf(context)?.showSnackBar(
             liubanSnackBarWithSemanticsHint(
-              ApiDevSemantics.dmThreadLoadErrorFallbackMessage,
-              semanticsHint: ApiDevSemantics.dmThreadLoadErrorFallbackSnackHint,
+              ApiDevSemantics.dmThreadLoadFailedMessage,
+              semanticsHint: ApiDevSemantics.dmThreadLoadFailedSnackHint,
             ),
           );
         });
@@ -237,24 +231,6 @@ class _DmChatScreenState extends State<DmChatScreen> {
                 ),
               ),
             ),
-            if (_usingMockThread)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
-                child: Semantics(
-                  container: true,
-                  label: ApiDevSemantics.dmMockThreadBannerVisibleText,
-                  hint: ApiDevSemantics.dmMockThreadBannerSemanticsHint,
-                  excludeSemantics: true,
-                  child: SelectionArea(
-                    child: Text(
-                      ApiDevSemantics.dmMockThreadBannerVisibleText,
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.tertiary,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
             Expanded(
               child: _loading
                   ? const Center(
@@ -272,8 +248,29 @@ class _DmChatScreenState extends State<DmChatScreen> {
                           horizontal: 12,
                           vertical: 16,
                         ),
-                        itemCount: _items.length,
+                        itemCount: _items.isEmpty ? 1 : _items.length,
                         itemBuilder: (context, i) {
+                          if (_items.isEmpty) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 24),
+                              child: Center(
+                                child: Semantics(
+                                  container: true,
+                                  label: '暫無對話訊息',
+                                  hint: '下拉可重新整理並重試載入對話',
+                                  excludeSemantics: true,
+                                  child: SelectionArea(
+                                    child: Text(
+                                      '暫無對話訊息',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
                           final m = _items[i];
                           final align = m.isMine
                               ? Alignment.centerRight
