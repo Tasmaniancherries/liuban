@@ -17,6 +17,8 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
     with SingleTickerProviderStateMixin {
+  static const int _maxEmailLength = 254;
+
   late final TabController _tabs;
   final _email = TextEditingController();
   bool _submitting = false;
@@ -100,6 +102,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
 
   Future<void> _sendEmail() async {
     final addr = _email.text.trim();
+    if (addr.length > _maxEmailLength) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        liubanSnackBarWithSemanticsHint(
+          '郵箱長度不可超過 $_maxEmailLength 字元',
+          semanticsHint: ApiDevSemantics.forgotPasswordEmailTooLongSnackHint(
+            _maxEmailLength,
+          ),
+        ),
+      );
+      return;
+    }
     if (!_looksLikeEmail(addr)) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
@@ -322,6 +335,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
             child: TextField(
               controller: _email,
               enabled: !_submitting,
+              maxLength: _maxEmailLength + 1,
               keyboardType: TextInputType.emailAddress,
               autofillHints: const [AutofillHints.email],
               autocorrect: false,

@@ -21,6 +21,8 @@ class ComposePostScreen extends StatefulWidget {
 }
 
 class _ComposePostScreenState extends State<ComposePostScreen> {
+  static const int _maxPostBodyLength = 2000;
+
   final _body = TextEditingController();
   bool _hideSchool = false;
   PostAudience _audience = PostAudience.publicSquare;
@@ -204,6 +206,17 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
       );
       return;
     }
+    if (text.length > _maxPostBodyLength) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        liubanSnackBarWithSemanticsHint(
+          ApiDevSemantics.composePostBodyTooLongMessage(_maxPostBodyLength),
+          semanticsHint: ApiDevSemantics.composePostBodyTooLongSnackHint(
+            _maxPostBodyLength,
+          ),
+        ),
+      );
+      return;
+    }
     if (_hideSchool && _audience == PostAudience.schoolPeers) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
@@ -360,6 +373,7 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
               child: TextField(
                 controller: _body,
                 maxLines: 8,
+                maxLength: _maxPostBodyLength,
                 enabled: !_submitting,
                 decoration: const InputDecoration(
                   alignLabelWithHint: true,

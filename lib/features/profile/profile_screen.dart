@@ -27,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<bool>? _loadMeInFlight;
 
-  /// 成功載入個人檔回傳 `true`；失敗或改用占位時回傳 `false`（並已安排 SnackBar）。
+  /// 成功載入個人檔回傳 `true`；失敗時回傳 `false`（並已安排 SnackBar）。
   Future<bool> _loadMe() {
     if (_loadMeInFlight != null) return _loadMeInFlight!;
     _loadMeInFlight = _performLoadMe().whenComplete(() {
@@ -226,7 +226,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         semanticsLabel:
                             session.phase == AccountPhase.verifiedStudent
                             ? '已認證，留伴預設頭像'
-                            : '頭像占位',
+                            : '預設頭像',
                         style: const TextStyle(fontSize: 24),
                       ),
                     ),
@@ -273,13 +273,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                 )
                               else
-                                Wrap(
-                                  spacing: 8,
-                                  runSpacing: 8,
-                                  children: [
-                                    _schoolChip(context, '港大', alumni: true),
-                                    _schoolChip(context, '中大', alumni: false),
-                                  ],
+                                Text(
+                                  '尚未同步學籍標籤',
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurfaceVariant,
+                                      ),
                                 ),
                             ] else
                               Text(
@@ -304,12 +305,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 if (kDebugMode) ...[
                   Semantics(
                     header: true,
-                    label: '帳戶狀態（開發預覽）',
+                    label: '帳戶狀態（除錯工具）',
                     hint: '僅除錯組建可用於模擬審核階段',
                     excludeSemantics: true,
                     child: SelectionArea(
                       child: Text(
-                        '帳戶狀態（開發預覽）',
+                        '帳戶狀態（除錯工具）',
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ),
@@ -323,7 +324,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         button: true,
                         selected: session.phase == AccountPhase.guest,
                         label: '切換為訪客狀態，訪客',
-                        hint: '僅開發預覽：模擬訪客階段',
+                        hint: '僅除錯用途：模擬訪客階段',
                         excludeSemantics: true,
                         child: ChoiceChip(
                           tooltip: '切換為訪客狀態',
@@ -338,7 +339,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         selected:
                             session.phase == AccountPhase.pendingVerification,
                         label: '切換為審核中狀態，審核中',
-                        hint: '僅開發預覽：模擬審核中階段',
+                        hint: '僅除錯用途：模擬審核中階段',
                         excludeSemantics: true,
                         child: ChoiceChip(
                           tooltip: '切換為審核中狀態',
@@ -354,7 +355,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         button: true,
                         selected: session.phase == AccountPhase.verifiedStudent,
                         label: '切換為已認證狀態，已認證',
-                        hint: '僅開發預覽：模擬已認證階段',
+                        hint: '僅除錯用途：模擬已認證階段',
                         excludeSemantics: true,
                         child: ChoiceChip(
                           tooltip: '切換為已認證狀態',
@@ -371,7 +372,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Semantics(
                     container: true,
                     label: ApiDevSemantics.profilePhasePreviewDisclaimer,
-                    hint: '僅開發預覽用說明文字',
+                    hint: '僅除錯用途說明文字',
                     excludeSemantics: true,
                     child: SelectionArea(
                       child: Text(
@@ -491,9 +492,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               });
                               session.signOut();
                             },
-                      child: kDebugMode
-                          ? const Text('退出登入（預覽）')
-                          : const Text('退出登入'),
+                      child: const Text('退出登入'),
                     ),
                   ),
                 ),

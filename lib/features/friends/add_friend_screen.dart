@@ -16,6 +16,8 @@ class AddFriendScreen extends StatefulWidget {
 }
 
 class _AddFriendScreenState extends State<AddFriendScreen> {
+  static const int _maxCustomIdLength = 32;
+
   final _id = TextEditingController();
   bool _submitting = false;
 
@@ -93,6 +95,17 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
         liubanSnackBarWithSemanticsHint(
           '請輸入 ID',
           semanticsHint: ApiDevSemantics.addFriendIdEmptySnackHint,
+        ),
+      );
+      return;
+    }
+    if (raw.length > _maxCustomIdLength) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        liubanSnackBarWithSemanticsHint(
+          'ID 長度不可超過 $_maxCustomIdLength 字元',
+          semanticsHint: ApiDevSemantics.addFriendIdTooLongSnackHint(
+            _maxCustomIdLength,
+          ),
         ),
       );
       return;
@@ -179,6 +192,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                 child: TextField(
                   controller: _id,
                   enabled: !_submitting,
+                  maxLength: _maxCustomIdLength + 1,
                   autocorrect: false,
                   enableSuggestions: false,
                   textInputAction: TextInputAction.done,

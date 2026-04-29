@@ -15,6 +15,13 @@ class AppContainer {
     AuthSessionTokens? sessionTokens,
     required this.guestDeviceId,
     bool logHttpTraffic = true,
+    AuthApi? authApi,
+    AuthApi Function(Dio dio)? authApiFactory,
+    FeedApi? feedApi,
+    FriendsApi? friendsApi,
+    FriendsApi Function(Dio dio)? friendsApiFactory,
+    PromotionApi? promotionApi,
+    SupportApi? supportApi,
   }) : sessionTokens = sessionTokens ?? AuthSessionTokens() {
     final root = baseUrl ?? AppConfig.apiBaseUrl;
     plainDio = DioClient.createPlainDio(baseUrl: root);
@@ -24,11 +31,24 @@ class AppContainer {
       baseUrl: root,
       logTraffic: logHttpTraffic,
     );
-    auth = AuthApi(dio, apiPrefix: AppConfig.apiPrefix);
-    feed = FeedApi(dio, apiPrefix: AppConfig.apiPrefix);
-    friends = FriendsApi(dio, apiPrefix: AppConfig.apiPrefix);
-    promotion = PromotionApi(dio, apiPrefix: AppConfig.apiPrefix);
-    support = SupportApi(dio, apiPrefix: AppConfig.apiPrefix);
+    assert(
+      authApi == null || authApiFactory == null,
+      'Provide at most one of authApi and authApiFactory',
+    );
+    assert(
+      friendsApi == null || friendsApiFactory == null,
+      'Provide at most one of friendsApi and friendsApiFactory',
+    );
+    auth = authApiFactory != null
+        ? authApiFactory(dio)
+        : (authApi ?? AuthApi(dio, apiPrefix: AppConfig.apiPrefix));
+    feed = feedApi ?? FeedApi(dio, apiPrefix: AppConfig.apiPrefix);
+    friends = friendsApiFactory != null
+        ? friendsApiFactory(dio)
+        : (friendsApi ?? FriendsApi(dio, apiPrefix: AppConfig.apiPrefix));
+    promotion =
+        promotionApi ?? PromotionApi(dio, apiPrefix: AppConfig.apiPrefix);
+    support = supportApi ?? SupportApi(dio, apiPrefix: AppConfig.apiPrefix);
   }
 
   final AuthSessionTokens sessionTokens;

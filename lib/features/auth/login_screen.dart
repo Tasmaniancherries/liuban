@@ -25,6 +25,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  static const int _maxLoginAccountLength = 128;
+  static const int _maxLoginPasswordLength = 128;
+
   final _account = TextEditingController();
   final _password = TextEditingController();
   bool _loading = false;
@@ -111,6 +114,28 @@ class _LoginScreenState extends State<LoginScreen> {
         liubanSnackBarWithSemanticsHint(
           '請輸入帳號與密碼',
           semanticsHint: ApiDevSemantics.loginValidationEmptyFieldsSnackHint,
+        ),
+      );
+      return;
+    }
+    if (account.length > _maxLoginAccountLength) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        liubanSnackBarWithSemanticsHint(
+          '帳號長度不可超過 $_maxLoginAccountLength 字元',
+          semanticsHint: ApiDevSemantics.loginAccountTooLongSnackHint(
+            _maxLoginAccountLength,
+          ),
+        ),
+      );
+      return;
+    }
+    if (password.length > _maxLoginPasswordLength) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        liubanSnackBarWithSemanticsHint(
+          '密碼長度不可超過 $_maxLoginPasswordLength 字元',
+          semanticsHint: ApiDevSemantics.loginPasswordTooLongSnackHint(
+            _maxLoginPasswordLength,
+          ),
         ),
       );
       return;
@@ -216,6 +241,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: TextField(
                   controller: _account,
                   enabled: !_loading,
+                  maxLength: _maxLoginAccountLength + 1,
                   decoration: const InputDecoration(
                     labelText: '帳號',
                     hintText: '自訂 ID 或郵箱',
@@ -236,6 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: TextField(
                   controller: _password,
                   enabled: !_loading,
+                  maxLength: _maxLoginPasswordLength + 1,
                   obscureText: _obscure,
                   autofillHints: const [AutofillHints.password],
                   decoration: InputDecoration(

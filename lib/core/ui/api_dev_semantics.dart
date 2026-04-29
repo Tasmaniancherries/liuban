@@ -1,6 +1,6 @@
 import 'package:liuban/core/config/app_config.dart';
 
-/// 開發與無障礙說明用文案：實際請求為 **主機** + [AppConfig.apiPrefix] + 下列相對路徑
+/// 功能與無障礙說明用文案：實際請求為 **主機** + [AppConfig.apiPrefix] + 下列相對路徑
 ///（`dart define API_PREFIX` 可覆寫預設 `/v1`）。
 abstract final class ApiDevSemantics {
   ApiDevSemantics._();
@@ -145,9 +145,19 @@ abstract final class ApiDevSemantics {
     '重設連結須帶 token；尚未呼叫 POST ${AppConfig.apiPrefix}/auth/password/reset/complete。',
   );
 
+  /// [ResetPasswordConfirmScreen] token 過長。
+  static String resetPasswordTokenTooLongSnackHint(int maxLength) => _p(
+    '重設憑證最多 $maxLength 字元；超出時不會送出 POST ${AppConfig.apiPrefix}/auth/password/reset/complete。',
+  );
+
   /// [ResetPasswordConfirmScreen] 新密碼過短。
   static String get resetPasswordTooShortSnackHint =>
       _p('新密碼長度須符合後端策略（至少 8 字）；尚未送出 complete。');
+
+  /// [ResetPasswordConfirmScreen] 新密碼過長。
+  static String resetPasswordPasswordTooLongSnackHint(int maxLength) => _p(
+    '新密碼最多 $maxLength 字元；超出時不會送出 POST ${AppConfig.apiPrefix}/auth/password/reset/complete。',
+  );
 
   /// [ResetPasswordConfirmScreen] 兩次密碼不一致。
   static String get resetPasswordMismatchSnackHint => _p(
@@ -205,6 +215,11 @@ abstract final class ApiDevSemantics {
   static String get changePasswordTooShortSnackHint =>
       _p('新密碼長度須符合後端策略；尚未送出 POST ${AppConfig.apiPrefix}/auth/password。');
 
+  /// [ChangePasswordScreen] 密碼欄位過長。
+  static String changePasswordTooLongSnackHint(int maxLength) => _p(
+    '密碼最多 $maxLength 字元；超出時不會送出 POST ${AppConfig.apiPrefix}/auth/password。',
+  );
+
   /// [ChangePasswordScreen] 兩次新密碼不一致。
   static String get changePasswordMismatchSnackHint =>
       _p('兩次新密碼須一致；尚未呼叫 POST ${AppConfig.apiPrefix}/auth/password。');
@@ -235,13 +250,18 @@ abstract final class ApiDevSemantics {
     '請輸入有效信箱格式；尚未 POST ${AppConfig.apiPrefix}/auth/password/reset/request。',
   );
 
+  /// [ForgotPasswordScreen] 信箱過長。
+  static String forgotPasswordEmailTooLongSnackHint(int maxLength) => _p(
+    '信箱最多 $maxLength 字元；超出時不會送出 POST ${AppConfig.apiPrefix}/auth/password/reset/request。',
+  );
+
   /// [ForgotPasswordScreen] [LiubanApiException]。
   static String get forgotPasswordApiErrorSnackHint => _p(
     '寄送重設信失敗，訊息由後端回傳。預期：POST ${AppConfig.apiPrefix}/auth/password/reset/request，body：email。',
   );
 
   static String get supportMessages =>
-      _p('POST ${AppConfig.apiPrefix}/support/messages；示意對話，上線後接通客服。');
+      _p('POST ${AppConfig.apiPrefix}/support/messages；訪客可直接留言給官方客服。');
 
   /// [SupportChatScreen] 送出留言 [LiubanApiException]。
   static String get supportSendMessageApiErrorSnackHint =>
@@ -262,6 +282,11 @@ abstract final class ApiDevSemantics {
   /// [AddFriendScreen] 未輸入 ID。
   static String get addFriendIdEmptySnackHint =>
       _p('請輸入對方自訂 ID；尚未 POST ${AppConfig.apiPrefix}/friends/requests。');
+
+  /// [AddFriendScreen] 對方自訂 ID 過長。
+  static String addFriendIdTooLongSnackHint(int maxLength) => _p(
+    '目標自訂 ID 最多 $maxLength 字元；超出時不會送出 POST ${AppConfig.apiPrefix}/friends/requests。',
+  );
 
   /// [AddFriendScreen] 邀請已送出。
   static String get addFriendRequestSentSnackHint => _p(
@@ -332,6 +357,15 @@ abstract final class ApiDevSemantics {
   static String get composePostBodyEmptySnackHint =>
       _p('送出須有動態正文；請求 body 含文字欄位。發佈或更新說明見右上角完成按鈕之無障礙提示。');
 
+  /// [ComposePostScreen] 送出前驗證：正文過長。
+  static String composePostBodyTooLongMessage(int maxLength) =>
+      '內容過長，請控制在 $maxLength 字以內';
+
+  /// 同上 SnackBar 之無障礙 hint（尚未呼叫 POST／PATCH）。
+  static String composePostBodyTooLongSnackHint(int maxLength) => _p(
+    '送出前會檢查正文長度上限（$maxLength 字）。超出時不會呼叫發佈或更新 API，請先精簡內容。',
+  );
+
   /// [ComposePostScreen] `hide_school` 與本校可見互斥。
   static const String composePostAudienceSchoolConflictMessage = '隱藏學校時不可選「本校」';
 
@@ -377,6 +411,16 @@ abstract final class ApiDevSemantics {
   static String get loginValidationEmptyFieldsSnackHint =>
       _p('僅客戶端表單檢查；尚未 POST ${AppConfig.apiPrefix}/auth/login。');
 
+  /// [LoginScreen] 帳號過長。
+  static String loginAccountTooLongSnackHint(int maxLength) => _p(
+    '帳號最多 $maxLength 字元；超出時不會送出 POST ${AppConfig.apiPrefix}/auth/login。',
+  );
+
+  /// [LoginScreen] 密碼過長。
+  static String loginPasswordTooLongSnackHint(int maxLength) => _p(
+    '密碼最多 $maxLength 字元；超出時不會送出 POST ${AppConfig.apiPrefix}/auth/login。',
+  );
+
   /// [LoginScreen] 登入成功 SnackBar。
   static String get loginSuccessSnackHint =>
       _p('登入成功，已儲存 tokens。POST ${AppConfig.apiPrefix}/auth/login。');
@@ -408,6 +452,21 @@ abstract final class ApiDevSemantics {
     '請補齊欄位後再送出。送出任務為 POST ${AppConfig.apiPrefix}/auth/register（multipart）。',
   );
 
+  /// [RegistrationScreen] 自訂 ID 過長。
+  static String registrationCustomIdTooLongSnackHint(int maxLength) => _p(
+    '自訂 ID 最多 $maxLength 字元；超出時不會送出 POST ${AppConfig.apiPrefix}/auth/register。',
+  );
+
+  /// [RegistrationScreen] 學校名稱過長。
+  static String registrationSchoolTooLongSnackHint(int maxLength) => _p(
+    '學校名稱最多 $maxLength 字元；超出時不會送出 POST ${AppConfig.apiPrefix}/auth/register。',
+  );
+
+  /// [RegistrationScreen] 學號過長。
+  static String registrationStudentIdTooLongSnackHint(int maxLength) => _p(
+    '學號最多 $maxLength 字元；超出時不會送出 POST ${AppConfig.apiPrefix}/auth/register。',
+  );
+
   /// [RegistrationScreen] 未上傳審核圖檔。
   static String get registrationDocumentRequiredSnackHint => _p(
     '須上傳審核圖檔後方可註冊。POST ${AppConfig.apiPrefix}/auth/register（multipart，含檔案）。',
@@ -433,7 +492,7 @@ abstract final class ApiDevSemantics {
 
   /// 推廣詳情頁頂（與列表 [promotionListBanner] 並列參考）。
   static String get promotionDetailDevNote =>
-      _p('優先 GET ${AppConfig.apiPrefix}/promotions/推廣 ID 已編碼；失敗時使用本地或列表快取摘要。');
+      _p('推廣詳情以單篇 GET ${AppConfig.apiPrefix}/promotions/推廣 ID 已編碼載入；可下拉重新整理。');
 
   /// 推廣詳情無資料（非 App 路由錯誤）。
   static const String promotionDetailEmptyTitle = '找不到此推廣內容';
@@ -462,11 +521,11 @@ abstract final class ApiDevSemantics {
 
   /// [FeedPostDetailScreen] 等無法解析帖文時之無障礙 hint。
   static String get feedPostDetailLoadFailedSemanticsHint => _p(
-    '後端或網路失敗且無可用快取。單篇：GET ${AppConfig.apiPrefix}/feed/posts/動態 ID 已編碼。'
+    '後端或網路失敗時顯示。單篇：GET ${AppConfig.apiPrefix}/feed/posts/動態 ID 已編碼。'
     '可於此頁面向下拖曳重新整理，或使用返回鈕離開。',
   );
 
-  /// [FeedPostDetailScreen]、[ComposePostScreen] 單篇 GET 失敗且後端回傳業務訊息時之 Snack hint（本體為 [LiubanApiException.message]；詳情頁可能仍顯示列表快取）。
+  /// [FeedPostDetailScreen]、[ComposePostScreen] 單篇 GET 失敗且後端回傳業務訊息時之 Snack hint（本體為 [LiubanApiException.message]）。
   static String get feedPostGetApiErrorSnackHint =>
       _p('載入動態失敗，訊息由後端回傳。預期：GET ${AppConfig.apiPrefix}/feed/posts/動態 ID 已編碼。');
 
@@ -492,9 +551,9 @@ abstract final class ApiDevSemantics {
   static String get verificationSyncApiErrorSnackHint =>
       _p('同步審核狀態失敗。預期：GET ${AppConfig.apiPrefix}/auth/me/verification。');
 
-  /// 個人頁開發用階段切換器下方灰字說明。
+  /// 個人頁除錯用階段切換器下方灰字說明。
   static String get profilePhasePreviewDisclaimer => _p(
-    '下方帳戶階段切換僅開發預覽。實際階段以 GET ${AppConfig.apiPrefix}/auth/me/verification 為準；請使用「同步審核狀態」。',
+    '下方帳戶階段切換僅供除錯。實際階段以 GET ${AppConfig.apiPrefix}/auth/me/verification 為準；請使用「同步審核狀態」。',
   );
 
   /// 設定「用戶協議與隱私」占位全文（含 docs 尾註）。
@@ -644,7 +703,7 @@ abstract final class ApiDevSemantics {
   /// 路由錯誤頁 AppBar 無障礙標題。
   static const String routeErrorScreenAppBarSemanticsLabel = '無法開啟此頁面或連結';
 
-  /// 路由錯誤頁 AppBar：與 SnackBar 共用之開發／無障礙尾註。
+  /// 路由錯誤頁 AppBar：與 SnackBar 共用之功能／無障礙尾註。
   static String get routeErrorScreenAppBarSemanticsHint =>
       deepLinkNavigationRejectedHint;
 
@@ -685,7 +744,7 @@ abstract final class ApiDevSemantics {
 
   /// 訊息分頁官方客服頂部橫幅（訪客提示 + API）。
   static String get supportGuestBanner => _p(
-    '訪客無需註冊即可聯絡平台；上線後請接 IM 與頻率限制。'
+    '訪客無需註冊即可聯絡平台；建議保留防濫用頻率限制。'
     '留言可走 POST ${AppConfig.apiPrefix}/support/messages（詳見進入對話後說明）。',
   );
 

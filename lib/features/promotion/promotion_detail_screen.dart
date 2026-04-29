@@ -19,7 +19,7 @@ class _PromotionDetailLoad {
   final PromotionItem? item;
   final bool loadFailed;
 
-  /// 非空時顯示後端錯誤字串（仍可能已套用本地摘要）。
+  /// 非空時顯示後端錯誤字串。
   final String? apiFailureSnackMessage;
 }
 
@@ -231,7 +231,7 @@ class _PromotionDetailScreenState extends State<PromotionDetailScreen> {
                         child: Semantics(
                           header: true,
                           label: ApiDevSemantics.promotionDetailDevNote,
-                          hint: '開發與 API 說明',
+                          hint: '功能與 API 說明',
                           excludeSemantics: true,
                           child: SelectionArea(
                             child: Text(

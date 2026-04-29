@@ -24,6 +24,8 @@ class DmChatScreen extends StatefulWidget {
 }
 
 class _DmChatScreenState extends State<DmChatScreen> {
+  static const int _maxMessageLength = 500;
+
   final _input = TextEditingController();
   final _scroll = ScrollController();
   List<DmMessageDto> _items = <DmMessageDto>[];
@@ -31,6 +33,7 @@ class _DmChatScreenState extends State<DmChatScreen> {
   bool _sending = false;
 
   bool get _hasUnsentDraft => _input.text.trim().isNotEmpty;
+  bool get _canSend => !_sending && _input.text.trim().isNotEmpty;
 
   void _onInputChanged() => setState(() {});
 
@@ -219,7 +222,7 @@ class _DmChatScreenState extends State<DmChatScreen> {
               child: Semantics(
                 header: true,
                 label: ApiDevSemantics.dmThread,
-                hint: '開發與 API 說明，下方為聊天訊息',
+                hint: '功能與 API 說明，下方為聊天訊息',
                 excludeSemantics: true,
                 child: SelectionArea(
                   child: Text(
@@ -369,6 +372,7 @@ class _DmChatScreenState extends State<DmChatScreen> {
                           controller: _input,
                           minLines: 1,
                           maxLines: 4,
+                          maxLength: _maxMessageLength,
                           enabled: !_sending,
                           decoration: const InputDecoration(
                             hintText: '輸入訊息⋯',
@@ -376,7 +380,7 @@ class _DmChatScreenState extends State<DmChatScreen> {
                           ),
                           textInputAction: TextInputAction.send,
                           onSubmitted: (_) {
-                            if (_sending) return;
+                            if (!_canSend) return;
                             unawaitedDebug('DmChatScreen._send', _send());
                           },
                         ),
@@ -384,10 +388,14 @@ class _DmChatScreenState extends State<DmChatScreen> {
                     ),
                     const SizedBox(width: 8),
                     Semantics(
-                      hint: _sending ? '訊息送出中' : '送出輸入框內文字給對方',
+                      hint: _sending
+                          ? '訊息送出中'
+                          : _canSend
+                          ? '送出輸入框內文字給對方'
+                          : '請先輸入訊息內容',
                       child: IconButton.filled(
                         tooltip: '傳送',
-                        onPressed: _sending
+                        onPressed: !_canSend
                             ? null
                             : () =>
                                   unawaitedDebug('DmChatScreen._send', _send()),

@@ -25,7 +25,7 @@ class AppSession extends ChangeNotifier {
 
   bool get canUseSchoolAndFriends => _phase == AccountPhase.verifiedStudent;
 
-  /// 開發用：之後改為登入／審核 API 回調
+  /// 更新身分階段（登入、註冊、冷啟動 token 水合、個人檔「同步審核狀態」等會呼叫）。
   void setPhase(AccountPhase phase) {
     if (_phase == phase) return;
     _phase = phase;

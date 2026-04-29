@@ -113,6 +113,7 @@ class SettingsScreen extends StatelessWidget {
 
   Future<void> _pickLocale(BuildContext context) async {
     final ctrl = AppLocaleScope.of(context);
+    final messenger = ScaffoldMessenger.of(context);
     final chosen = await showDialog<AppLocalePreference>(
       context: context,
       builder: (ctx) => Semantics(
@@ -161,12 +162,11 @@ class SettingsScreen extends StatelessWidget {
         ),
       ),
     );
-    if (chosen == null || !context.mounted) return;
+    if (chosen == null) return;
     try {
       await ctrl.setPreference(chosen);
     } catch (_) {
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         liubanSnackBarWithSemanticsHint(
           ApiDevSemantics.settingsPersistenceFailedMessage,
           semanticsHint: ApiDevSemantics.settingsPersistenceFailedSnackHint,

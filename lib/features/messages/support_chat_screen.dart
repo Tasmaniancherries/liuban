@@ -21,7 +21,7 @@ class ChatMessage {
   final DateTime time;
 }
 
-/// 官方客服：本地示意對話，上線後接通 IM / WebSocket
+/// 官方客服留言；目前採送出訊息為主，後續可接即時通道。
 class SupportChatScreen extends StatefulWidget {
   const SupportChatScreen({super.key});
 
@@ -30,19 +30,16 @@ class SupportChatScreen extends StatefulWidget {
 }
 
 class _SupportChatScreenState extends State<SupportChatScreen> {
+  static const int _maxMessageLength = 500;
+
   final _input = TextEditingController();
   final _scroll = ScrollController();
-  final List<ChatMessage> _items = [
-    ChatMessage(
-      text: '你好，這裡是留伴官方客服。訪客也可留言，我們會盡快回覆。',
-      fromUser: false,
-      time: DateTime.now().subtract(const Duration(minutes: 2)),
-    ),
-  ];
+  final List<ChatMessage> _items = <ChatMessage>[];
 
   bool _sending = false;
 
   bool get _hasUnsentDraft => _input.text.trim().isNotEmpty;
+  bool get _canSend => !_sending && _input.text.trim().isNotEmpty;
 
   void _onInputChanged() => setState(() {});
 
@@ -189,7 +186,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
               child: Semantics(
                 header: true,
                 label: ApiDevSemantics.supportMessages,
-                hint: '開發與 API 說明，下方為客服對話',
+                hint: '功能與 API 說明，下方為客服對話',
                 excludeSemantics: true,
                 child: SelectionArea(
                   child: Text(
@@ -211,8 +208,27 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                   horizontal: 12,
                   vertical: 16,
                 ),
-                itemCount: _items.length,
+                itemCount: _items.isEmpty ? 1 : _items.length,
                 itemBuilder: (context, i) {
+                  if (_items.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 24),
+                      child: Center(
+                        child: Semantics(
+                          container: true,
+                          label: '暫無客服訊息',
+                          hint: '可在下方輸入框留言給官方客服',
+                          excludeSemantics: true,
+                          child: SelectionArea(
+                            child: Text(
+                              '暫無客服訊息',
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
                   final m = _items[i];
                   final align = m.fromUser
                       ? Alignment.centerRight
@@ -276,6 +292,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                           controller: _input,
                           minLines: 1,
                           maxLines: 4,
+                          maxLength: _maxMessageLength,
                           enabled: !_sending,
                           decoration: const InputDecoration(
                             hintText: '輸入訊息⋯',
@@ -283,7 +300,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                           ),
                           textInputAction: TextInputAction.send,
                           onSubmitted: (_) {
-                            if (_sending) return;
+                            if (!_canSend) return;
                             unawaitedDebug('SupportChatScreen._send', _send());
                           },
                         ),
@@ -291,10 +308,14 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                     ),
                     const SizedBox(width: 8),
                     Semantics(
-                      hint: _sending ? '訊息送出中' : '送出輸入框內文字給官方客服',
+                      hint: _sending
+                          ? '訊息送出中'
+                          : _canSend
+                          ? '送出輸入框內文字給官方客服'
+                          : '請先輸入訊息內容',
                       child: IconButton.filled(
                         tooltip: '傳送',
-                        onPressed: _sending
+                        onPressed: !_canSend
                             ? null
                             : () => unawaitedDebug(
                                 'SupportChatScreen._send',

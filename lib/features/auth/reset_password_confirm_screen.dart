@@ -22,6 +22,9 @@ class ResetPasswordConfirmScreen extends StatefulWidget {
 
 class _ResetPasswordConfirmScreenState
     extends State<ResetPasswordConfirmScreen> {
+  static const int _maxTokenLength = 512;
+  static const int _maxNewPasswordLength = 128;
+
   late final TextEditingController _token;
   final _pass = TextEditingController();
   final _again = TextEditingController();
@@ -115,6 +118,28 @@ class _ResetPasswordConfirmScreenState
         liubanSnackBarWithSemanticsHint(
           '請輸入重設憑證（token）',
           semanticsHint: ApiDevSemantics.resetPasswordTokenMissingSnackHint,
+        ),
+      );
+      return;
+    }
+    if (raw.length > _maxTokenLength) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        liubanSnackBarWithSemanticsHint(
+          '重設憑證長度不可超過 $_maxTokenLength 字元',
+          semanticsHint: ApiDevSemantics.resetPasswordTokenTooLongSnackHint(
+            _maxTokenLength,
+          ),
+        ),
+      );
+      return;
+    }
+    if (p.length > _maxNewPasswordLength) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        liubanSnackBarWithSemanticsHint(
+          '新密碼長度不可超過 $_maxNewPasswordLength 字元',
+          semanticsHint: ApiDevSemantics.resetPasswordPasswordTooLongSnackHint(
+            _maxNewPasswordLength,
+          ),
         ),
       );
       return;
@@ -225,6 +250,7 @@ class _ResetPasswordConfirmScreenState
                 child: TextField(
                   controller: _token,
                   enabled: !_submitting,
+                  maxLength: _maxTokenLength + 1,
                   decoration: const InputDecoration(
                     labelText: '重設憑證（token）',
                     hintText: '郵件連結中的 token',
@@ -243,6 +269,7 @@ class _ResetPasswordConfirmScreenState
                 child: TextField(
                   controller: _pass,
                   enabled: !_submitting,
+                  maxLength: _maxNewPasswordLength + 1,
                   obscureText: _obscureP,
                   autofillHints: const [AutofillHints.newPassword],
                   decoration: InputDecoration(
@@ -275,6 +302,7 @@ class _ResetPasswordConfirmScreenState
                 child: TextField(
                   controller: _again,
                   enabled: !_submitting,
+                  maxLength: _maxNewPasswordLength + 1,
                   obscureText: _obscureA,
                   autofillHints: const [AutofillHints.newPassword],
                   decoration: InputDecoration(

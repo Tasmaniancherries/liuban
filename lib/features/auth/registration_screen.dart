@@ -8,6 +8,7 @@ import 'package:liuban/core/debug/unawaited_debug.dart';
 import 'package:liuban/core/network/api_exception.dart';
 import 'package:liuban/core/session/app_session.dart';
 import 'package:liuban/core/session/app_session_scope.dart';
+import 'package:liuban/core/session/verification_phase_mapper.dart';
 import 'package:liuban/core/text/account_input_normalize.dart';
 import 'package:liuban/core/ui/api_dev_semantics.dart';
 import 'package:liuban/core/ui/liuban_snackbar.dart';
@@ -23,6 +24,10 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  static const int _maxCustomIdLength = 32;
+  static const int _maxSchoolNameLength = 80;
+  static const int _maxStudentIdLength = 32;
+
   final _customId = TextEditingController();
   final _school = TextEditingController();
   final _studentId = TextEditingController();
@@ -182,6 +187,39 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       );
       return;
     }
+    if (id.length > _maxCustomIdLength) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        liubanSnackBarWithSemanticsHint(
+          '自訂 ID 長度不可超過 $_maxCustomIdLength 字元',
+          semanticsHint: ApiDevSemantics.registrationCustomIdTooLongSnackHint(
+            _maxCustomIdLength,
+          ),
+        ),
+      );
+      return;
+    }
+    if (sch.length > _maxSchoolNameLength) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        liubanSnackBarWithSemanticsHint(
+          '學校名稱長度不可超過 $_maxSchoolNameLength 字元',
+          semanticsHint: ApiDevSemantics.registrationSchoolTooLongSnackHint(
+            _maxSchoolNameLength,
+          ),
+        ),
+      );
+      return;
+    }
+    if (sid.length > _maxStudentIdLength) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        liubanSnackBarWithSemanticsHint(
+          '學號長度不可超過 $_maxStudentIdLength 字元',
+          semanticsHint: ApiDevSemantics.registrationStudentIdTooLongSnackHint(
+            _maxStudentIdLength,
+          ),
+        ),
+      );
+      return;
+    }
     if (_documentBytes == null) {
       final msg = switch (_docKind) {
         RegistrationVerificationDocumentKind.offerOrAdmissionProof =>
@@ -213,8 +251,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           access: token,
           refresh: res.refreshToken,
         );
+        try {
+          final st = await container.auth.fetchVerificationStatus();
+          session.setPhase(accountPhaseFromVerificationApi(st.phase));
+        } catch (_) {
+          session.setPhase(accountPhaseFromVerificationApi(res.accountPhase));
+        }
+      } else {
+        session.setPhase(accountPhaseFromVerificationApi(res.accountPhase));
       }
-      session.setPhase(AccountPhase.pendingVerification);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
@@ -328,6 +373,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 child: TextField(
                   controller: _customId,
                   enabled: !_submitting,
+                  maxLength: _maxCustomIdLength + 1,
                   autofillHints: const [AutofillHints.newUsername],
                   autocorrect: false,
                   enableSuggestions: false,
@@ -347,6 +393,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 child: TextField(
                   controller: _school,
                   enabled: !_submitting,
+                  maxLength: _maxSchoolNameLength + 1,
                   autofillHints: const [AutofillHints.organizationName],
                   decoration: const InputDecoration(
                     labelText: '學校（主學校）',
@@ -364,6 +411,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 child: TextField(
                   controller: _studentId,
                   enabled: !_submitting,
+                  maxLength: _maxStudentIdLength + 1,
                   decoration: const InputDecoration(
                     labelText: '學號（機密，僅審核用）',
                     border: OutlineInputBorder(),
