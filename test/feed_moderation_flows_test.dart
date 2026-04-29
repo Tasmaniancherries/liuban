@@ -5,8 +5,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:liuban/core/app_container.dart';
 import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/config/app_config.dart';
 import 'package:liuban/core/network/auth_session_tokens.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/data/api/feed_api.dart';
+import 'package:liuban/data/api/friends_api.dart';
 import 'package:liuban/features/feed/feed_report_flow.dart';
+
+class _FriendsBlockNonApiException extends FriendsApi {
+  _FriendsBlockNonApiException(super.dio, {required super.apiPrefix});
+
+  @override
+  Future<void> blockUser({required String userId}) async {
+    throw StateError('simulated blockUser non-LiubanApiException');
+  }
+}
+
+class _FeedDeleteNonApiException extends FeedApi {
+  _FeedDeleteNonApiException(super.dio, {required super.apiPrefix});
+
+  @override
+  Future<void> deletePost(String postId) async {
+    throw StateError('simulated deletePost non-LiubanApiException');
+  }
+}
 
 class _BlockUserAdapter implements HttpClientAdapter {
   _BlockUserAdapter({required this.statusCode, this.errorMessage});
@@ -123,6 +145,31 @@ Widget _blockHarness(HttpClientAdapter adapter) {
   );
 }
 
+Widget _blockHarnessFriendsApi(FriendsApi friendsApi) {
+  final container = AppContainer(
+    guestDeviceId: 'test-device',
+    logHttpTraffic: false,
+    baseUrl: 'https://example.invalid',
+    sessionTokens: AuthSessionTokens(accessToken: 't'),
+    friendsApi: friendsApi,
+  );
+  return AppContainerScope(
+    container: container,
+    child: MaterialApp(
+      home: Scaffold(
+        body: Builder(
+          builder: (context) {
+            return TextButton(
+              onPressed: () => runBlockUserFlow(context, userId: 'peer-1'),
+              child: const Text('block'),
+            );
+          },
+        ),
+      ),
+    ),
+  );
+}
+
 Widget _deleteHarness(HttpClientAdapter adapter) {
   final container = AppContainer(
     guestDeviceId: 'test-device',
@@ -131,6 +178,31 @@ Widget _deleteHarness(HttpClientAdapter adapter) {
     sessionTokens: AuthSessionTokens(accessToken: 't'),
   );
   container.dio.httpClientAdapter = adapter;
+  return AppContainerScope(
+    container: container,
+    child: MaterialApp(
+      home: Scaffold(
+        body: Builder(
+          builder: (context) {
+            return TextButton(
+              onPressed: () => runDeleteOwnPostFlow(context, postId: 'post-1'),
+              child: const Text('delete'),
+            );
+          },
+        ),
+      ),
+    ),
+  );
+}
+
+Widget _deleteHarnessFeedApi(FeedApi feedApi) {
+  final container = AppContainer(
+    guestDeviceId: 'test-device',
+    logHttpTraffic: false,
+    baseUrl: 'https://example.invalid',
+    sessionTokens: AuthSessionTokens(accessToken: 't'),
+    feedApi: feedApi,
+  );
   return AppContainerScope(
     container: container,
     child: MaterialApp(
@@ -188,6 +260,22 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('cannot block'), findsOneWidget);
     });
+
+    testWidgets('non-API error shows generic snackbar', (tester) async {
+      await tester.pumpWidget(
+        _blockHarnessFriendsApi(
+          _FriendsBlockNonApiException(Dio(), apiPrefix: AppConfig.apiPrefix),
+        ),
+      );
+      await tester.tap(find.text('block'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('屏蔽'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text(ApiDevSemantics.feedModerationGenericFailureMessage),
+        findsOneWidget,
+      );
+    });
   });
 
   group('runDeleteOwnPostFlow', () {
@@ -226,6 +314,22 @@ void main() {
       await tester.tap(find.text('刪除'));
       await tester.pumpAndSettle();
       expect(find.text('cannot delete'), findsOneWidget);
+    });
+
+    testWidgets('non-API error shows generic snackbar', (tester) async {
+      await tester.pumpWidget(
+        _deleteHarnessFeedApi(
+          _FeedDeleteNonApiException(Dio(), apiPrefix: AppConfig.apiPrefix),
+        ),
+      );
+      await tester.tap(find.text('delete'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('刪除'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text(ApiDevSemantics.feedModerationGenericFailureMessage),
+        findsOneWidget,
+      );
     });
   });
 }

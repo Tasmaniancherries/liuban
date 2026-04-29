@@ -121,11 +121,46 @@ void main() {
     });
 
     test('dio exception message is used when server body is absent', () {
+      final e = DioException(requestOptions: _ro(), message: 'socket closed');
+      expect(LiubanApiException.fromDio(e).message, 'socket closed');
+    });
+
+    test('server JSON message takes precedence over dio exception message', () {
       final e = DioException(
         requestOptions: _ro(),
-        message: 'socket closed',
+        response: Response(
+          requestOptions: _ro(),
+          statusCode: 500,
+          data: <String, dynamic>{'message': 'from server'},
+        ),
+        message: 'from dio',
+        type: DioExceptionType.badResponse,
       );
-      expect(LiubanApiException.fromDio(e).message, 'socket closed');
+      expect(LiubanApiException.fromDio(e).message, 'from server');
+    });
+
+    test('empty string body falls back to dio exception message', () {
+      final e = DioException(
+        requestOptions: _ro(),
+        response: Response(requestOptions: _ro(), statusCode: 502, data: ''),
+        message: 'gateway failed',
+        type: DioExceptionType.badResponse,
+      );
+      expect(LiubanApiException.fromDio(e).message, 'gateway failed');
+    });
+
+    test('detail takes precedence over dio exception message when present', () {
+      final e = DioException(
+        requestOptions: _ro(),
+        response: Response(
+          requestOptions: _ro(),
+          statusCode: 400,
+          data: <String, dynamic>{'detail': 'detail from server'},
+        ),
+        message: 'from dio',
+        type: DioExceptionType.badResponse,
+      );
+      expect(LiubanApiException.fromDio(e).message, 'detail from server');
     });
 
     test('raw keeps original DioException instance', () {

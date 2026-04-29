@@ -4,14 +4,38 @@ import 'package:liuban/core/app_container.dart';
 import 'package:liuban/core/app_container_scope.dart';
 import 'package:liuban/core/config/app_config.dart';
 import 'package:liuban/core/locale/app_locale_controller.dart';
+import 'package:liuban/core/locale/app_locale_preference.dart';
 import 'package:liuban/core/locale/app_locale_scope.dart';
 import 'package:liuban/core/network/auth_session_tokens.dart';
+import 'package:liuban/core/persistence/app_persistence.dart';
 import 'package:liuban/core/theme/theme_mode_controller.dart';
 import 'package:liuban/core/theme/theme_mode_scope.dart';
 import 'package:liuban/core/ui/api_dev_semantics.dart';
 import 'package:liuban/features/settings/settings_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-Widget _buildHarness(Widget child) {
+class _ThrowingLocaleWritePersistence extends AppPersistence {
+  _ThrowingLocaleWritePersistence(
+    super._prefs,
+    super.sessionTokens,
+    super.guestDeviceId,
+  );
+
+  @override
+  Future<void> writeAppLocalePreference(AppLocalePreference preference) async {
+    throw StateError('simulated writeAppLocalePreference failure');
+  }
+}
+
+/// 模擬 [AppLocaleController.setPreference] 非 API 失敗，對應設定頁 catch 與 SnackBar。
+class _ThrowingSetPreferenceLocaleController extends AppLocaleController {
+  @override
+  Future<void> setPreference(AppLocalePreference next) async {
+    throw StateError('simulated setPreference failure');
+  }
+}
+
+Widget _buildHarness(Widget child, {AppLocaleController? localeController}) {
   final container = AppContainer(
     guestDeviceId: 'test-device',
     logHttpTraffic: false,
@@ -23,7 +47,7 @@ Widget _buildHarness(Widget child) {
     child: ThemeModeScope(
       controller: ThemeModeController(),
       child: AppLocaleScope(
-        controller: AppLocaleController(),
+        controller: localeController ?? AppLocaleController(),
         child: MaterialApp(home: child),
       ),
     ),
@@ -31,6 +55,50 @@ Widget _buildHarness(Widget child) {
 }
 
 void main() {
+  test('throwing locale persistence makes setPreference fail', () async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final controller = AppLocaleController(
+      persistence: _ThrowingLocaleWritePersistence(
+        prefs,
+        AuthSessionTokens(),
+        'test-device',
+      ),
+    );
+    expect(controller.preference, AppLocalePreference.system);
+    await expectLater(
+      controller.setPreference(AppLocalePreference.english),
+      throwsA(isA<StateError>()),
+    );
+  });
+
+  testWidgets('locale persist failure shows persistence snackbar', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _buildHarness(
+        const SettingsScreen(),
+        localeController: _ThrowingSetPreferenceLocaleController(),
+      ),
+    );
+
+    await tester.tap(find.text('介面語言'));
+    await tester.pumpAndSettle();
+
+    // 以路由結果模擬選取 English，避免依賴 ListTile 點擊（widget test 曾無法關閉對話框）。
+    Navigator.of(
+      tester.element(find.byType(AlertDialog)),
+      rootNavigator: true,
+    ).pop(AppLocalePreference.english);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    expect(
+      find.text(ApiDevSemantics.settingsPersistenceFailedMessage),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('theme dialog marks current option with check icon', (
     tester,
   ) async {

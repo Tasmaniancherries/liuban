@@ -78,7 +78,7 @@ class _PromotionDetailFailAdapter implements HttpClientAdapter {
   }
 }
 
-/// `GET …/promotions/{id}` 失敗且 [promotionById] 為 null（例如 id 不在 [kMockPromotions]）。
+/// `GET …/promotions/{id}` 失敗且 [promotionFixtureById] 為 null（例如 id 不在 [kPromotionFixtures]）。
 class _PromotionDetailFailNoLocalAdapter implements HttpClientAdapter {
   @override
   void close({bool force = false}) {}
@@ -92,7 +92,7 @@ class _PromotionDetailFailNoLocalAdapter implements HttpClientAdapter {
     final p = options.uri.path;
     if (options.method == 'GET' && p.endsWith('/promotions/999')) {
       return ResponseBody.fromString(
-        jsonEncode({'message': '推廣詳情無本地備援 API 錯誤'}),
+        jsonEncode({'message': '推廣詳情無本地夾具 API 錯誤'}),
         502,
         headers: {
           Headers.contentTypeHeader: ['application/json'],
@@ -171,7 +171,7 @@ void main() {
   });
 
   testWidgets(
-    'GET failure with no local mock shows empty title and API snackbar',
+    'GET failure with no local fixture shows empty title and API snackbar',
     (tester) async {
       final container = AppContainer(
         guestDeviceId: 'g',
@@ -195,7 +195,7 @@ void main() {
         find.text(ApiDevSemantics.promotionDetailEmptyTitle),
         findsOneWidget,
       );
-      expect(find.text('推廣詳情無本地備援 API 錯誤'), findsOneWidget);
+      expect(find.text('推廣詳情無本地夾具 API 錯誤'), findsOneWidget);
     },
   );
 
@@ -235,7 +235,7 @@ void main() {
   );
 
   testWidgets(
-    'getPromotion non-API failure with no local mock shows empty title and generic snackbar',
+    'getPromotion non-API failure with no local fixture shows empty title and generic snackbar',
     (tester) async {
       final container = AppContainer(
         guestDeviceId: 'g',

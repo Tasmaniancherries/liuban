@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:liuban/core/network/api_exception.dart';
 import 'package:liuban/data/api/feed_api.dart';
 
 class _FeedCaptureAdapter implements HttpClientAdapter {
@@ -66,11 +67,11 @@ class _FeedCaptureAdapter implements HttpClientAdapter {
       );
     }
     if (p.endsWith('/feed/posts') && options.method == 'POST') {
-      // Return empty object to exercise local fallback in createPost.
+      // Return empty object to exercise local DTO compatibility parsing.
       return ResponseBody.fromString('{}', 200, headers: jsonHeaders);
     }
     if (p.contains('/feed/posts/') && options.method == 'PATCH') {
-      // Return empty object to exercise local fallback in updatePost.
+      // Return empty object to exercise local DTO compatibility parsing.
       return ResponseBody.fromString('{}', 200, headers: jsonHeaders);
     }
     if (p.endsWith('/report') && options.method == 'POST') {
@@ -85,6 +86,24 @@ class _FeedCaptureAdapter implements HttpClientAdapter {
       404,
       headers: jsonHeaders,
     );
+  }
+}
+
+class _ThrowingFeedAdapter implements HttpClientAdapter {
+  _ThrowingFeedAdapter(this._exceptionFactory);
+
+  final DioException Function(RequestOptions options) _exceptionFactory;
+
+  @override
+  void close({bool force = false}) {}
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    throw _exceptionFactory(options);
   }
 }
 
@@ -127,7 +146,7 @@ void main() {
     expect(dto.body, 'detail');
   });
 
-  test('createPost posts payload and falls back on empty response', () async {
+  test('createPost posts payload and tolerates empty response body', () async {
     final dto = await api.createPost(
       body: 'hello',
       audienceApiValue: 'public',
@@ -143,7 +162,7 @@ void main() {
   });
 
   test(
-    'updatePost patches encoded id and falls back on empty response',
+    'updatePost patches encoded id and tolerates empty response body',
     () async {
       final dto = await api.updatePost(
         postId: 'p 1',
@@ -175,5 +194,226 @@ void main() {
     await api.deletePost('p 9');
     expect(adapter.lastOptions?.method, 'DELETE');
     expect(adapter.lastOptions?.uri.path, '/v1/feed/posts/p%209');
+  });
+
+  test('reportPost maps DioException to LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingFeedAdapter(
+      (options) => DioException.badResponse(
+        statusCode: 403,
+        requestOptions: options,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: 403,
+          data: {'message': '你沒有權限檢舉此貼文'},
+        ),
+      ),
+    );
+    final errApi = FeedApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      () => errApi.reportPost(postId: 'p1', reason: 'spam'),
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.message,
+          'message',
+          '你沒有權限檢舉此貼文',
+        ),
+      ),
+    );
+  });
+
+  test('listPublicFeed maps DioException to LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingFeedAdapter(
+      (options) => DioException.badResponse(
+        statusCode: 503,
+        requestOptions: options,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: 503,
+          data: {'message': '廣場服務暫時不可用'},
+        ),
+      ),
+    );
+    final errApi = FeedApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      errApi.listPublicFeed,
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.message,
+          'message',
+          '廣場服務暫時不可用',
+        ),
+      ),
+    );
+  });
+
+  test('getPost maps DioException to LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingFeedAdapter(
+      (options) => DioException.badResponse(
+        statusCode: 404,
+        requestOptions: options,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: 404,
+          data: {'message': '貼文不存在'},
+        ),
+      ),
+    );
+    final errApi = FeedApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      () => errApi.getPost('missing'),
+      throwsA(
+        isA<LiubanApiException>().having((e) => e.message, 'message', '貼文不存在'),
+      ),
+    );
+  });
+
+  test('deletePost maps DioException to LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingFeedAdapter(
+      (options) => DioException.badResponse(
+        statusCode: 403,
+        requestOptions: options,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: 403,
+          data: {'message': '你沒有權限刪除此貼文'},
+        ),
+      ),
+    );
+    final errApi = FeedApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      () => errApi.deletePost('p1'),
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.message,
+          'message',
+          '你沒有權限刪除此貼文',
+        ),
+      ),
+    );
+  });
+
+  test('createPost maps DioException to LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingFeedAdapter(
+      (options) => DioException.badResponse(
+        statusCode: 400,
+        requestOptions: options,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: 400,
+          data: {'message': '貼文內容不可為空'},
+        ),
+      ),
+    );
+    final errApi = FeedApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      () => errApi.createPost(
+        body: '',
+        audienceApiValue: 'public',
+        hideSchool: false,
+      ),
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.message,
+          'message',
+          '貼文內容不可為空',
+        ),
+      ),
+    );
+  });
+
+  test('updatePost maps DioException to LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingFeedAdapter(
+      (options) => DioException.badResponse(
+        statusCode: 403,
+        requestOptions: options,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: 403,
+          data: {'message': '你只能編輯自己的貼文'},
+        ),
+      ),
+    );
+    final errApi = FeedApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      () => errApi.updatePost(
+        postId: 'p1',
+        body: 'new',
+        audienceApiValue: 'friends',
+        hideSchool: false,
+      ),
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.message,
+          'message',
+          '你只能編輯自己的貼文',
+        ),
+      ),
+    );
+  });
+
+  test('listSchoolFeed maps DioException to LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingFeedAdapter(
+      (options) => DioException.badResponse(
+        statusCode: 503,
+        requestOptions: options,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: 503,
+          data: {'message': '本校動態服務暫時不可用'},
+        ),
+      ),
+    );
+    final errApi = FeedApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      errApi.listSchoolFeed,
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.message,
+          'message',
+          '本校動態服務暫時不可用',
+        ),
+      ),
+    );
+  });
+
+  test('listFriendsFeed maps DioException to LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingFeedAdapter(
+      (options) => DioException.badResponse(
+        statusCode: 503,
+        requestOptions: options,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: 503,
+          data: {'message': '好友動態服務暫時不可用'},
+        ),
+      ),
+    );
+    final errApi = FeedApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      errApi.listFriendsFeed,
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.message,
+          'message',
+          '好友動態服務暫時不可用',
+        ),
+      ),
+    );
   });
 }

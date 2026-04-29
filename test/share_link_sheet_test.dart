@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:liuban/core/share/share_link_sheet.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
 
 const _shareChannel = MethodChannel('dev.fluttercommunity.plus/share');
 
@@ -117,7 +118,10 @@ void main() {
     await tester.tap(find.text('複製連結'));
     await tester.pumpAndSettle();
 
-    expect(find.text('無法複製連結'), findsOneWidget);
+    expect(
+      find.text(ApiDevSemantics.shareLinkCopyFailedMessage),
+      findsOneWidget,
+    );
     expect(find.text('分享至…'), findsOneWidget);
   });
 
@@ -164,7 +168,10 @@ void main() {
     await tester.tap(find.text('分享至…'));
     await tester.pumpAndSettle();
 
-    expect(find.text('無法開啟系統分享'), findsOneWidget);
+    expect(
+      find.text(ApiDevSemantics.shareLinkSystemShareFailedMessage),
+      findsOneWidget,
+    );
     expect(find.text('分享至…'), findsNothing);
   });
 

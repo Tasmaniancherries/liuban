@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:liuban/core/network/api_exception.dart';
 import 'package:liuban/data/api/friends_api.dart';
 
 class _FriendsCaptureAdapter implements HttpClientAdapter {
@@ -70,6 +71,24 @@ class _FriendsCaptureAdapter implements HttpClientAdapter {
 
     // Other operations only need success status for request-shape assertions.
     return ResponseBody.fromString('{}', 200, headers: jsonHeaders);
+  }
+}
+
+class _ThrowingFriendsAdapter implements HttpClientAdapter {
+  _ThrowingFriendsAdapter(this._exceptionFactory);
+
+  final DioException Function(RequestOptions options) _exceptionFactory;
+
+  @override
+  void close({bool force = false}) {}
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    throw _exceptionFactory(options);
   }
 }
 
@@ -151,6 +170,285 @@ void main() {
       expect(list, isEmpty);
     },
   );
+
+  test('sendFriendRequest maps DioException to LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingFriendsAdapter(
+      (options) => DioException.badResponse(
+        statusCode: 409,
+        requestOptions: options,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: 409,
+          data: {'message': '你們已經是好友'},
+        ),
+      ),
+    );
+    final errApi = FriendsApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      () => errApi.sendFriendRequest(targetCustomId: 'river'),
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.message,
+          'message',
+          '你們已經是好友',
+        ),
+      ),
+    );
+  });
+
+  test(
+    'listIncomingRequests maps DioException to LiubanApiException',
+    () async {
+      final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+      errDio.httpClientAdapter = _ThrowingFriendsAdapter(
+        (options) => DioException.badResponse(
+          statusCode: 500,
+          requestOptions: options,
+          response: Response<dynamic>(
+            requestOptions: options,
+            statusCode: 500,
+            data: {'message': '暫時無法讀取好友申請'},
+          ),
+        ),
+      );
+      final errApi = FriendsApi(errDio, apiPrefix: '/v1');
+
+      await expectLater(
+        errApi.listIncomingRequests,
+        throwsA(
+          isA<LiubanApiException>().having(
+            (e) => e.message,
+            'message',
+            '暫時無法讀取好友申請',
+          ),
+        ),
+      );
+    },
+  );
+
+  test('listDmMessages maps DioException to LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingFriendsAdapter(
+      (options) => DioException.badResponse(
+        statusCode: 503,
+        requestOptions: options,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: 503,
+          data: {'message': '私訊服務暫時不可用'},
+        ),
+      ),
+    );
+    final errApi = FriendsApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      () => errApi.listDmMessages(peerId: 'u1'),
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.message,
+          'message',
+          '私訊服務暫時不可用',
+        ),
+      ),
+    );
+  });
+
+  test('unblockUser maps DioException to LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingFriendsAdapter(
+      (options) => DioException.badResponse(
+        statusCode: 403,
+        requestOptions: options,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: 403,
+          data: {'message': '你沒有權限解除此屏蔽'},
+        ),
+      ),
+    );
+    final errApi = FriendsApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      () => errApi.unblockUser(userId: 'u1'),
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.message,
+          'message',
+          '你沒有權限解除此屏蔽',
+        ),
+      ),
+    );
+  });
+
+  test('listInbox maps DioException to LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingFriendsAdapter(
+      (options) => DioException.badResponse(
+        statusCode: 503,
+        requestOptions: options,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: 503,
+          data: {'message': '收件匣暫時不可用'},
+        ),
+      ),
+    );
+    final errApi = FriendsApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      errApi.listInbox,
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.message,
+          'message',
+          '收件匣暫時不可用',
+        ),
+      ),
+    );
+  });
+
+  test(
+    'respondToFriendRequest maps DioException to LiubanApiException',
+    () async {
+      final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+      errDio.httpClientAdapter = _ThrowingFriendsAdapter(
+        (options) => DioException.badResponse(
+          statusCode: 404,
+          requestOptions: options,
+          response: Response<dynamic>(
+            requestOptions: options,
+            statusCode: 404,
+            data: {'message': '找不到此好友申請'},
+          ),
+        ),
+      );
+      final errApi = FriendsApi(errDio, apiPrefix: '/v1');
+
+      await expectLater(
+        () => errApi.respondToFriendRequest(requestId: 'r1', accept: true),
+        throwsA(
+          isA<LiubanApiException>().having(
+            (e) => e.message,
+            'message',
+            '找不到此好友申請',
+          ),
+        ),
+      );
+    },
+  );
+
+  test(
+    'listOutgoingRequests maps DioException to LiubanApiException',
+    () async {
+      final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+      errDio.httpClientAdapter = _ThrowingFriendsAdapter(
+        (options) => DioException.badResponse(
+          statusCode: 500,
+          requestOptions: options,
+          response: Response<dynamic>(
+            requestOptions: options,
+            statusCode: 500,
+            data: {'message': '暫時無法讀取發送紀錄'},
+          ),
+        ),
+      );
+      final errApi = FriendsApi(errDio, apiPrefix: '/v1');
+
+      await expectLater(
+        errApi.listOutgoingRequests,
+        throwsA(
+          isA<LiubanApiException>().having(
+            (e) => e.message,
+            'message',
+            '暫時無法讀取發送紀錄',
+          ),
+        ),
+      );
+    },
+  );
+
+  test('sendDmMessage maps DioException to LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingFriendsAdapter(
+      (options) => DioException.badResponse(
+        statusCode: 429,
+        requestOptions: options,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: 429,
+          data: {'message': '傳送過於頻繁，請稍後再試'},
+        ),
+      ),
+    );
+    final errApi = FriendsApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      () => errApi.sendDmMessage(peerId: 'u1', text: 'hi'),
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.message,
+          'message',
+          '傳送過於頻繁，請稍後再試',
+        ),
+      ),
+    );
+  });
+
+  test('blockUser maps DioException to LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingFriendsAdapter(
+      (options) => DioException.badResponse(
+        statusCode: 403,
+        requestOptions: options,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: 403,
+          data: {'message': '你沒有權限屏蔽此用戶'},
+        ),
+      ),
+    );
+    final errApi = FriendsApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      () => errApi.blockUser(userId: 'u1'),
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.message,
+          'message',
+          '你沒有權限屏蔽此用戶',
+        ),
+      ),
+    );
+  });
+
+  test('listBlockedUsers maps DioException to LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingFriendsAdapter(
+      (options) => DioException.badResponse(
+        statusCode: 500,
+        requestOptions: options,
+        response: Response<dynamic>(
+          requestOptions: options,
+          statusCode: 500,
+          data: {'message': '暫時無法讀取屏蔽名單'},
+        ),
+      ),
+    );
+    final errApi = FriendsApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      errApi.listBlockedUsers,
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.message,
+          'message',
+          '暫時無法讀取屏蔽名單',
+        ),
+      ),
+    );
+  });
 }
 
 class _BrokenBlocksAdapter implements HttpClientAdapter {

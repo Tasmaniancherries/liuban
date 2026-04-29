@@ -95,6 +95,38 @@ class _DmThreadAdapter implements HttpClientAdapter {
 }
 
 void main() {
+  testWidgets('empty input tap does not send message', (tester) async {
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    tester.view.physicalSize = const Size(800, 1000);
+    tester.view.devicePixelRatio = 1.0;
+
+    final adapter = _DmThreadAdapter();
+    final container = AppContainer(
+      guestDeviceId: 'g',
+      logHttpTraffic: false,
+      baseUrl: 'https://example.invalid',
+      sessionTokens: AuthSessionTokens(accessToken: 't'),
+    );
+    container.dio.httpClientAdapter = adapter;
+
+    await tester.pumpWidget(
+      AppContainerScope(
+        container: container,
+        child: const MaterialApp(
+          home: DmChatScreen(peerId: 'peer_z', peerCustomId: 'peer_z'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('對方載入測試'), findsOneWidget);
+    await tester.tap(find.byTooltip('傳送'));
+    await tester.pumpAndSettle();
+    expect(find.text('對方載入測試'), findsOneWidget);
+    expect(find.text('我回覆一句'), findsNothing);
+  });
+
   testWidgets('loads thread and sends message', (tester) async {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);

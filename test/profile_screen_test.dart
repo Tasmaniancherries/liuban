@@ -148,6 +148,34 @@ void main() {
     expect(find.text('Alice'), findsOneWidget);
   });
 
+  testWidgets('verified phase with empty educations shows empty label state', (
+    tester,
+  ) async {
+    final container = AppContainer(
+      guestDeviceId: 'd',
+      logHttpTraffic: false,
+      baseUrl: 'https://example.invalid',
+      sessionTokens: AuthSessionTokens(accessToken: 'tok'),
+    );
+    container.dio.httpClientAdapter = _AuthMeAdapter();
+    final session = AppSession()..setPhase(AccountPhase.verifiedStudent);
+
+    await tester.pumpWidget(
+      AppSessionScope(
+        notifier: session,
+        child: AppContainerScope(
+          container: container,
+          child: const MaterialApp(home: ProfileScreen()),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('尚未同步學籍標籤'), findsOneWidget);
+    expect(find.text('港大 · 校友'), findsNothing);
+    expect(find.text('中大'), findsNothing);
+  });
+
   testWidgets('sync verification non-API error shows generic snackbar', (
     tester,
   ) async {
@@ -337,7 +365,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final button = tester.widget<OutlinedButton>(
-      find.widgetWithText(OutlinedButton, '退出登入（預覽）'),
+      find.widgetWithText(OutlinedButton, '退出登入'),
     );
     expect(button.onPressed, isNull);
   });

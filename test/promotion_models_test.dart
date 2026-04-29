@@ -19,9 +19,9 @@ void main() {
     expect(item.body, 'b');
   });
 
-  test('promotionById finds mock id or returns null', () {
-    expect(promotionById('1'), isNotNull);
-    expect(promotionById('1')!.title, isNotEmpty);
-    expect(promotionById('missing'), isNull);
+  test('promotionFixtureById finds fixture id or returns null', () {
+    expect(promotionFixtureById('1'), isNotNull);
+    expect(promotionFixtureById('1')!.title, isNotEmpty);
+    expect(promotionFixtureById('missing'), isNull);
   });
 }

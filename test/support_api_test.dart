@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:liuban/core/network/api_exception.dart';
 import 'package:liuban/data/api/support_api.dart';
 
 class _SupportCaptureAdapter implements HttpClientAdapter {
@@ -27,6 +28,24 @@ class _SupportCaptureAdapter implements HttpClientAdapter {
       Headers.contentTypeHeader: [Headers.jsonContentType],
     };
     return ResponseBody.fromString('{}', 200, headers: headers);
+  }
+}
+
+class _ThrowingSupportAdapter implements HttpClientAdapter {
+  _ThrowingSupportAdapter(this._exceptionFactory);
+
+  final DioException Function(RequestOptions options) _exceptionFactory;
+
+  @override
+  void close({bool force = false}) {}
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async {
+    throw _exceptionFactory(options);
   }
 }
 
@@ -63,4 +82,56 @@ void main() {
       expect(adapter.lastJsonBody?['contact_hint'], '@river');
     },
   );
+
+  test(
+    'sendMessage maps DioException response message to LiubanApiException',
+    () async {
+      final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+      errDio.httpClientAdapter = _ThrowingSupportAdapter(
+        (options) => DioException.badResponse(
+          statusCode: 400,
+          requestOptions: options,
+          response: Response<dynamic>(
+            requestOptions: options,
+            statusCode: 400,
+            data: {'message': '客服服務暫時不可用'},
+          ),
+        ),
+      );
+      final errApi = SupportApi(errDio, apiPrefix: '/v1');
+
+      await expectLater(
+        () => errApi.sendMessage(text: 'help'),
+        throwsA(
+          isA<LiubanApiException>().having(
+            (e) => e.message,
+            'message',
+            '客服服務暫時不可用',
+          ),
+        ),
+      );
+    },
+  );
+
+  test('sendMessage keeps Dio timeout message in LiubanApiException', () async {
+    final errDio = Dio(BaseOptions(baseUrl: 'https://example.invalid'));
+    errDio.httpClientAdapter = _ThrowingSupportAdapter(
+      (options) => DioException.connectionTimeout(
+        requestOptions: options,
+        timeout: const Duration(seconds: 2),
+      ),
+    );
+    final errApi = SupportApi(errDio, apiPrefix: '/v1');
+
+    await expectLater(
+      () => errApi.sendMessage(text: 'help'),
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.message,
+          'message',
+          contains('took longer than'),
+        ),
+      ),
+    );
+  });
 }

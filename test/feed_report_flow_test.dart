@@ -5,8 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:liuban/core/app_container.dart';
 import 'package:liuban/core/app_container_scope.dart';
+import 'package:liuban/core/config/app_config.dart';
 import 'package:liuban/core/network/auth_session_tokens.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/data/api/feed_api.dart';
 import 'package:liuban/features/feed/feed_report_flow.dart';
+
+class _FeedReportPostNonApiException extends FeedApi {
+  _FeedReportPostNonApiException(super.dio, {required super.apiPrefix});
+
+  @override
+  Future<void> reportPost({required String postId, String? reason}) async {
+    throw StateError('simulated reportPost non-LiubanApiException');
+  }
+}
 
 class _ReportPostAdapter implements HttpClientAdapter {
   _ReportPostAdapter({required this.statusCode, this.errorMessage});
@@ -78,6 +90,31 @@ Widget _harness(HttpClientAdapter adapter) {
   );
 }
 
+Widget _harnessWithFeedApi(FeedApi feedApi) {
+  final container = AppContainer(
+    guestDeviceId: 'test-device',
+    logHttpTraffic: false,
+    baseUrl: 'https://example.invalid',
+    sessionTokens: AuthSessionTokens(accessToken: 't'),
+    feedApi: feedApi,
+  );
+  return AppContainerScope(
+    container: container,
+    child: MaterialApp(
+      home: Scaffold(
+        body: Builder(
+          builder: (context) {
+            return TextButton(
+              onPressed: () => runFeedReportFlow(context, postId: 'post-1'),
+              child: const Text('run'),
+            );
+          },
+        ),
+      ),
+    ),
+  );
+}
+
 void main() {
   testWidgets('selecting reason and submitting shows success snackbar', (
     tester,
@@ -113,5 +150,23 @@ void main() {
     await tester.tap(find.text('其他'));
     await tester.pumpAndSettle();
     expect(find.text('cannot report this post'), findsOneWidget);
+  });
+
+  testWidgets('non-API error shows generic moderation snackbar', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _harnessWithFeedApi(
+        _FeedReportPostNonApiException(Dio(), apiPrefix: AppConfig.apiPrefix),
+      ),
+    );
+    await tester.tap(find.text('run'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('騷擾或仇恨'));
+    await tester.pumpAndSettle();
+    expect(
+      find.text(ApiDevSemantics.feedModerationGenericFailureMessage),
+      findsOneWidget,
+    );
   });
 }
