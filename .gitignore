@@ -30,3 +30,5 @@ macos/Flutter/GeneratedPluginRegistrant.swift
 # Misc
 *.swp
 .DS_Store
+test/.venv/
+test/video_gift_A_96f/
