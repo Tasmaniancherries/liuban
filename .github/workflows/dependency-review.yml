@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       # pull_request 會自動帶入 base/head；workflow_dispatch 沒有 PR 內容，必須手動指定 ref，否則會失敗：
       # "Both a base ref and head ref must be provided..."
