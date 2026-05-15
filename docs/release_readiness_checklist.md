@@ -40,6 +40,6 @@
 ## 发布前最终核对（建议 T-1）
 
 - [x] 客户端输入长度防线（`LiubanInputLimits` + API 送出前校验 + 对应单测）
-- [ ] 本机执行 `dart format .` 后再 `make ci-quality` 通过（含 lockfile、format 校验、`dart analyze --fatal-infos`、全量 `flutter test`）
+- [x] 本机执行 `dart format .` 后再 `make ci-quality` 通过（含 lockfile、format 校验、`dart analyze --fatal-infos`、全量 `flutter test`）
 - [ ] 版本说明（对内/对外）已准备
 - [ ] 回滚方案已演练

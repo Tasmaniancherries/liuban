@@ -143,7 +143,7 @@ flutter build appbundle --release
 
 | 检查项 | 命令 | 最近一次 |
 |--------|------|----------|
-| 格式 + 单测 + 分析 | `make ci-quality` | 发版前执行并记录日期 |
-| 编译烟测 | `make ci-smoke` | 发版前执行并记录日期 |
+| 格式 + 单测 + 分析 | `make ci-quality` | 2026-05-15 已通过（含 `dart format .`） |
+| 编译烟测 | `make ci-smoke` | Web release 已通过；Android 需本机配置 `ANDROID_HOME` 与 SDK 后重跑 |
 
 完成 P0 后，在 `release_readiness_checklist.md` 中勾选对应项，并归档本手册签字页扫描件或 PR 评论链接。
