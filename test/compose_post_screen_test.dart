@@ -87,6 +87,38 @@ void _bindTallSurface(WidgetTester tester) {
 }
 
 void main() {
+  testWidgets('publish button is disabled until body has content', (
+    tester,
+  ) async {
+    final container = AppContainer(
+      guestDeviceId: 'g',
+      logHttpTraffic: false,
+      baseUrl: 'https://example.invalid',
+      sessionTokens: AuthSessionTokens(accessToken: 't'),
+    );
+    container.dio.httpClientAdapter = _CreatePostAdapter();
+
+    await tester.pumpWidget(
+      AppContainerScope(
+        container: container,
+        child: const MaterialApp(home: ComposePostScreen()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    _bindTallSurface(tester);
+    await tester.pump();
+
+    final publishButtonFinder = find.widgetWithText(TextButton, '發佈');
+    var publishButton = tester.widget<TextButton>(publishButtonFinder);
+    expect(publishButton.onPressed, isNull);
+
+    await tester.enterText(find.byType(TextField), '有內容');
+    await tester.pump();
+
+    publishButton = tester.widget<TextButton>(publishButtonFinder);
+    expect(publishButton.onPressed, isNotNull);
+  });
+
   testWidgets('body input is clamped to max length', (tester) async {
     final container = AppContainer(
       guestDeviceId: 'g',
@@ -112,7 +144,7 @@ void main() {
     expect(textField.controller!.text.length, 2000);
   });
 
-  testWidgets('empty body shows validation snackbar', (tester) async {
+  testWidgets('empty body keeps publish button disabled', (tester) async {
     final container = AppContainer(
       guestDeviceId: 'g',
       logHttpTraffic: false,
@@ -131,13 +163,10 @@ void main() {
     _bindTallSurface(tester);
     await tester.pump();
 
-    await tester.tap(_composePublishButton());
-    await tester.pumpAndSettle();
-
-    expect(
-      find.text(ApiDevSemantics.composePostBodyEmptyMessage),
-      findsOneWidget,
+    final publishButton = tester.widget<TextButton>(
+      find.widgetWithText(TextButton, '發佈'),
     );
+    expect(publishButton.onPressed, isNull);
   });
 
   testWidgets('submit creates post and pops with summary', (tester) async {

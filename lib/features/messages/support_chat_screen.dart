@@ -5,7 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:liuban/core/app_container_scope.dart';
 import 'package:liuban/core/debug/unawaited_debug.dart';
 import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
 import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_api_exception_snack_hint.dart';
 import 'package:liuban/core/ui/liuban_snackbar.dart';
 import 'package:liuban/core/ui/scroll_constants.dart';
 
@@ -30,7 +32,7 @@ class SupportChatScreen extends StatefulWidget {
 }
 
 class _SupportChatScreenState extends State<SupportChatScreen> {
-  static const int _maxMessageLength = 500;
+  static const int _maxMessageLength = LiubanInputLimits.chatMessageMaxLength;
 
   final _input = TextEditingController();
   final _scroll = ScrollController();
@@ -115,7 +117,14 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
           e.message,
-          semanticsHint: ApiDevSemantics.supportSendMessageApiErrorSnackHint,
+          semanticsHint: liubanApiExceptionSnackHint(
+            e,
+            defaultHint: ApiDevSemantics.supportSendMessageApiErrorSnackHint,
+            clientTooLongHint:
+                ApiDevSemantics.supportChatMessageTooLongSnackHint(
+                  _maxMessageLength,
+                ),
+          ),
         ),
       );
       return;

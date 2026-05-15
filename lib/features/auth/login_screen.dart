@@ -9,7 +9,9 @@ import 'package:liuban/core/session/app_session.dart';
 import 'package:liuban/core/session/app_session_scope.dart';
 import 'package:liuban/core/session/verification_phase_mapper.dart';
 import 'package:liuban/core/text/account_input_normalize.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
 import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_api_exception_snack_hint.dart';
 import 'package:liuban/core/ui/liuban_snackbar.dart';
 import 'package:liuban/core/ui/scroll_constants.dart';
 
@@ -25,9 +27,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  static const int _maxLoginAccountLength = 128;
-  static const int _maxLoginPasswordLength = 128;
-
   final _account = TextEditingController();
   final _password = TextEditingController();
   bool _loading = false;
@@ -118,23 +117,29 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       return;
     }
-    if (account.length > _maxLoginAccountLength) {
+    if (account.length > LiubanInputLimits.loginAccountMaxLength) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          '帳號長度不可超過 $_maxLoginAccountLength 字元',
+          ApiDevSemantics.inputTooLongMessage(
+            '帳號',
+            LiubanInputLimits.loginAccountMaxLength,
+          ),
           semanticsHint: ApiDevSemantics.loginAccountTooLongSnackHint(
-            _maxLoginAccountLength,
+            LiubanInputLimits.loginAccountMaxLength,
           ),
         ),
       );
       return;
     }
-    if (password.length > _maxLoginPasswordLength) {
+    if (password.length > LiubanInputLimits.passwordMaxLength) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          '密碼長度不可超過 $_maxLoginPasswordLength 字元',
+          ApiDevSemantics.inputTooLongMessage(
+            '密碼',
+            LiubanInputLimits.passwordMaxLength,
+          ),
           semanticsHint: ApiDevSemantics.loginPasswordTooLongSnackHint(
-            _maxLoginPasswordLength,
+            LiubanInputLimits.passwordMaxLength,
           ),
         ),
       );
@@ -177,7 +182,10 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
           e.message,
-          semanticsHint: ApiDevSemantics.loginApiErrorSnackHint,
+          semanticsHint: liubanApiExceptionSnackHint(
+            e,
+            defaultHint: ApiDevSemantics.loginApiErrorSnackHint,
+          ),
         ),
       );
     } catch (_) {
@@ -241,7 +249,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: TextField(
                   controller: _account,
                   enabled: !_loading,
-                  maxLength: _maxLoginAccountLength + 1,
+                  maxLength: LiubanInputLimits.loginAccountMaxLength + 1,
                   decoration: const InputDecoration(
                     labelText: '帳號',
                     hintText: '自訂 ID 或郵箱',
@@ -262,7 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: TextField(
                   controller: _password,
                   enabled: !_loading,
-                  maxLength: _maxLoginPasswordLength + 1,
+                  maxLength: LiubanInputLimits.passwordMaxLength + 1,
                   obscureText: _obscure,
                   autofillHints: const [AutofillHints.password],
                   decoration: InputDecoration(

@@ -3,7 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:liuban/core/app_container_scope.dart';
 import 'package:liuban/core/debug/unawaited_debug.dart';
 import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
 import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_api_exception_snack_hint.dart';
 import 'package:liuban/core/ui/liuban_snackbar.dart';
 import 'package:liuban/core/ui/scroll_constants.dart';
 
@@ -17,8 +19,6 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
     with SingleTickerProviderStateMixin {
-  static const int _maxEmailLength = 254;
-
   late final TabController _tabs;
   final _email = TextEditingController();
   bool _submitting = false;
@@ -102,12 +102,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
 
   Future<void> _sendEmail() async {
     final addr = _email.text.trim();
-    if (addr.length > _maxEmailLength) {
+    if (addr.length > LiubanInputLimits.emailMaxLength) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          '郵箱長度不可超過 $_maxEmailLength 字元',
+          ApiDevSemantics.inputTooLongMessage(
+            '郵箱',
+            LiubanInputLimits.emailMaxLength,
+          ),
           semanticsHint: ApiDevSemantics.forgotPasswordEmailTooLongSnackHint(
-            _maxEmailLength,
+            LiubanInputLimits.emailMaxLength,
           ),
         ),
       );
@@ -135,7 +138,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
           e.message,
-          semanticsHint: ApiDevSemantics.forgotPasswordApiErrorSnackHint,
+          semanticsHint: liubanApiExceptionSnackHint(
+            e,
+            defaultHint: ApiDevSemantics.forgotPasswordApiErrorSnackHint,
+            clientTooLongHint:
+                ApiDevSemantics.forgotPasswordEmailTooLongSnackHint(
+                  LiubanInputLimits.emailMaxLength,
+                ),
+          ),
         ),
       );
     } catch (_) {
@@ -335,7 +345,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
             child: TextField(
               controller: _email,
               enabled: !_submitting,
-              maxLength: _maxEmailLength + 1,
+              maxLength: LiubanInputLimits.emailMaxLength + 1,
               keyboardType: TextInputType.emailAddress,
               autofillHints: const [AutofillHints.email],
               autocorrect: false,

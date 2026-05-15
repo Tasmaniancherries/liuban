@@ -11,9 +11,8 @@ abstract final class ApiDevSemantics {
 
   static String _p(String sentence) => '$sentence $docsTrail';
 
-  static String get feedPublicList => _p(
-    '優先載入 GET ${AppConfig.apiPrefix}/feed/public。可載入更多、下拉刷新；發佈成功後可刷新。',
-  );
+  static String get feedPublicList =>
+      _p('優先載入 GET ${AppConfig.apiPrefix}/feed/public。可載入更多、下拉刷新；發佈成功後可刷新。');
 
   static String get feedSchoolList =>
       _p('優先載入 GET ${AppConfig.apiPrefix}/feed/school；僅已認證同校。可載入更多。');
@@ -101,6 +100,23 @@ abstract final class ApiDevSemantics {
 
   static String get dmSendMessageGenericFailureSnackHint => _p(
     '預期 POST ${AppConfig.apiPrefix}/friends/dm/對方 ID 經編碼後/messages；非業務錯誤或網路失敗。可稍後重試。',
+  );
+
+  /// 一般表單欄位超過上限時之 SnackBar 本文（[fieldLabel] 可含尾隨空格以調整排版）。
+  static String inputTooLongMessage(String fieldLabel, int maxLength) =>
+      '$fieldLabel長度不可超過 $maxLength 字元';
+
+  /// 客戶端長度防禦觸發、且畫面未提供專用 hint 時之通用無障礙說明。
+  static String get clientValidationTooLongSnackHint =>
+      _p('輸入未送出；內容長度超出 App 客戶端上限，請縮短後重試。');
+
+  /// 私訊／客服單則文字超過上限時之 SnackBar 本文。
+  static String chatMessageTooLongMessage(int maxLength) =>
+      '訊息過長，請控制在 $maxLength 字以內';
+
+  /// [DmChatScreen] 私訊文字超長（客戶端防禦）SnackBar 無障礙 hint。
+  static String dmChatMessageTooLongSnackHint(int maxLength) => _p(
+    '私訊未送出；text 須不超過 $maxLength 字（POST ${AppConfig.apiPrefix}/friends/dm/對方 ID 經編碼後/messages）。',
   );
 
   /// [DmChatScreen] 載入對話 GET 失敗時之 SnackBar 本文。
@@ -274,6 +290,11 @@ abstract final class ApiDevSemantics {
     '預期 POST ${AppConfig.apiPrefix}/support/messages；非業務錯誤或網路失敗時顯示此提示。可稍後重試。',
   );
 
+  /// [SupportChatScreen] 客服留言超長（客戶端防禦）SnackBar 無障礙 hint。
+  static String supportChatMessageTooLongSnackHint(int maxLength) => _p(
+    '客服留言未送出；text 須不超過 $maxLength 字（POST ${AppConfig.apiPrefix}/support/messages）。',
+  );
+
   static String friendRequestSubmitHint({required bool submitting}) {
     if (submitting) return '處理中';
     return '向對方送出好友邀請。POST ${AppConfig.apiPrefix}/friends/requests，body：target_custom_id。 $docsTrail';
@@ -362,9 +383,8 @@ abstract final class ApiDevSemantics {
       '內容過長，請控制在 $maxLength 字以內';
 
   /// 同上 SnackBar 之無障礙 hint（尚未呼叫 POST／PATCH）。
-  static String composePostBodyTooLongSnackHint(int maxLength) => _p(
-    '送出前會檢查正文長度上限（$maxLength 字）。超出時不會呼叫發佈或更新 API，請先精簡內容。',
-  );
+  static String composePostBodyTooLongSnackHint(int maxLength) =>
+      _p('送出前會檢查正文長度上限（$maxLength 字）。超出時不會呼叫發佈或更新 API，請先精簡內容。');
 
   /// [ComposePostScreen] `hide_school` 與本校可見互斥。
   static const String composePostAudienceSchoolConflictMessage = '隱藏學校時不可選「本校」';
@@ -412,14 +432,12 @@ abstract final class ApiDevSemantics {
       _p('僅客戶端表單檢查；尚未 POST ${AppConfig.apiPrefix}/auth/login。');
 
   /// [LoginScreen] 帳號過長。
-  static String loginAccountTooLongSnackHint(int maxLength) => _p(
-    '帳號最多 $maxLength 字元；超出時不會送出 POST ${AppConfig.apiPrefix}/auth/login。',
-  );
+  static String loginAccountTooLongSnackHint(int maxLength) =>
+      _p('帳號最多 $maxLength 字元；超出時不會送出 POST ${AppConfig.apiPrefix}/auth/login。');
 
   /// [LoginScreen] 密碼過長。
-  static String loginPasswordTooLongSnackHint(int maxLength) => _p(
-    '密碼最多 $maxLength 字元；超出時不會送出 POST ${AppConfig.apiPrefix}/auth/login。',
-  );
+  static String loginPasswordTooLongSnackHint(int maxLength) =>
+      _p('密碼最多 $maxLength 字元；超出時不會送出 POST ${AppConfig.apiPrefix}/auth/login。');
 
   /// [LoginScreen] 登入成功 SnackBar。
   static String get loginSuccessSnackHint =>
@@ -556,7 +574,7 @@ abstract final class ApiDevSemantics {
     '下方帳戶階段切換僅供除錯。實際階段以 GET ${AppConfig.apiPrefix}/auth/me/verification 為準；請使用「同步審核狀態」。',
   );
 
-  /// 設定「用戶協議與隱私」占位全文（含 docs 尾註）。
+  /// 設定「用戶協議與隱私」摘要全文（含 docs 尾註）。
   static String get settingsLegalPlaceholder =>
       '正式上線前將提供完整《用戶協議》與《隱私政策》連結；目前請以實際營運方公告為準。'
       '註冊時提交的 Offer、錄取證明、學生證與學籍資料僅用於審核與合規，詳見後續正式文案。'
@@ -576,11 +594,34 @@ abstract final class ApiDevSemantics {
 
   /// [SettingsScreen] 「協議與隱私」全文對話框外層（內文已含 [settingsLegalPlaceholder]）。
   static String get settingsLegalDialogContainerHint =>
-      '捲動瀏覽占位條款說明。 $docsTrail';
+      '捲動瀏覽條款摘要說明。 $docsTrail';
 
   /// 檢舉動態對話框頂部說明。
   static String get feedReportDialogIntro => _p(
-    '請選擇檢舉原因。送出時 POST ${AppConfig.apiPrefix}/feed/posts/動態 ID 已編碼/report，body 可含 reason。',
+    '請選擇檢舉原因；選「其他」時可於下一步填寫補充說明（選填）。送出時 POST ${AppConfig.apiPrefix}/feed/posts/動態 ID 已編碼/report，body 可含 reason。',
+  );
+
+  /// [_FeedReportDialog] 選擇「其他」後，補充說明步驟之外層無障礙 hint。
+  static String get feedReportOtherDetailSemanticsHint => _p(
+    '填寫檢舉補充說明（選填）。送出仍為 POST ${AppConfig.apiPrefix}/feed/posts/動態 ID 已編碼/report。',
+  );
+
+  /// [_FeedReportDialog] 補充說明 [TextField] 之無障礙 hint。
+  static String get feedReportOtherFieldSemanticsHint =>
+      _p('併入單一 reason 字串與代碼 other 一併送出；輸入上限 480 字元。');
+
+  /// [_FeedReportDialog] 「送出檢舉」按鈕（其他／補充說明步驟）。
+  static String get feedReportSubmitOtherSemanticsHint => _p(
+    '以目前輸入組合 reason 並 POST ${AppConfig.apiPrefix}/feed/posts/動態 ID 已編碼/report。',
+  );
+
+  /// [FeedApi.reportPost] 送出前 `reason` 長度超過上限（見 [LiubanInputLimits.feedReportReasonMaxTotalLength]）。
+  static String feedReportReasonTooLongMessage(int maxLength) =>
+      '檢舉說明過長，請控制在 $maxLength 字以內';
+
+  /// [runFeedReportFlow] 檢舉原因過長（客戶端防禦）SnackBar 無障礙 hint。
+  static String feedReportReasonTooLongSnackHint(int maxLength) => _p(
+    '檢舉 reason 未送出；長度須不超過 $maxLength（見 POST ${AppConfig.apiPrefix}/feed/posts/{id}/report）。',
   );
 
   /// 屏蔽對話框第二段（接在使用者說明之後）。

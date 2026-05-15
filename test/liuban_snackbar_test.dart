@@ -34,11 +34,7 @@ void main() {
     'liubanSnackBarContent wraps custom widget in live-region semantics',
     () {
       const content = Row(
-        children: [
-          Icon(Icons.info),
-          SizedBox(width: 8),
-          Text('rich message'),
-        ],
+        children: [Icon(Icons.info), SizedBox(width: 8), Text('rich message')],
       );
       final bar = liubanSnackBarContent(content);
       expect(bar.duration, const Duration(milliseconds: 4000));

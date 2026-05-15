@@ -98,7 +98,7 @@
 
 解析列表與詳情時，App 以 [postAudienceFromApiValue](../lib/features/feed/post_models.dart) 還原；未知值視為無法對應之可見範圍（UI 顯示原始字串或預設）。
 
-**Response（200）**：完整 [FeedPostDto](#feedpost-json-欄位)。若 body 為空或空 object，客戶端會用請求內容組本地占位 DTO（後端仍建議回完整資源）。
+**Response（200）**：完整 [FeedPostDto](#feedpost-json-欄位)。若 body 為空或空 object，客戶端會以請求內容組最小可用 DTO（後端仍建議回完整資源）。
 
 ---
 
@@ -112,7 +112,7 @@
 
 檢舉動態。
 
-**Body（JSON）**：可選 `reason`（string）。
+**Body（JSON）**：可選 `reason`（string）。App 內建分類會送出短代碼 `spam`、`harassment`；使用者選「其他」且填寫補充說明時，客戶端以 `other — {說明}` 形式併為單一字串（說明欄最多 480 字元；後端請以一般字串處理即可）。客戶端另以 **512** 字元為 `reason` 總長防禦上限，超長則不送出請求。
 
 **Response**：204 或 200 空 body 皆可（客戶端目前不解析 body）。
 
@@ -196,7 +196,7 @@
 
 送出私訊。
 
-**Body**：`text`（string）。
+**Body**：`text`（string）。客戶端以 **500** 字元為 `text` 防禦上限，超長則不送出請求。
 
 ---
 
@@ -318,7 +318,7 @@
 
 | 欄位 | 必填 | 說明 |
 |------|------|------|
-| `text` | 是 | 使用者留言 |
+| `text` | 是 | 使用者留言（客戶端防禦上限 **500** 字元，超長不送出） |
 | `guest_token` | 否 | 訪客或未登入時識別 |
 | `contact_hint` | 否 | 聯絡方式提示 |
 

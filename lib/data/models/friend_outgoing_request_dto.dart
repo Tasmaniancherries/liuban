@@ -31,10 +31,11 @@ class FriendOutgoingRequestDto {
   static List<FriendOutgoingRequestDto> listFromResponse(dynamic data) =>
       asJsonObjectList(data).map(FriendOutgoingRequestDto.fromJson).toList();
 
-  static List<FriendOutgoingRequestDto> mockOutgoing() =>
+  /// 單元測試用夾具。
+  static List<FriendOutgoingRequestDto> fixtureOutgoing() =>
       const <FriendOutgoingRequestDto>[
         FriendOutgoingRequestDto(
-          id: 'mock_o1',
+          id: 'fixture_o1',
           toCustomId: 'library_fan',
           status: 'pending',
           createdAt: '2026-03-27',

@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:liuban/core/app_container_scope.dart';
 import 'package:liuban/core/debug/unawaited_debug.dart';
 import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
 import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_api_exception_snack_hint.dart';
 import 'package:liuban/core/ui/liuban_snackbar.dart';
 import 'package:liuban/core/ui/scroll_constants.dart';
 
@@ -16,8 +18,6 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  static const int _maxPasswordLength = 128;
-
   final _current = TextEditingController();
   final _next = TextEditingController();
   final _again = TextEditingController();
@@ -115,14 +115,17 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       );
       return;
     }
-    if (cur.length > _maxPasswordLength ||
-        nw.length > _maxPasswordLength ||
-        ag.length > _maxPasswordLength) {
+    if (cur.length > LiubanInputLimits.passwordMaxLength ||
+        nw.length > LiubanInputLimits.passwordMaxLength ||
+        ag.length > LiubanInputLimits.passwordMaxLength) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          '密碼長度不可超過 $_maxPasswordLength 字元',
+          ApiDevSemantics.inputTooLongMessage(
+            '密碼',
+            LiubanInputLimits.passwordMaxLength,
+          ),
           semanticsHint: ApiDevSemantics.changePasswordTooLongSnackHint(
-            _maxPasswordLength,
+            LiubanInputLimits.passwordMaxLength,
           ),
         ),
       );
@@ -165,7 +168,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
           e.message,
-          semanticsHint: ApiDevSemantics.changePasswordApiErrorSnackHint,
+          semanticsHint: liubanApiExceptionSnackHint(
+            e,
+            defaultHint: ApiDevSemantics.changePasswordApiErrorSnackHint,
+            clientTooLongHint: ApiDevSemantics.changePasswordTooLongSnackHint(
+              LiubanInputLimits.passwordMaxLength,
+            ),
+          ),
         ),
       );
     } catch (_) {
@@ -234,7 +243,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 child: TextField(
                   controller: _current,
                   enabled: !_submitting,
-                  maxLength: _maxPasswordLength + 1,
+                  maxLength: LiubanInputLimits.passwordMaxLength + 1,
                   obscureText: _obscureCur,
                   autofillHints: const [AutofillHints.password],
                   decoration: InputDecoration(
@@ -267,7 +276,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 child: TextField(
                   controller: _next,
                   enabled: !_submitting,
-                  maxLength: _maxPasswordLength + 1,
+                  maxLength: LiubanInputLimits.passwordMaxLength + 1,
                   obscureText: _obscureNew,
                   autofillHints: const [AutofillHints.newPassword],
                   decoration: InputDecoration(
@@ -300,7 +309,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 child: TextField(
                   controller: _again,
                   enabled: !_submitting,
-                  maxLength: _maxPasswordLength + 1,
+                  maxLength: LiubanInputLimits.passwordMaxLength + 1,
                   obscureText: _obscureAgain,
                   autofillHints: const [AutofillHints.newPassword],
                   decoration: InputDecoration(

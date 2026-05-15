@@ -31,14 +31,15 @@ class FriendInboxItemDto {
   static List<FriendInboxItemDto> listFromResponse(dynamic data) =>
       asJsonObjectList(data).map(FriendInboxItemDto.fromJson).toList();
 
-  static List<FriendInboxItemDto> mockInbox() => const <FriendInboxItemDto>[
+  /// 單元測試用夾具。
+  static List<FriendInboxItemDto> fixtureInbox() => const <FriendInboxItemDto>[
     FriendInboxItemDto(
-      peerId: 'mock_1',
+      peerId: 'fixture_peer_1',
       peerCustomId: 'river_2026',
       lastMessagePreview: '晚安！週末要不要一起爬山？',
     ),
     FriendInboxItemDto(
-      peerId: 'mock_2',
+      peerId: 'fixture_peer_2',
       peerCustomId: 'hk_reading_club',
       lastMessagePreview: '社團群公告已更新',
     ),

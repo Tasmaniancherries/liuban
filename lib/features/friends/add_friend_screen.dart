@@ -4,7 +4,9 @@ import 'package:liuban/core/app_container_scope.dart';
 import 'package:liuban/core/debug/unawaited_debug.dart';
 import 'package:liuban/core/network/api_exception.dart';
 import 'package:liuban/core/text/account_input_normalize.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
 import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_api_exception_snack_hint.dart';
 import 'package:liuban/core/ui/liuban_snackbar.dart';
 
 /// 雙向好友：搜尋對方自訂 ID 並發出申請。
@@ -16,8 +18,6 @@ class AddFriendScreen extends StatefulWidget {
 }
 
 class _AddFriendScreenState extends State<AddFriendScreen> {
-  static const int _maxCustomIdLength = 32;
-
   final _id = TextEditingController();
   bool _submitting = false;
 
@@ -99,12 +99,15 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
       );
       return;
     }
-    if (raw.length > _maxCustomIdLength) {
+    if (raw.length > LiubanInputLimits.customIdMaxLength) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          'ID 長度不可超過 $_maxCustomIdLength 字元',
+          ApiDevSemantics.inputTooLongMessage(
+            'ID ',
+            LiubanInputLimits.customIdMaxLength,
+          ),
           semanticsHint: ApiDevSemantics.addFriendIdTooLongSnackHint(
-            _maxCustomIdLength,
+            LiubanInputLimits.customIdMaxLength,
           ),
         ),
       );
@@ -128,7 +131,13 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
           e.message,
-          semanticsHint: ApiDevSemantics.addFriendApiErrorSnackHint,
+          semanticsHint: liubanApiExceptionSnackHint(
+            e,
+            defaultHint: ApiDevSemantics.addFriendApiErrorSnackHint,
+            clientTooLongHint: ApiDevSemantics.addFriendIdTooLongSnackHint(
+              LiubanInputLimits.customIdMaxLength,
+            ),
+          ),
         ),
       );
     } catch (_) {
@@ -192,7 +201,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                 child: TextField(
                   controller: _id,
                   enabled: !_submitting,
-                  maxLength: _maxCustomIdLength + 1,
+                  maxLength: LiubanInputLimits.customIdMaxLength + 1,
                   autocorrect: false,
                   enableSuggestions: false,
                   textInputAction: TextInputAction.done,

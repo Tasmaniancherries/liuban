@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/data/api/api_client_validation.dart';
 import 'package:liuban/data/models/feed_post_dto.dart';
 import 'package:liuban/data/models/json_utils.dart';
 
@@ -82,6 +85,14 @@ class FeedApi {
     required String audienceApiValue,
     required bool hideSchool,
   }) async {
+    assertTextWithinLimit(
+      text: body,
+      maxLength: LiubanInputLimits.feedPostBodyMaxLength,
+      message: ApiDevSemantics.composePostBodyTooLongMessage(
+        LiubanInputLimits.feedPostBodyMaxLength,
+      ),
+      code: LiubanInputLimits.inputTooLongCode,
+    );
     try {
       final res = await _dio.post<dynamic>(
         _path('/feed/posts'),
@@ -115,6 +126,14 @@ class FeedApi {
     required String audienceApiValue,
     required bool hideSchool,
   }) async {
+    assertTextWithinLimit(
+      text: body,
+      maxLength: LiubanInputLimits.feedPostBodyMaxLength,
+      message: ApiDevSemantics.composePostBodyTooLongMessage(
+        LiubanInputLimits.feedPostBodyMaxLength,
+      ),
+      code: LiubanInputLimits.inputTooLongCode,
+    );
     try {
       final enc = Uri.encodeComponent(postId);
       final res = await _dio.patch<dynamic>(
@@ -144,6 +163,17 @@ class FeedApi {
 
   /// 檢舉動態。預設：`POST {apiPrefix}/feed/posts/{id}/report`，body 可含 `reason`。
   Future<void> reportPost({required String postId, String? reason}) async {
+    final r = reason;
+    if (r != null && r.isNotEmpty) {
+      assertTextWithinLimit(
+        text: r,
+        maxLength: LiubanInputLimits.feedReportReasonMaxTotalLength,
+        message: ApiDevSemantics.feedReportReasonTooLongMessage(
+          LiubanInputLimits.feedReportReasonMaxTotalLength,
+        ),
+        code: LiubanInputLimits.reportReasonTooLongCode,
+      );
+    }
     try {
       final enc = Uri.encodeComponent(postId);
       await _dio.post<dynamic>(

@@ -2,6 +2,9 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/data/api/api_client_validation.dart';
 import 'package:liuban/data/models/json_utils.dart';
 import 'package:liuban/data/models/registration_response.dart';
 import 'package:liuban/data/models/token_pair_dto.dart';
@@ -66,6 +69,33 @@ class AuthApi {
     RegistrationVerificationDocumentKind verificationDocumentKind =
         RegistrationVerificationDocumentKind.offerOrAdmissionProof,
   }) async {
+    assertTextWithinLimit(
+      text: customId,
+      maxLength: LiubanInputLimits.customIdMaxLength,
+      message: ApiDevSemantics.inputTooLongMessage(
+        '自訂 ID ',
+        LiubanInputLimits.customIdMaxLength,
+      ),
+      code: LiubanInputLimits.inputTooLongCode,
+    );
+    assertTextWithinLimit(
+      text: schoolName,
+      maxLength: LiubanInputLimits.schoolNameMaxLength,
+      message: ApiDevSemantics.inputTooLongMessage(
+        '學校名稱',
+        LiubanInputLimits.schoolNameMaxLength,
+      ),
+      code: LiubanInputLimits.inputTooLongCode,
+    );
+    assertTextWithinLimit(
+      text: studentId,
+      maxLength: LiubanInputLimits.studentIdMaxLength,
+      message: ApiDevSemantics.inputTooLongMessage(
+        '學號',
+        LiubanInputLimits.studentIdMaxLength,
+      ),
+      code: LiubanInputLimits.inputTooLongCode,
+    );
     try {
       final file = MultipartFile.fromBytes(
         documentBytes,
@@ -122,6 +152,24 @@ class AuthApi {
     required String account,
     required String password,
   }) async {
+    assertTextWithinLimit(
+      text: account,
+      maxLength: LiubanInputLimits.loginAccountMaxLength,
+      message: ApiDevSemantics.inputTooLongMessage(
+        '帳號',
+        LiubanInputLimits.loginAccountMaxLength,
+      ),
+      code: LiubanInputLimits.inputTooLongCode,
+    );
+    assertTextWithinLimit(
+      text: password,
+      maxLength: LiubanInputLimits.passwordMaxLength,
+      message: ApiDevSemantics.inputTooLongMessage(
+        '密碼',
+        LiubanInputLimits.passwordMaxLength,
+      ),
+      code: LiubanInputLimits.inputTooLongCode,
+    );
     try {
       final res = await _dio.post<dynamic>(
         _path('/auth/login'),
@@ -139,6 +187,20 @@ class AuthApi {
     required String currentPassword,
     required String newPassword,
   }) async {
+    for (final entry in <(String, String)>[
+      ('目前密碼', currentPassword),
+      ('新密碼', newPassword),
+    ]) {
+      assertTextWithinLimit(
+        text: entry.$2,
+        maxLength: LiubanInputLimits.passwordMaxLength,
+        message: ApiDevSemantics.inputTooLongMessage(
+          entry.$1,
+          LiubanInputLimits.passwordMaxLength,
+        ),
+        code: LiubanInputLimits.inputTooLongCode,
+      );
+    }
     try {
       await _dio.post<dynamic>(
         _path('/auth/password'),
@@ -152,8 +214,17 @@ class AuthApi {
     }
   }
 
-  /// 寄送重設密碼信（占位：後端應總回 200，避免枚舉註冊信箱）。
+  /// 寄送重設密碼信；常見 REST 合約為一律回成功狀態，避免枚舉已註冊信箱。
   Future<void> requestPasswordResetEmail({required String email}) async {
+    assertTextWithinLimit(
+      text: email,
+      maxLength: LiubanInputLimits.emailMaxLength,
+      message: ApiDevSemantics.inputTooLongMessage(
+        '郵箱',
+        LiubanInputLimits.emailMaxLength,
+      ),
+      code: LiubanInputLimits.inputTooLongCode,
+    );
     try {
       await _dio.post<dynamic>(
         _path('/auth/password/reset/request'),
@@ -164,11 +235,29 @@ class AuthApi {
     }
   }
 
-  /// 使用者從郵件連結取得 `token` 後提交新密碼（占位）。
+  /// 以郵件連結內之 `token` 完成重設並提交新密碼。
   Future<void> completePasswordResetWithToken({
     required String token,
     required String newPassword,
   }) async {
+    assertTextWithinLimit(
+      text: token,
+      maxLength: LiubanInputLimits.resetTokenMaxLength,
+      message: ApiDevSemantics.inputTooLongMessage(
+        '重設憑證',
+        LiubanInputLimits.resetTokenMaxLength,
+      ),
+      code: LiubanInputLimits.inputTooLongCode,
+    );
+    assertTextWithinLimit(
+      text: newPassword,
+      maxLength: LiubanInputLimits.passwordMaxLength,
+      message: ApiDevSemantics.inputTooLongMessage(
+        '新密碼',
+        LiubanInputLimits.passwordMaxLength,
+      ),
+      code: LiubanInputLimits.inputTooLongCode,
+    );
     try {
       await _dio.post<dynamic>(
         _path('/auth/password/reset/complete'),

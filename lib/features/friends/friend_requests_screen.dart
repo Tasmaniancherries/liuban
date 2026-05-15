@@ -85,7 +85,10 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen>
         apiFailureSnackMessage: e.message,
       );
     } catch (_) {
-      return const _IncomingTabLoad(items: <FriendRequestDto>[], loadFailed: true);
+      return const _IncomingTabLoad(
+        items: <FriendRequestDto>[],
+        loadFailed: true,
+      );
     }
   }
 

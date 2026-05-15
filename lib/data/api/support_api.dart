@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/data/api/api_client_validation.dart';
 
 /// 官方客服留言（訪客可呼叫）。
 ///
@@ -23,6 +26,14 @@ class SupportApi {
     String? guestToken,
     String? contactHint,
   }) async {
+    assertTextWithinLimit(
+      text: text,
+      maxLength: LiubanInputLimits.chatMessageMaxLength,
+      message: ApiDevSemantics.chatMessageTooLongMessage(
+        LiubanInputLimits.chatMessageMaxLength,
+      ),
+      code: LiubanInputLimits.messageTextTooLongCode,
+    );
     try {
       await _dio.post<dynamic>(
         _path('/support/messages'),

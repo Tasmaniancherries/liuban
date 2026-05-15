@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
 import 'package:liuban/data/api/friends_api.dart';
 
 class _FriendsCaptureAdapter implements HttpClientAdapter {
@@ -111,6 +113,33 @@ void main() {
     expect(list.single.peerCustomId, 'c1');
   });
 
+  test(
+    'sendFriendRequest rejects oversized target id before network',
+    () async {
+      final long = ''.padRight(LiubanInputLimits.customIdMaxLength + 1, 'x');
+      await expectLater(
+        () => api.sendFriendRequest(targetCustomId: long),
+        throwsA(
+          isA<LiubanApiException>()
+              .having(
+                (e) => e.message,
+                'message',
+                ApiDevSemantics.inputTooLongMessage(
+                  'ID ',
+                  LiubanInputLimits.customIdMaxLength,
+                ),
+              )
+              .having(
+                (e) => e.code,
+                'code',
+                LiubanInputLimits.inputTooLongCode,
+              ),
+        ),
+      );
+      expect(adapter.lastOptions, isNull);
+    },
+  );
+
   test('sendFriendRequest posts target_custom_id', () async {
     await api.sendFriendRequest(targetCustomId: 'river');
     expect(adapter.lastOptions?.method, 'POST');
@@ -145,6 +174,29 @@ void main() {
     await api.sendDmMessage(peerId: 'u 1/x', text: 'yo');
     expect(adapter.lastOptions?.uri.path, '/v1/friends/dm/u%201%2Fx/messages');
     expect(adapter.lastJsonBody?['text'], 'yo');
+  });
+
+  test('sendDmMessage rejects oversized text before network', () async {
+    final long = ''.padRight(LiubanInputLimits.chatMessageMaxLength + 1, 'x');
+    await expectLater(
+      () => api.sendDmMessage(peerId: 'u1', text: long),
+      throwsA(
+        isA<LiubanApiException>()
+            .having(
+              (e) => e.message,
+              'message',
+              ApiDevSemantics.chatMessageTooLongMessage(
+                LiubanInputLimits.chatMessageMaxLength,
+              ),
+            )
+            .having(
+              (e) => e.code,
+              'code',
+              LiubanInputLimits.messageTextTooLongCode,
+            ),
+      ),
+    );
+    expect(adapter.lastOptions, isNull);
   });
 
   test('block/list/unblock users use expected paths and payload', () async {

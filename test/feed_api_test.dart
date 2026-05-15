@@ -4,6 +4,8 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
 import 'package:liuban/data/api/feed_api.dart';
 
 class _FeedCaptureAdapter implements HttpClientAdapter {
@@ -146,6 +148,29 @@ void main() {
     expect(dto.body, 'detail');
   });
 
+  test('createPost rejects oversized body before network', () async {
+    final long = ''.padRight(LiubanInputLimits.feedPostBodyMaxLength + 1, 'x');
+    await expectLater(
+      () => api.createPost(
+        body: long,
+        audienceApiValue: 'public',
+        hideSchool: false,
+      ),
+      throwsA(
+        isA<LiubanApiException>()
+            .having(
+              (e) => e.message,
+              'message',
+              ApiDevSemantics.composePostBodyTooLongMessage(
+                LiubanInputLimits.feedPostBodyMaxLength,
+              ),
+            )
+            .having((e) => e.code, 'code', LiubanInputLimits.inputTooLongCode),
+      ),
+    );
+    expect(adapter.lastOptions, isNull);
+  });
+
   test('createPost posts payload and tolerates empty response body', () async {
     final dto = await api.createPost(
       body: 'hello',
@@ -159,6 +184,26 @@ void main() {
     expect(dto.id, 'local');
     expect(dto.body, 'hello');
     expect(dto.hideSchool, isTrue);
+  });
+
+  test('updatePost rejects oversized body before network', () async {
+    final long = ''.padRight(LiubanInputLimits.feedPostBodyMaxLength + 1, 'x');
+    await expectLater(
+      () => api.updatePost(
+        postId: 'p1',
+        body: long,
+        audienceApiValue: 'public',
+        hideSchool: false,
+      ),
+      throwsA(
+        isA<LiubanApiException>().having(
+          (e) => e.code,
+          'code',
+          LiubanInputLimits.inputTooLongCode,
+        ),
+      ),
+    );
+    expect(adapter.lastOptions, isNull);
   });
 
   test(
@@ -188,6 +233,32 @@ void main() {
     await api.reportPost(postId: 'p 2');
     expect(adapter.lastOptions?.uri.path, '/v1/feed/posts/p%202/report');
     expect(adapter.lastJsonBody, isEmpty);
+  });
+
+  test('reportPost rejects oversized reason before network', () async {
+    final long = ''.padRight(
+      LiubanInputLimits.feedReportReasonMaxTotalLength + 1,
+      'x',
+    );
+    await expectLater(
+      () => api.reportPost(postId: 'p1', reason: long),
+      throwsA(
+        isA<LiubanApiException>()
+            .having(
+              (e) => e.message,
+              'message',
+              ApiDevSemantics.feedReportReasonTooLongMessage(
+                LiubanInputLimits.feedReportReasonMaxTotalLength,
+              ),
+            )
+            .having(
+              (e) => e.code,
+              'code',
+              LiubanInputLimits.reportReasonTooLongCode,
+            ),
+      ),
+    );
+    expect(adapter.lastOptions, isNull);
   });
 
   test('deletePost encodes id and uses DELETE method', () async {

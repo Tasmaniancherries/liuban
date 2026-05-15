@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
 import 'package:liuban/data/api/support_api.dart';
 
 class _SupportCaptureAdapter implements HttpClientAdapter {
@@ -82,6 +84,29 @@ void main() {
       expect(adapter.lastJsonBody?['contact_hint'], '@river');
     },
   );
+
+  test('sendMessage rejects oversized text before network', () async {
+    final long = ''.padRight(LiubanInputLimits.chatMessageMaxLength + 1, 'x');
+    await expectLater(
+      () => api.sendMessage(text: long),
+      throwsA(
+        isA<LiubanApiException>()
+            .having(
+              (e) => e.message,
+              'message',
+              ApiDevSemantics.chatMessageTooLongMessage(
+                LiubanInputLimits.chatMessageMaxLength,
+              ),
+            )
+            .having(
+              (e) => e.code,
+              'code',
+              LiubanInputLimits.messageTextTooLongCode,
+            ),
+      ),
+    );
+    expect(adapter.lastOptions, isNull);
+  });
 
   test(
     'sendMessage maps DioException response message to LiubanApiException',

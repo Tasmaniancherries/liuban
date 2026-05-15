@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/data/api/api_client_validation.dart';
 import 'package:liuban/data/models/blocked_user_dto.dart';
 import 'package:liuban/data/models/dm_message_dto.dart';
 import 'package:liuban/data/models/friend_inbox_item_dto.dart';
@@ -45,6 +48,15 @@ class FriendsApi {
 
   /// 向對方自訂 ID 發出好友申請（對方通過後成為雙向好友）。
   Future<void> sendFriendRequest({required String targetCustomId}) async {
+    assertTextWithinLimit(
+      text: targetCustomId,
+      maxLength: LiubanInputLimits.customIdMaxLength,
+      message: ApiDevSemantics.inputTooLongMessage(
+        'ID ',
+        LiubanInputLimits.customIdMaxLength,
+      ),
+      code: LiubanInputLimits.inputTooLongCode,
+    );
     try {
       await _dio.post<dynamic>(
         _path('/friends/requests'),
@@ -105,6 +117,14 @@ class FriendsApi {
     required String peerId,
     required String text,
   }) async {
+    assertTextWithinLimit(
+      text: text,
+      maxLength: LiubanInputLimits.chatMessageMaxLength,
+      message: ApiDevSemantics.chatMessageTooLongMessage(
+        LiubanInputLimits.chatMessageMaxLength,
+      ),
+      code: LiubanInputLimits.messageTextTooLongCode,
+    );
     try {
       await _dio.post<dynamic>(
         _dmMessagesPath(peerId),

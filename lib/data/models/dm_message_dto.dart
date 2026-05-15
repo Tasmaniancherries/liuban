@@ -30,13 +30,19 @@ class DmMessageDto {
   static List<DmMessageDto> listFromResponse(dynamic data) =>
       asJsonObjectList(data).map(DmMessageDto.fromJson).toList();
 
-  static List<DmMessageDto> mockThread() => const <DmMessageDto>[
+  /// 單元測試用夾具。
+  static List<DmMessageDto> fixtureThread() => const <DmMessageDto>[
     DmMessageDto(
-      id: 'm1',
+      id: 'fixture_m1',
       body: '嗨！下週有沒有空？',
       isMine: false,
       createdAt: '10:02',
     ),
-    DmMessageDto(id: 'm2', body: '可以呀，週六下午？', isMine: true, createdAt: '10:05'),
+    DmMessageDto(
+      id: 'fixture_m2',
+      body: '可以呀，週六下午？',
+      isMine: true,
+      createdAt: '10:05',
+    ),
   ];
 }

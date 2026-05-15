@@ -22,6 +22,8 @@
 - 使用文档：`release_notes_launch_candidate.md`
 - 目标：统一内部口径，确认灰度方案与回滚阈值
 
+研发在评审前应于仓库根目录执行 `make ci-quality`（与 GitHub Actions quality job 一致），并确认 `release_readiness_checklist.md` 中 T-1 核对项已完成。
+
 评审建议：
 
 1. 过一遍「本版重点」与「用户可感知变更」

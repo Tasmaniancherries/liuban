@@ -155,7 +155,9 @@ void main() {
     expect(find.text('重設憑證長度不可超過 512 字元'), findsOneWidget);
   });
 
-  testWidgets('too long new password shows validation snackbar', (tester) async {
+  testWidgets('too long new password shows validation snackbar', (
+    tester,
+  ) async {
     final container = AppContainer(
       guestDeviceId: 'g',
       logHttpTraffic: false,
@@ -186,7 +188,9 @@ void main() {
     expect(find.text('新密碼長度不可超過 128 字元'), findsOneWidget);
   });
 
-  testWidgets('short password shows length validation snackbar', (tester) async {
+  testWidgets('short password shows length validation snackbar', (
+    tester,
+  ) async {
     final container = AppContainer(
       guestDeviceId: 'g',
       logHttpTraffic: false,

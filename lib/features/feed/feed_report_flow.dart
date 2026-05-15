@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:liuban/core/app_container_scope.dart';
 import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
 import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_api_exception_snack_hint.dart';
 import 'package:liuban/core/ui/liuban_snackbar.dart';
 
 /// 廣場檢舉：選原因 → [FeedApi.reportPost]。
@@ -9,91 +11,15 @@ Future<void> runFeedReportFlow(
   BuildContext context, {
   required String postId,
 }) async {
-  final code = await showDialog<String>(
+  final reason = await showDialog<String>(
     context: context,
-    builder: (ctx) => Semantics(
-      container: true,
-      label: '檢舉此動態',
-      hint: ApiDevSemantics.feedReportDialogIntro,
-      child: AlertDialog(
-        title: const Text('檢舉此動態'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SelectionArea(
-              child: Text(
-                ApiDevSemantics.feedReportDialogIntro,
-                style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(ctx).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Tooltip(
-              message: '檢舉原因：垃圾或廣告',
-              child: Semantics(
-                button: true,
-                label: '檢舉原因，垃圾或廣告',
-                hint: '選取後送出此檢舉原因',
-                excludeSemantics: true,
-                child: ListTile(
-                  title: const Text('垃圾或廣告'),
-                  onTap: () => Navigator.of(ctx).pop('spam'),
-                ),
-              ),
-            ),
-            Tooltip(
-              message: '檢舉原因：騷擾或仇恨',
-              child: Semantics(
-                button: true,
-                label: '檢舉原因，騷擾或仇恨',
-                hint: '選取後送出此檢舉原因',
-                excludeSemantics: true,
-                child: ListTile(
-                  title: const Text('騷擾或仇恨'),
-                  onTap: () => Navigator.of(ctx).pop('harassment'),
-                ),
-              ),
-            ),
-            Tooltip(
-              message: '檢舉原因：其他',
-              child: Semantics(
-                button: true,
-                label: '檢舉原因，其他',
-                hint: '選取後送出此檢舉原因',
-                excludeSemantics: true,
-                child: ListTile(
-                  title: const Text('其他'),
-                  onTap: () => Navigator.of(ctx).pop('other'),
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          Tooltip(
-            message: '關閉，不檢舉',
-            child: Semantics(
-              button: true,
-              label: '關閉，不檢舉',
-              hint: '關閉對話框，不送出檢舉',
-              excludeSemantics: true,
-              child: TextButton(
-                onPressed: () => Navigator.of(ctx).pop(),
-                child: const Text('取消'),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
+    builder: (ctx) => const _FeedReportDialog(),
   );
-  if (code == null || !context.mounted) return;
+  if (reason == null || !context.mounted) return;
   try {
     await AppContainerScope.of(
       context,
-    ).feed.reportPost(postId: postId, reason: code);
+    ).feed.reportPost(postId: postId, reason: reason);
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       liubanSnackBarWithSemanticsHint(
@@ -106,7 +32,13 @@ Future<void> runFeedReportFlow(
     ScaffoldMessenger.of(context).showSnackBar(
       liubanSnackBarWithSemanticsHint(
         e.message,
-        semanticsHint: ApiDevSemantics.feedReportErrorSnackHint,
+        semanticsHint: liubanApiExceptionSnackHint(
+          e,
+          defaultHint: ApiDevSemantics.feedReportErrorSnackHint,
+          clientTooLongHint: ApiDevSemantics.feedReportReasonTooLongSnackHint(
+            LiubanInputLimits.feedReportReasonMaxTotalLength,
+          ),
+        ),
       ),
     );
   } catch (_) {
@@ -117,6 +49,180 @@ Future<void> runFeedReportFlow(
         semanticsHint: ApiDevSemantics.feedModerationGenericFailureSnackHint,
       ),
     );
+  }
+}
+
+enum _FeedReportPhase { pickReason, otherDetail }
+
+class _FeedReportDialog extends StatefulWidget {
+  const _FeedReportDialog();
+
+  @override
+  State<_FeedReportDialog> createState() => _FeedReportDialogState();
+}
+
+class _FeedReportDialogState extends State<_FeedReportDialog> {
+  /// 與 `other — ` 前綴併入後仍維持合理總長（後端 `reason` 為單一字串）。
+  _FeedReportPhase _phase = _FeedReportPhase.pickReason;
+  final TextEditingController _otherDetail = TextEditingController();
+
+  @override
+  void dispose() {
+    _otherDetail.dispose();
+    super.dispose();
+  }
+
+  String _composeOtherReason() {
+    final d = _otherDetail.text.trim();
+    if (d.isEmpty) return 'other';
+    return 'other — $d';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      container: true,
+      label: '檢舉此動態',
+      hint: _phase == _FeedReportPhase.pickReason
+          ? ApiDevSemantics.feedReportDialogIntro
+          : ApiDevSemantics.feedReportOtherDetailSemanticsHint,
+      child: AlertDialog(
+        title: const Text('檢舉此動態'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SelectionArea(
+                child: Text(
+                  ApiDevSemantics.feedReportDialogIntro,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              if (_phase == _FeedReportPhase.pickReason) ..._pickReasonTiles(),
+              if (_phase == _FeedReportPhase.otherDetail)
+                ..._otherDetailFields(),
+            ],
+          ),
+        ),
+        actions: _phase == _FeedReportPhase.pickReason
+            ? [
+                Tooltip(
+                  message: '關閉，不檢舉',
+                  child: Semantics(
+                    button: true,
+                    label: '關閉，不檢舉',
+                    hint: '關閉對話框，不送出檢舉',
+                    excludeSemantics: true,
+                    child: TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('取消'),
+                    ),
+                  ),
+                ),
+              ]
+            : [
+                Tooltip(
+                  message: '返回選擇檢舉原因',
+                  child: Semantics(
+                    button: true,
+                    label: '返回',
+                    hint: '返回上一步重新選擇檢舉原因',
+                    excludeSemantics: true,
+                    child: TextButton(
+                      onPressed: () => setState(() {
+                        _phase = _FeedReportPhase.pickReason;
+                      }),
+                      child: const Text('返回'),
+                    ),
+                  ),
+                ),
+                Tooltip(
+                  message: '送出檢舉',
+                  child: Semantics(
+                    button: true,
+                    label: '送出檢舉',
+                    hint: ApiDevSemantics.feedReportSubmitOtherSemanticsHint,
+                    excludeSemantics: true,
+                    child: FilledButton(
+                      onPressed: () =>
+                          Navigator.of(context).pop(_composeOtherReason()),
+                      child: const Text('送出檢舉'),
+                    ),
+                  ),
+                ),
+              ],
+      ),
+    );
+  }
+
+  List<Widget> _pickReasonTiles() {
+    return [
+      Tooltip(
+        message: '檢舉原因：垃圾或廣告',
+        child: Semantics(
+          button: true,
+          label: '檢舉原因，垃圾或廣告',
+          hint: '選取後送出此檢舉原因',
+          excludeSemantics: true,
+          child: ListTile(
+            title: const Text('垃圾或廣告'),
+            onTap: () => Navigator.of(context).pop('spam'),
+          ),
+        ),
+      ),
+      Tooltip(
+        message: '檢舉原因：騷擾或仇恨',
+        child: Semantics(
+          button: true,
+          label: '檢舉原因，騷擾或仇恨',
+          hint: '選取後送出此檢舉原因',
+          excludeSemantics: true,
+          child: ListTile(
+            title: const Text('騷擾或仇恨'),
+            onTap: () => Navigator.of(context).pop('harassment'),
+          ),
+        ),
+      ),
+      Tooltip(
+        message: '檢舉原因：其他',
+        child: Semantics(
+          button: true,
+          label: '檢舉原因，其他',
+          hint: '可於下一步填寫選填說明後送出',
+          excludeSemantics: true,
+          child: ListTile(
+            title: const Text('其他'),
+            onTap: () => setState(() => _phase = _FeedReportPhase.otherDetail),
+          ),
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> _otherDetailFields() {
+    return [
+      Text('可簡述詳情（選填）', style: Theme.of(context).textTheme.titleSmall),
+      const SizedBox(height: 8),
+      Semantics(
+        label: '檢舉補充說明',
+        hint: ApiDevSemantics.feedReportOtherFieldSemanticsHint,
+        textField: true,
+        child: TextField(
+          controller: _otherDetail,
+          maxLines: 4,
+          maxLength: LiubanInputLimits.feedReportOtherDetailMaxLength,
+          decoration: const InputDecoration(
+            alignLabelWithHint: true,
+            hintText: '例如：涉及詐騙連結、假冒身分⋯',
+            border: OutlineInputBorder(),
+          ),
+        ),
+      ),
+    ];
   }
 }
 

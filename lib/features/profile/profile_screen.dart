@@ -504,27 +504,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  static Widget _schoolChip(
-    BuildContext context,
-    String shortName, {
-    required bool alumni,
-  }) {
-    final dto = EducationEntryDto(schoolShortName: shortName, alumni: alumni);
-    return Semantics(
-      container: true,
-      label: '學籍標籤，${dto.chipLabel}',
-      hint: '學校或校友身分標籤，僅顯示',
-      excludeSemantics: true,
-      child: Chip(
-        label: Text(dto.chipLabel),
-        visualDensity: VisualDensity.compact,
-        side: BorderSide(
-          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.35),
-        ),
-      ),
-    );
-  }
-
   static Widget _schoolChipFromDto(BuildContext context, EducationEntryDto e) {
     return Semantics(
       container: true,

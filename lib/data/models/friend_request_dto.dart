@@ -26,9 +26,10 @@ class FriendRequestDto {
   static List<FriendRequestDto> listFromResponse(dynamic data) =>
       asJsonObjectList(data).map(FriendRequestDto.fromJson).toList();
 
-  static List<FriendRequestDto> mockPending() => const <FriendRequestDto>[
+  /// 單元測試用夾具。
+  static List<FriendRequestDto> fixturePending() => const <FriendRequestDto>[
     FriendRequestDto(
-      id: 'mock_r1',
+      id: 'fixture_r1',
       fromCustomId: 'coffee_hk',
       createdAt: '2026-03-28',
     ),

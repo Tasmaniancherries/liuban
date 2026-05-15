@@ -231,8 +231,10 @@ class _LiubanAppState extends State<LiubanApp> {
       final truncated = _truncateForLog(messageBuilder());
       debugPrint('LiubanApp: ${_sanitizeForLog(truncated)}');
     } catch (e, st) {
-      final fallback = _truncateForLog('debug log builder failed: $e\n$st');
-      debugPrint('LiubanApp: ${_sanitizeForLog(fallback)}');
+      final truncatedErrorLog = _truncateForLog(
+        'debug log builder failed: $e\n$st',
+      );
+      debugPrint('LiubanApp: ${_sanitizeForLog(truncatedErrorLog)}');
     }
   }
 

@@ -163,41 +163,42 @@ void main() {
     expect(find.text('我回覆一句'), findsOneWidget);
   });
 
-  testWidgets('thread load non-API error shows empty state and generic snackbar', (
-    tester,
-  ) async {
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-    tester.view.physicalSize = const Size(800, 1000);
-    tester.view.devicePixelRatio = 1.0;
+  testWidgets(
+    'thread load non-API error shows empty state and generic snackbar',
+    (tester) async {
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      tester.view.physicalSize = const Size(800, 1000);
+      tester.view.devicePixelRatio = 1.0;
 
-    final container = AppContainer(
-      guestDeviceId: 'g',
-      logHttpTraffic: false,
-      baseUrl: 'https://example.invalid',
-      sessionTokens: AuthSessionTokens(accessToken: 't'),
-      friendsApi: _FriendsListDmNonApiException(
-        Dio(),
-        apiPrefix: AppConfig.apiPrefix,
-      ),
-    );
-
-    await tester.pumpWidget(
-      AppContainerScope(
-        container: container,
-        child: const MaterialApp(
-          home: DmChatScreen(peerId: 'peer_z', peerCustomId: 'peer_z'),
+      final container = AppContainer(
+        guestDeviceId: 'g',
+        logHttpTraffic: false,
+        baseUrl: 'https://example.invalid',
+        sessionTokens: AuthSessionTokens(accessToken: 't'),
+        friendsApi: _FriendsListDmNonApiException(
+          Dio(),
+          apiPrefix: AppConfig.apiPrefix,
         ),
-      ),
-    );
-    await tester.pumpAndSettle();
+      );
 
-    expect(
-      find.text(ApiDevSemantics.dmThreadLoadFailedMessage),
-      findsOneWidget,
-    );
-    expect(find.text('暫無對話訊息'), findsOneWidget);
-  });
+      await tester.pumpWidget(
+        AppContainerScope(
+          container: container,
+          child: const MaterialApp(
+            home: DmChatScreen(peerId: 'peer_z', peerCustomId: 'peer_z'),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text(ApiDevSemantics.dmThreadLoadFailedMessage),
+        findsOneWidget,
+      );
+      expect(find.text('暫無對話訊息'), findsOneWidget);
+    },
+  );
 
   testWidgets('send non-API error shows generic snackbar', (tester) async {
     addTearDown(tester.view.resetPhysicalSize);

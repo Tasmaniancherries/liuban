@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:liuban/core/app_container_scope.dart';
 import 'package:liuban/core/debug/unawaited_debug.dart';
 import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
 import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_api_exception_snack_hint.dart';
 import 'package:liuban/core/ui/liuban_snackbar.dart';
 import 'package:liuban/core/ui/scroll_constants.dart';
 
@@ -22,9 +24,6 @@ class ResetPasswordConfirmScreen extends StatefulWidget {
 
 class _ResetPasswordConfirmScreenState
     extends State<ResetPasswordConfirmScreen> {
-  static const int _maxTokenLength = 512;
-  static const int _maxNewPasswordLength = 128;
-
   late final TextEditingController _token;
   final _pass = TextEditingController();
   final _again = TextEditingController();
@@ -122,23 +121,29 @@ class _ResetPasswordConfirmScreenState
       );
       return;
     }
-    if (raw.length > _maxTokenLength) {
+    if (raw.length > LiubanInputLimits.resetTokenMaxLength) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          '重設憑證長度不可超過 $_maxTokenLength 字元',
+          ApiDevSemantics.inputTooLongMessage(
+            '重設憑證',
+            LiubanInputLimits.resetTokenMaxLength,
+          ),
           semanticsHint: ApiDevSemantics.resetPasswordTokenTooLongSnackHint(
-            _maxTokenLength,
+            LiubanInputLimits.resetTokenMaxLength,
           ),
         ),
       );
       return;
     }
-    if (p.length > _maxNewPasswordLength) {
+    if (p.length > LiubanInputLimits.passwordMaxLength) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          '新密碼長度不可超過 $_maxNewPasswordLength 字元',
+          ApiDevSemantics.inputTooLongMessage(
+            '新密碼',
+            LiubanInputLimits.passwordMaxLength,
+          ),
           semanticsHint: ApiDevSemantics.resetPasswordPasswordTooLongSnackHint(
-            _maxNewPasswordLength,
+            LiubanInputLimits.passwordMaxLength,
           ),
         ),
       );
@@ -181,7 +186,13 @@ class _ResetPasswordConfirmScreenState
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
           e.message,
-          semanticsHint: ApiDevSemantics.resetPasswordApiErrorSnackHint,
+          semanticsHint: liubanApiExceptionSnackHint(
+            e,
+            defaultHint: ApiDevSemantics.resetPasswordApiErrorSnackHint,
+            clientTooLongHint: ApiDevSemantics.changePasswordTooLongSnackHint(
+              LiubanInputLimits.passwordMaxLength,
+            ),
+          ),
         ),
       );
     } catch (_) {
@@ -250,7 +261,7 @@ class _ResetPasswordConfirmScreenState
                 child: TextField(
                   controller: _token,
                   enabled: !_submitting,
-                  maxLength: _maxTokenLength + 1,
+                  maxLength: LiubanInputLimits.resetTokenMaxLength + 1,
                   decoration: const InputDecoration(
                     labelText: '重設憑證（token）',
                     hintText: '郵件連結中的 token',
@@ -269,7 +280,7 @@ class _ResetPasswordConfirmScreenState
                 child: TextField(
                   controller: _pass,
                   enabled: !_submitting,
-                  maxLength: _maxNewPasswordLength + 1,
+                  maxLength: LiubanInputLimits.passwordMaxLength + 1,
                   obscureText: _obscureP,
                   autofillHints: const [AutofillHints.newPassword],
                   decoration: InputDecoration(
@@ -302,7 +313,7 @@ class _ResetPasswordConfirmScreenState
                 child: TextField(
                   controller: _again,
                   enabled: !_submitting,
-                  maxLength: _maxNewPasswordLength + 1,
+                  maxLength: LiubanInputLimits.passwordMaxLength + 1,
                   obscureText: _obscureA,
                   autofillHints: const [AutofillHints.newPassword],
                   decoration: InputDecoration(

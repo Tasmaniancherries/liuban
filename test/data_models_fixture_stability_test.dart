@@ -7,10 +7,10 @@ import 'package:liuban/data/models/friend_outgoing_request_dto.dart';
 import 'package:liuban/data/models/friend_request_dto.dart';
 
 void main() {
-  test('FeedPostDto mock feed sizes and audience tags are stable', () {
-    final publicFeed = FeedPostDto.mockPublicFeed();
-    final schoolFeed = FeedPostDto.mockSchoolFeed();
-    final friendsFeed = FeedPostDto.mockFriendsFeed();
+  test('FeedPostDto fixture feed sizes and audience tags are stable', () {
+    final publicFeed = FeedPostDto.fixturePublicFeed();
+    final schoolFeed = FeedPostDto.fixtureSchoolFeed();
+    final friendsFeed = FeedPostDto.fixtureFriendsFeed();
 
     expect(publicFeed, hasLength(6));
     expect(schoolFeed, hasLength(5));
@@ -20,34 +20,34 @@ void main() {
     expect(friendsFeed.every((e) => e.audience == 'friends'), isTrue);
   });
 
-  test('FriendRequestDto.mockPending has at least one pending request', () {
-    final list = FriendRequestDto.mockPending();
+  test('FriendRequestDto.fixturePending has at least one pending request', () {
+    final list = FriendRequestDto.fixturePending();
     expect(list, isNotEmpty);
     expect(list.first.id, isNotEmpty);
     expect(list.first.fromCustomId, isNotEmpty);
   });
 
-  test('FriendOutgoingRequestDto.mockOutgoing defaults to pending', () {
-    final list = FriendOutgoingRequestDto.mockOutgoing();
+  test('FriendOutgoingRequestDto.fixtureOutgoing defaults to pending', () {
+    final list = FriendOutgoingRequestDto.fixtureOutgoing();
     expect(list, isNotEmpty);
     expect(list.first.status, 'pending');
     expect(list.first.toCustomId, isNotEmpty);
   });
 
-  test('FriendInboxItemDto.mockInbox has preview text entries', () {
-    final list = FriendInboxItemDto.mockInbox();
+  test('FriendInboxItemDto.fixtureInbox has preview text entries', () {
+    final list = FriendInboxItemDto.fixtureInbox();
     expect(list, hasLength(2));
     expect(list.every((e) => (e.lastMessagePreview ?? '').isNotEmpty), isTrue);
   });
 
-  test('BlockedUserDto.mockList has display label', () {
-    final list = BlockedUserDto.mockList();
+  test('BlockedUserDto.fixtureList has display label', () {
+    final list = BlockedUserDto.fixtureList();
     expect(list, isNotEmpty);
     expect((list.first.displayLabel ?? '').isNotEmpty, isTrue);
   });
 
-  test('DmMessageDto.mockThread alternates mine and peer examples', () {
-    final list = DmMessageDto.mockThread();
+  test('DmMessageDto.fixtureThread alternates mine and peer', () {
+    final list = DmMessageDto.fixtureThread();
     expect(list, hasLength(2));
     expect(list.any((e) => e.isMine), isTrue);
     expect(list.any((e) => !e.isMine), isTrue);

@@ -11,8 +11,9 @@
 | [release_notes_public_short.md](release_notes_public_short.md) | 對外精簡更新公告（應用商店／社群可直接使用） |
 | [release_execution_runbook.md](release_execution_runbook.md) | 發布執行順序（T-3 至 T+7 的角色與文檔對應） |
 | [release_rollout_and_rollback_guide.md](release_rollout_and_rollback_guide.md) | 灰度放量與回滾判定指南（發布當天決策用） |
+| [p0_operational_runbook.md](p0_operational_runbook.md) | **P0 阻塞項**執行手冊（真機回歸、聯調簽收、監控、構建、合規） |
 
-實作入口：`lib/data/api/*.dart`、[`lib/core/network/token_refresh_interceptor.dart`](../lib/core/network/token_refresh_interceptor.dart)。
+實作入口：`lib/data/api/*.dart`、[`lib/core/network/token_refresh_interceptor.dart`](../lib/core/network/token_refresh_interceptor.dart)。客戶端輸入長度上限集中於 [`lib/core/text/liuban_input_limits.dart`](../lib/core/text/liuban_input_limits.dart)，各契約文中「客戶端防禦上限」須與其一致。
 
 畫面上功能／無障礙用 API 說明集中於 [`lib/core/ui/api_dev_semantics.dart`](../lib/core/ui/api_dev_semantics.dart)（含 `AppConfig.apiPrefix` 與 docs 尾註）。另含分享連結底部表、訪客鎖定層 hint。已接入之主要畫面含：登入／註冊、`AuthRequiredGate`（須登入門檻）、廣場與發佈／單篇、檢舉／屏蔽／刪除對話框、撰寫權限門檻頁、好友收件匣與私訊／申請、推廣列表與詳情、設定（協議與關於）、屏蔽列表、個人檔（含同步審核與除錯說明）、改密與重設密碼、客服、路由錯誤頁等。
 

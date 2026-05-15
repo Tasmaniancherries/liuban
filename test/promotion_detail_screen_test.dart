@@ -147,9 +147,7 @@ void main() {
     expect(find.textContaining('平台'), findsWidgets);
   });
 
-  testWidgets('GET failure shows empty state and API snackbar', (
-    tester,
-  ) async {
+  testWidgets('GET failure shows empty state and API snackbar', (tester) async {
     final container = AppContainer(
       guestDeviceId: 'g',
       logHttpTraffic: false,
@@ -166,7 +164,10 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text(ApiDevSemantics.promotionDetailEmptyTitle), findsOneWidget);
+    expect(
+      find.text(ApiDevSemantics.promotionDetailEmptyTitle),
+      findsOneWidget,
+    );
     expect(find.text('推廣詳情 API 測試錯誤'), findsOneWidget);
   });
 

@@ -337,60 +337,61 @@ void main() {
     expect(find.text('捨棄輸入？'), findsNothing);
   });
 
-  testWidgets('support tab back still prompts discard when email draft exists', (
-    tester,
-  ) async {
-    final container = AppContainer(
-      guestDeviceId: 'g',
-      logHttpTraffic: false,
-      baseUrl: 'https://example.invalid',
-      sessionTokens: AuthSessionTokens(),
-    );
-    container.dio.httpClientAdapter = _PasswordResetRequestAdapter();
+  testWidgets(
+    'support tab back still prompts discard when email draft exists',
+    (tester) async {
+      final container = AppContainer(
+        guestDeviceId: 'g',
+        logHttpTraffic: false,
+        baseUrl: 'https://example.invalid',
+        sessionTokens: AuthSessionTokens(),
+      );
+      container.dio.httpClientAdapter = _PasswordResetRequestAdapter();
 
-    final router = GoRouter(
-      initialLocation: '/entry',
-      routes: [
-        GoRoute(
-          path: '/entry',
-          builder: (context, state) => Scaffold(
-            body: Center(
-              child: FilledButton(
-                onPressed: () => context.push('/forgot'),
-                child: const Text('OPEN_FORGOT'),
+      final router = GoRouter(
+        initialLocation: '/entry',
+        routes: [
+          GoRoute(
+            path: '/entry',
+            builder: (context, state) => Scaffold(
+              body: Center(
+                child: FilledButton(
+                  onPressed: () => context.push('/forgot'),
+                  child: const Text('OPEN_FORGOT'),
+                ),
               ),
             ),
           ),
-        ),
-        GoRoute(
-          path: '/forgot',
-          builder: (context, state) => const ForgotPasswordScreen(),
-        ),
-      ],
-    );
+          GoRoute(
+            path: '/forgot',
+            builder: (context, state) => const ForgotPasswordScreen(),
+          ),
+        ],
+      );
 
-    await tester.pumpWidget(
-      AppContainerScope(
-        container: container,
-        child: MaterialApp.router(
-          theme: LiubanTheme.light(),
-          routerConfig: router,
+      await tester.pumpWidget(
+        AppContainerScope(
+          container: container,
+          child: MaterialApp.router(
+            theme: LiubanTheme.light(),
+            routerConfig: router,
+          ),
         ),
-      ),
-    );
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('OPEN_FORGOT'));
-    await tester.pumpAndSettle();
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('OPEN_FORGOT'));
+      await tester.pumpAndSettle();
 
-    await tester.enterText(find.byType(TextField), 'a@x.hk');
-    await tester.pump();
-    await tester.tap(find.text('客服協助'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('返回'));
-    await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'a@x.hk');
+      await tester.pump();
+      await tester.tap(find.text('客服協助'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('返回'));
+      await tester.pumpAndSettle();
 
-    expect(find.text('捨棄輸入？'), findsOneWidget);
-  });
+      expect(find.text('捨棄輸入？'), findsOneWidget);
+    },
+  );
 
   testWidgets('support tab back without draft pops directly', (tester) async {
     final container = AppContainer(

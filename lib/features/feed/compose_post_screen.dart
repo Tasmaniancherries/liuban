@@ -3,7 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:liuban/core/app_container_scope.dart';
 import 'package:liuban/core/debug/unawaited_debug.dart';
 import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
 import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_api_exception_snack_hint.dart';
 import 'package:liuban/core/ui/liuban_snackbar.dart';
 import 'package:liuban/core/ui/scroll_constants.dart';
 import 'package:liuban/data/models/feed_post_dto.dart';
@@ -21,8 +23,6 @@ class ComposePostScreen extends StatefulWidget {
 }
 
 class _ComposePostScreenState extends State<ComposePostScreen> {
-  static const int _maxPostBodyLength = 2000;
-
   final _body = TextEditingController();
   bool _hideSchool = false;
   PostAudience _audience = PostAudience.publicSquare;
@@ -121,6 +121,14 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
       _hideSchool != _baselineHideSchool ||
       _audience != _baselineAudience;
 
+  bool get _hasValidBody {
+    final text = _body.text.trim();
+    return text.isNotEmpty &&
+        text.length <= LiubanInputLimits.feedPostBodyMaxLength;
+  }
+
+  bool get _canSubmit => !_submitting && _hasValidBody;
+
   Future<void> _confirmDiscardIfNeeded() async {
     if (_submitting) return;
     if (!_hasUnsavedChanges) {
@@ -206,12 +214,14 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
       );
       return;
     }
-    if (text.length > _maxPostBodyLength) {
+    if (text.length > LiubanInputLimits.feedPostBodyMaxLength) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          ApiDevSemantics.composePostBodyTooLongMessage(_maxPostBodyLength),
+          ApiDevSemantics.composePostBodyTooLongMessage(
+            LiubanInputLimits.feedPostBodyMaxLength,
+          ),
           semanticsHint: ApiDevSemantics.composePostBodyTooLongSnackHint(
-            _maxPostBodyLength,
+            LiubanInputLimits.feedPostBodyMaxLength,
           ),
         ),
       );
@@ -254,7 +264,13 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
           e.message,
-          semanticsHint: ApiDevSemantics.composePostApiErrorSnackHint,
+          semanticsHint: liubanApiExceptionSnackHint(
+            e,
+            defaultHint: ApiDevSemantics.composePostApiErrorSnackHint,
+            clientTooLongHint: ApiDevSemantics.composePostBodyTooLongSnackHint(
+              LiubanInputLimits.feedPostBodyMaxLength,
+            ),
+          ),
         ),
       );
     } catch (_) {
@@ -332,7 +348,7 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
               message: editing ? '儲存動態' : '發佈動態',
               child: Semantics(
                 button: true,
-                enabled: !_submitting,
+                enabled: _canSubmit,
                 label: editing ? '儲存動態' : '發佈動態',
                 hint: ApiDevSemantics.composePostSubmitHint(
                   editing: editing,
@@ -340,7 +356,7 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
                 ),
                 excludeSemantics: true,
                 child: TextButton(
-                  onPressed: _submitting
+                  onPressed: !_canSubmit
                       ? null
                       : () => unawaitedDebug(
                           'ComposePostScreen._submit',
@@ -373,8 +389,9 @@ class _ComposePostScreenState extends State<ComposePostScreen> {
               child: TextField(
                 controller: _body,
                 maxLines: 8,
-                maxLength: _maxPostBodyLength,
+                maxLength: LiubanInputLimits.feedPostBodyMaxLength,
                 enabled: !_submitting,
+                onChanged: (_) => setState(() {}),
                 decoration: const InputDecoration(
                   alignLabelWithHint: true,
                   labelText: '動態內容',

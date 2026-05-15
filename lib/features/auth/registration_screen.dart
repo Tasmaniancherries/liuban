@@ -10,7 +10,9 @@ import 'package:liuban/core/session/app_session.dart';
 import 'package:liuban/core/session/app_session_scope.dart';
 import 'package:liuban/core/session/verification_phase_mapper.dart';
 import 'package:liuban/core/text/account_input_normalize.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
 import 'package:liuban/core/ui/api_dev_semantics.dart';
+import 'package:liuban/core/ui/liuban_api_exception_snack_hint.dart';
 import 'package:liuban/core/ui/liuban_snackbar.dart';
 import 'package:liuban/core/ui/scroll_constants.dart';
 import 'package:liuban/data/api/auth_api.dart';
@@ -24,10 +26,6 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  static const int _maxCustomIdLength = 32;
-  static const int _maxSchoolNameLength = 80;
-  static const int _maxStudentIdLength = 32;
-
   final _customId = TextEditingController();
   final _school = TextEditingController();
   final _studentId = TextEditingController();
@@ -187,34 +185,43 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       );
       return;
     }
-    if (id.length > _maxCustomIdLength) {
+    if (id.length > LiubanInputLimits.customIdMaxLength) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          '自訂 ID 長度不可超過 $_maxCustomIdLength 字元',
+          ApiDevSemantics.inputTooLongMessage(
+            '自訂 ID ',
+            LiubanInputLimits.customIdMaxLength,
+          ),
           semanticsHint: ApiDevSemantics.registrationCustomIdTooLongSnackHint(
-            _maxCustomIdLength,
+            LiubanInputLimits.customIdMaxLength,
           ),
         ),
       );
       return;
     }
-    if (sch.length > _maxSchoolNameLength) {
+    if (sch.length > LiubanInputLimits.schoolNameMaxLength) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          '學校名稱長度不可超過 $_maxSchoolNameLength 字元',
+          ApiDevSemantics.inputTooLongMessage(
+            '學校名稱',
+            LiubanInputLimits.schoolNameMaxLength,
+          ),
           semanticsHint: ApiDevSemantics.registrationSchoolTooLongSnackHint(
-            _maxSchoolNameLength,
+            LiubanInputLimits.schoolNameMaxLength,
           ),
         ),
       );
       return;
     }
-    if (sid.length > _maxStudentIdLength) {
+    if (sid.length > LiubanInputLimits.studentIdMaxLength) {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
-          '學號長度不可超過 $_maxStudentIdLength 字元',
+          ApiDevSemantics.inputTooLongMessage(
+            '學號',
+            LiubanInputLimits.studentIdMaxLength,
+          ),
           semanticsHint: ApiDevSemantics.registrationStudentIdTooLongSnackHint(
-            _maxStudentIdLength,
+            LiubanInputLimits.studentIdMaxLength,
           ),
         ),
       );
@@ -273,7 +280,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         liubanSnackBarWithSemanticsHint(
           e.message,
-          semanticsHint: ApiDevSemantics.registrationApiErrorSnackHint,
+          semanticsHint: liubanApiExceptionSnackHint(
+            e,
+            defaultHint: ApiDevSemantics.registrationApiErrorSnackHint,
+          ),
         ),
       );
     } catch (_) {
@@ -373,7 +383,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 child: TextField(
                   controller: _customId,
                   enabled: !_submitting,
-                  maxLength: _maxCustomIdLength + 1,
+                  maxLength: LiubanInputLimits.customIdMaxLength + 1,
                   autofillHints: const [AutofillHints.newUsername],
                   autocorrect: false,
                   enableSuggestions: false,
@@ -393,7 +403,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 child: TextField(
                   controller: _school,
                   enabled: !_submitting,
-                  maxLength: _maxSchoolNameLength + 1,
+                  maxLength: LiubanInputLimits.schoolNameMaxLength + 1,
                   autofillHints: const [AutofillHints.organizationName],
                   decoration: const InputDecoration(
                     labelText: '學校（主學校）',
@@ -411,7 +421,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 child: TextField(
                   controller: _studentId,
                   enabled: !_submitting,
-                  maxLength: _maxStudentIdLength + 1,
+                  maxLength: LiubanInputLimits.studentIdMaxLength + 1,
                   decoration: const InputDecoration(
                     labelText: '學號（機密，僅審核用）',
                     border: OutlineInputBorder(),

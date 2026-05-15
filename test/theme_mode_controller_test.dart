@@ -6,9 +6,7 @@ import 'package:liuban/core/theme/theme_mode_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<AppPersistence> _buildPersistenceWithTheme(String? themeValue) async {
-  SharedPreferences.setMockInitialValues({
-    'liuban_theme_mode': ?themeValue,
-  });
+  SharedPreferences.setMockInitialValues({'liuban_theme_mode': ?themeValue});
   final prefs = await SharedPreferences.getInstance();
   return AppPersistence(prefs, AuthSessionTokens(), 'guest');
 }

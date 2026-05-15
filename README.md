@@ -83,7 +83,7 @@ flutter test test/unawaited_debug_test.dart
 
 其他範例：`test/dio_client_test.dart`（記錄脫敏）、`test/dio_session_dio_test.dart`（`createSessionDio`／`createPlainDio` 與 Bearer）、`test/auth_api_test.dart`（`AuthApi` 路徑／payload／multipart 欄位）、`test/feed_api_test.dart`（`FeedApi` 路徑／query／CRUD payload）、`test/friends_api_test.dart`（`FriendsApi` 路徑／payload／id 編碼／blocks 路由）、`test/promotion_api_test.dart`（`PromotionApi` 路徑與 id 編碼）、`test/support_api_test.dart`（`SupportApi` payload 與可選欄位）、`test/router_build_test.dart`（`buildRouter` 首屏與未知路徑錯誤頁）、`test/auth_session_tokens_test.dart`（`AuthSessionTokens`）、`test/liuban_api_exception_test.dart`（`LiubanApiException.fromDio`）、`test/json_utils_test.dart`（`asJsonMap`／`asJsonObjectList`）、`test/verification_phase_mapper_test.dart`（`accountPhaseFromVerificationApi`）、`test/api_dev_semantics_test.dart`（`GoRouter` 錯誤文案與無障礙標籤組字）、`test/token_refresh_interceptor_test.dart`（401 刷新與 `HttpClientAdapter` 迴路）。
 
-其他（DTO／session／設定）：`test/data_models_dto_test.dart`（各資料模型 `fromJson`／`listFromResponse`）、`test/data_models_mock_fallback_test.dart`（測試夾具資料穩定性）、`test/app_session_test.dart`（`AppSession` 階段與通知）、`test/scope_providers_test.dart`（`AppContainerScope`／`ThemeModeScope`／`AppLocaleScope`／`AppSessionScope`）、`test/post_audience_test.dart`（`PostAudience` 與 API 字串）、`test/app_config_test.dart`（`AppConfig` 預設編譯期常數）、`test/app_container_test.dart`（`AppContainer` DI 與 baseUrl wiring）、`test/promotion_models_test.dart`（`PromotionItem.fromDto`／`promotionFixtureById`）。
+其他（DTO／session／設定）：`test/data_models_dto_test.dart`（各資料模型 `fromJson`／`listFromResponse`）、`test/data_models_fixture_stability_test.dart`（測試夾具資料穩定性）、`test/liuban_input_limits_test.dart`（`LiubanInputLimits` 字數預算）、`test/liuban_api_exception_snack_hint_test.dart`（客戶端超長錯誤 SnackBar hint 路由）、`test/app_session_test.dart`（`AppSession` 階段與通知）、`test/scope_providers_test.dart`（`AppContainerScope`／`ThemeModeScope`／`AppLocaleScope`／`AppSessionScope`）、`test/post_audience_test.dart`（`PostAudience` 與 API 字串）、`test/app_config_test.dart`（`AppConfig` 預設編譯期常數）、`test/app_container_test.dart`（`AppContainer` DI 與 baseUrl wiring）、`test/promotion_models_test.dart`（`PromotionItem.fromDto`／`promotionFixtureById`）。
 
 其他（路由／門檻／UI 小件）：`test/auth_required_gate_test.dart`、`test/compose_access_gate_test.dart`、`test/widget_phase_guest_lock_test.dart`（`PhaseBadge`／`GuestLockOverlay`）、`test/scroll_behavior_test.dart`、`test/scroll_constants_test.dart`（`kLiubanListCacheExtent`）、`test/liuban_snackbar_test.dart`、`test/share_url_test.dart`（分享 URL 編碼與路徑）、`test/share_open_actions_test.dart`（`openFeedPostShareActions`／`openPromotionShareActions` 開啟底部表單）、`test/share_link_sheet_test.dart`（`showShareLinkSheet` 底部表單、複製／分享、share channel 與 `origin` 參數）、`test/feed_post_detail_screen_test.dart`（單篇載入失敗錯誤態、下拉重試、本人/他人更多選單權限與 `fetchMe` API 錯誤提示）、`test/feed_report_flow_test.dart`（`runFeedReportFlow` 成功／取消／API 錯誤）、`test/feed_moderation_flows_test.dart`（`runBlockUserFlow`／`runDeleteOwnPostFlow` 成功／取消／API 錯誤）、`test/settings_screen_test.dart`（主題/語言對話框切換與當前選項 check icon、協議對話框開關、開源許可頁與關於對話框顯示／關閉）、`test/settings_navigation_test.dart`（從設定頁前往忘記密碼與客服路由）、`test/blocked_users_screen_test.dart`（`BlockedUsersScreen` 封鎖列表與解除、`/friends/blocks` 路由）、`test/friend_requests_screen_test.dart`（`FriendRequestsScreen` 收到／發出分頁與 `incoming`／`outgoing` 路由）、`test/add_friend_screen_test.dart`（`AddFriendScreen` 空表單提示、`POST /friends/requests` 成功與 `GoRouter` pop）。
 
@@ -101,7 +101,9 @@ flutter test test/unawaited_debug_test.dart
 | `lib/features/messages/` | 訊息（好友／官方客服） |
 | `lib/features/profile/` | 我的 |
 | `lib/features/auth/` | 註冊／身分審核 |
-| `lib/core/ui/api_dev_semantics.dart` | 無障礙／開發用 API 路徑說明（含 `API_PREFIX`） |
+| `lib/core/text/liuban_input_limits.dart` | 客戶端輸入長度上限（與 UI／API 防禦對齊） |
+| `lib/core/ui/api_dev_semantics.dart` | 無障礙／功能用 API 路徑說明（含 `API_PREFIX`） |
+| `lib/core/ui/liuban_api_exception_snack_hint.dart` | 依 `LiubanApiException.code` 選擇 SnackBar 無障礙 hint |
 | `docs/README.md` | 契約文件索引 |
 | `docs/backend_auth_contract.md` | 認證、TokenPair／Bearer、refresh、`/auth/me`、密碼重置等 |
 | `docs/backend_domain_apis_contract.md` | 廣場、好友／私訊、推廣、客服 API |
@@ -110,6 +112,7 @@ flutter test test/unawaited_debug_test.dart
 | `docs/release_notes_public_short.md` | 對外精簡更新公告（可用於應用商店與社群） |
 | `docs/release_execution_runbook.md` | 發布執行順序指引（發布前後角色分工） |
 | `docs/release_rollout_and_rollback_guide.md` | 灰度放量與回滾判定指南（發布當天使用） |
+| `docs/p0_operational_runbook.md` | P0 阻塞項執行手冊（真機、聯調、監控、構建、合規） |
 
 目前 UI 為可運行的**前端殼子**；後端請依上列契約對接。
 

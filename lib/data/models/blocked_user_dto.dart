@@ -21,7 +21,8 @@ class BlockedUserDto {
   static List<BlockedUserDto> listFromResponse(dynamic data) =>
       asJsonObjectList(data).map(BlockedUserDto.fromJson).toList();
 
-  static List<BlockedUserDto> mockList() => const <BlockedUserDto>[
-    BlockedUserDto(userId: 'mock_blocked_1', displayLabel: '@river_2026'),
+  /// 單元測試用夾具。
+  static List<BlockedUserDto> fixtureList() => const <BlockedUserDto>[
+    BlockedUserDto(userId: 'fixture_blocked_1', displayLabel: '@river_2026'),
   ];
 }

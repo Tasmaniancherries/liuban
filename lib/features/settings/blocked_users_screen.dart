@@ -45,7 +45,10 @@ class _BlockedUsersScreenState extends State<BlockedUsersScreen> {
         apiFailureSnackMessage: e.message,
       );
     } catch (_) {
-      return const _BlockedUsersLoad(items: <BlockedUserDto>[], loadFailed: true);
+      return const _BlockedUsersLoad(
+        items: <BlockedUserDto>[],
+        loadFailed: true,
+      );
     }
   }
 

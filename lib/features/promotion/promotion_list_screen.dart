@@ -47,7 +47,10 @@ class _PromotionListScreenState extends State<PromotionListScreen> {
         apiFailureSnackMessage: e.message,
       );
     } catch (_) {
-      return const _PromotionListLoad(items: <PromotionItem>[], loadFailed: true);
+      return const _PromotionListLoad(
+        items: <PromotionItem>[],
+        loadFailed: true,
+      );
     }
   }
 

@@ -35,41 +35,41 @@ class FeedPostDto {
   static List<FeedPostDto> listFromResponse(dynamic data) =>
       asJsonObjectList(data).map(FeedPostDto.fromJson).toList();
 
-  /// 無法連線伺服器時的公開廣場占位。
-  static List<FeedPostDto> mockPublicFeed() {
+  /// 單元測試用動態列表夾具（不應在正式 UI 中顯示）。
+  static List<FeedPostDto> fixturePublicFeed() {
     return List<FeedPostDto>.generate(
       6,
       (int i) => FeedPostDto(
-        id: 'local_pub_$i',
-        authorId: 'demo',
-        authorDisplay: '示例作者',
-        body: '訪客與正式用戶皆可瀏覽。無法連線伺服器時顯示本地示例 ${i + 1}。',
+        id: 'fixture_pub_$i',
+        authorId: 'fixture_author',
+        authorDisplay: '測試夾具作者',
+        body: '測試夾具：公開廣場列表第 ${i + 1} 則。',
         audience: 'public',
       ),
     );
   }
 
-  static List<FeedPostDto> mockSchoolFeed() {
+  static List<FeedPostDto> fixtureSchoolFeed() {
     return List<FeedPostDto>.generate(
       5,
       (int i) => FeedPostDto(
-        id: 'local_sch_$i',
-        authorId: 'peer',
-        authorDisplay: '同校示例',
-        body: '僅同校可見之動態占位 ${i + 1}。後端就緒後會替換為真實本校流。',
+        id: 'fixture_sch_$i',
+        authorId: 'fixture_peer',
+        authorDisplay: '測試夾具同校',
+        body: '測試夾具：同校動態列表第 ${i + 1} 則。',
         audience: 'school',
       ),
     );
   }
 
-  static List<FeedPostDto> mockFriendsFeed() {
+  static List<FeedPostDto> fixtureFriendsFeed() {
     return List<FeedPostDto>.generate(
       4,
       (int i) => FeedPostDto(
-        id: 'local_fr_$i',
-        authorId: 'friend',
-        authorDisplay: '好友示例',
-        body: '雙向好友動態占位 ${i + 1}。',
+        id: 'fixture_fr_$i',
+        authorId: 'fixture_friend',
+        authorDisplay: '測試夾具好友',
+        body: '測試夾具：好友動態列表第 ${i + 1} 則。',
         audience: 'friends',
       ),
     );

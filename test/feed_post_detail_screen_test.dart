@@ -247,9 +247,7 @@ Widget _buildHarness(
 }
 
 void main() {
-  testWidgets('loads detail from API', (
-    tester,
-  ) async {
+  testWidgets('loads detail from API', (tester) async {
     await tester.pumpWidget(
       _buildHarness(
         const FeedPostDetailScreen(postId: 'ok-1'),
@@ -261,13 +259,9 @@ void main() {
     expect(find.text('純 API 載入單篇成功'), findsOneWidget);
   });
 
-  testWidgets('shows load failed state when detail API fails', (
-    tester,
-  ) async {
+  testWidgets('shows load failed state when detail API fails', (tester) async {
     await tester.pumpWidget(
-      _buildHarness(
-        const FeedPostDetailScreen(postId: 'p1'),
-      ),
+      _buildHarness(const FeedPostDetailScreen(postId: 'p1')),
     );
     await tester.pumpAndSettle();
 
@@ -425,9 +419,7 @@ void main() {
       await tester.pumpWidget(
         AppContainerScope(
           container: container,
-          child: const MaterialApp(
-            home: FeedPostDetailScreen(postId: 'p1'),
-          ),
+          child: const MaterialApp(home: FeedPostDetailScreen(postId: 'p1')),
         ),
       );
       await tester.pumpAndSettle();

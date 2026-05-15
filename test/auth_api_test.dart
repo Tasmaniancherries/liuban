@@ -4,6 +4,8 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:liuban/core/network/api_exception.dart';
+import 'package:liuban/core/text/liuban_input_limits.dart';
+import 'package:liuban/core/ui/api_dev_semantics.dart';
 import 'package:liuban/data/api/auth_api.dart';
 
 class _CaptureAdapter implements HttpClientAdapter {
@@ -88,6 +90,26 @@ void main() {
     api = AuthApi(dio, apiPrefix: '/v1');
   });
 
+  test('login rejects oversized account before network', () async {
+    final long = ''.padRight(LiubanInputLimits.loginAccountMaxLength + 1, 'x');
+    await expectLater(
+      () => api.login(account: long, password: 'p'),
+      throwsA(
+        isA<LiubanApiException>()
+            .having(
+              (e) => e.message,
+              'message',
+              ApiDevSemantics.inputTooLongMessage(
+                '帳號',
+                LiubanInputLimits.loginAccountMaxLength,
+              ),
+            )
+            .having((e) => e.code, 'code', LiubanInputLimits.inputTooLongCode),
+      ),
+    );
+    expect(adapter.lastOptions, isNull);
+  });
+
   test('login posts to /v1/auth/login with account/password body', () async {
     final pair = await api.login(account: 'u', password: 'p');
     expect(adapter.lastOptions?.method, 'POST');
@@ -113,6 +135,38 @@ void main() {
     expect(adapter.lastJsonBody?['token'], 't');
     expect(adapter.lastJsonBody?['new_password'], 'np');
   });
+
+  test(
+    'registerWithVerificationDocument rejects oversized custom id before network',
+    () async {
+      final long = ''.padRight(LiubanInputLimits.customIdMaxLength + 1, 'x');
+      await expectLater(
+        () => api.registerWithVerificationDocument(
+          customId: long,
+          schoolName: 'HKU',
+          studentId: 's1',
+          documentBytes: Uint8List.fromList([1]),
+        ),
+        throwsA(
+          isA<LiubanApiException>()
+              .having(
+                (e) => e.message,
+                'message',
+                ApiDevSemantics.inputTooLongMessage(
+                  '自訂 ID ',
+                  LiubanInputLimits.customIdMaxLength,
+                ),
+              )
+              .having(
+                (e) => e.code,
+                'code',
+                LiubanInputLimits.inputTooLongCode,
+              ),
+        ),
+      );
+      expect(adapter.lastOptions, isNull);
+    },
+  );
 
   test(
     'registerWithVerificationDocument uses offer field by default',
