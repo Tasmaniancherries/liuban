@@ -26,6 +26,8 @@ macos/Flutter/GeneratedPluginRegistrant.swift
 # iOS / Android（generate 後）
 **/Pods/
 **/DerivedData/
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
 
 # Misc
 *.swp

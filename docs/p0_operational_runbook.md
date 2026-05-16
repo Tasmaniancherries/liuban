@@ -69,7 +69,7 @@
 ## 3. 崩溃与错误监控接入
 
 **负责人**：研发（主）+ 运维  
-**当前仓库状态**：尚未集成第三方 SDK（无 Crashlytics / Sentry 依赖）；发版前需完成接入或书面豁免。
+**当前仓库状态**：已集成 **Firebase Crashlytics**（`firebase_core` / `firebase_crashlytics`）；发版前需完成 Firebase 项目配置并验证控制台可见崩溃。见 [firebase_crashlytics_setup.md](firebase_crashlytics_setup.md)。
 
 ### 3.1 推荐方案（二选一）
 

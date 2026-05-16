@@ -7,6 +7,7 @@ import 'package:liuban/core/bootstrap/session_hydrator.dart';
 import 'package:liuban/core/debug/unawaited_debug.dart';
 import 'package:liuban/core/locale/app_locale_controller.dart';
 import 'package:liuban/core/locale/app_locale_scope.dart';
+import 'package:liuban/core/monitoring/firebase_crash_reporting.dart';
 import 'package:liuban/core/persistence/app_persistence.dart';
 import 'package:liuban/core/persistence/app_persistence_scope.dart';
 import 'package:liuban/core/session/app_session.dart';
@@ -16,6 +17,7 @@ import 'package:liuban/core/theme/theme_mode_scope.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeFirebaseCrashReporting();
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   final persistence = await AppPersistence.initialize();
   persistence.sessionTokens.addListener(() {

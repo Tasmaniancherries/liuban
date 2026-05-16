@@ -11,7 +11,7 @@
 - [ ] 后端联调签收
   - 验收：关键接口成功/失败/空数据/超时场景均通过；错误提示符合预期。
 - [ ] 崩溃与错误监控接入
-  - 验收：可在监控平台看到崩溃、异常日志和版本号维度（当前仓库未集成 SDK，发版前需完成或书面豁免）。
+  - 验收：可在 Firebase Crashlytics 看到崩溃与 `app_version` 维度（见 [firebase_crashlytics_setup.md](firebase_crashlytics_setup.md) 完成 `flutterfire configure` 与真机测试崩溃）。
 - [ ] 发布构建链路验证
   - 验收：可重复产出可安装包；签名、渠道、版本号策略可追溯（本机可先跑 `make ci-smoke`）。
 - [ ] 隐私与合规入口检查
