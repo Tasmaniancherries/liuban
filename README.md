@@ -113,6 +113,7 @@ flutter test test/unawaited_debug_test.dart
 | `docs/release_execution_runbook.md` | 發布執行順序指引（發布前後角色分工） |
 | `docs/release_rollout_and_rollback_guide.md` | 灰度放量與回滾判定指南（發布當天使用） |
 | `docs/p0_operational_runbook.md` | P0 阻塞項執行手冊（真機、聯調、監控、構建、合規） |
+| `docs/firebase_crashlytics_setup.md` | Firebase Crashlytics 配置與驗證 |
 
 目前 UI 為可運行的**前端殼子**；後端請依上列契約對接。
 

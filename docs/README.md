@@ -12,6 +12,7 @@
 | [release_execution_runbook.md](release_execution_runbook.md) | 發布執行順序（T-3 至 T+7 的角色與文檔對應） |
 | [release_rollout_and_rollback_guide.md](release_rollout_and_rollback_guide.md) | 灰度放量與回滾判定指南（發布當天決策用） |
 | [p0_operational_runbook.md](p0_operational_runbook.md) | **P0 阻塞項**執行手冊（真機回歸、聯調簽收、監控、構建、合規） |
+| [firebase_crashlytics_setup.md](firebase_crashlytics_setup.md) | Firebase Crashlytics 配置與首次上報驗證 |
 
 實作入口：`lib/data/api/*.dart`、[`lib/core/network/token_refresh_interceptor.dart`](../lib/core/network/token_refresh_interceptor.dart)。客戶端輸入長度上限集中於 [`lib/core/text/liuban_input_limits.dart`](../lib/core/text/liuban_input_limits.dart)，各契約文中「客戶端防禦上限」須與其一致。
 
